@@ -2,6 +2,14 @@ import { useState } from 'react';
 import './App.css';
 import ICAL from "ical.js";
 
+export type CalendarEvent = {
+  id: string;
+  title: string;
+  description?: string;
+  location?: string;
+  start: Date;
+  end: Date;
+}
 
 function App() {
   const [file, setFile] = useState<File | undefined>();
@@ -19,21 +27,33 @@ function App() {
     const reader = new FileReader();
     reader.onload = () => {
       const result = reader.result as string;
-      const parsed = parseICSToEvents(result);
+      const parsed = parseICSToCalendarEvents(result);
       console.log(parsed);
     }
 
     reader.readAsText(uploadedFile);
   }
 
-  function parseICSToEvents(s: string): ICAL.Event[] {
+  function parseICSToCalendarEvents(s: string): CalendarEvent[] {
     const jcalData = ICAL.parse(s);
 
     const comp = new ICAL.Component(jcalData);
     const vevents = comp.getAllSubcomponents("vevent");
     const icalEvents = vevents.map((e) => new ICAL.Event(e));
 
-    return icalEvents;
+    const events = icalEvents.map(parseVEventToCalendarEvent);
+    return events;
+  }
+
+  function parseVEventToCalendarEvent(event: ICAL.Event): CalendarEvent {
+    return {
+      id: event.uid,
+      title: event.summary,
+      description: event.description,
+      location: event.location,
+      start: event.startDate.toJSDate(),
+      end: event.endDate.toJSDate()
+    }
   }
 
   return <>
