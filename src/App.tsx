@@ -1,5 +1,7 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from 'react';
+import './App.css';
+import ICAL from "ical.js";
+
 
 function App() {
   const [file, setFile] = useState<File | undefined>();
@@ -17,16 +19,21 @@ function App() {
     const reader = new FileReader();
     reader.onload = () => {
       const result = reader.result as string;
-      const parsed = parseICS(result);
+      const parsed = parseICSToEvents(result);
       console.log(parsed);
     }
 
     reader.readAsText(uploadedFile);
   }
 
-  function parseICS(s: string) {
-    // TODO
-    return s;
+  function parseICSToEvents(s: string): ICAL.Event[] {
+    const jcalData = ICAL.parse(s);
+
+    const comp = new ICAL.Component(jcalData);
+    const vevents = comp.getAllSubcomponents("vevent");
+    const icalEvents = vevents.map((e) => new ICAL.Event(e));
+
+    return icalEvents;
   }
 
   return <>
