@@ -13,10 +13,7 @@ export type CalendarEvent = {
 }
 
 function App() {
-  const [file, setFile] = useState<File | undefined>();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
-
-  const fileInput = document.getElementById("file-input");
 
   function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const fileList = e.target.files;
@@ -25,7 +22,6 @@ function App() {
     }
 
     const uploadedFile: File = fileList[0];
-    setFile(fileList[0]);
     const reader = new FileReader();
     reader.onload = () => {
       const result = reader.result as string;
@@ -49,6 +45,7 @@ function App() {
   }
 
   function parseVEventToCalendarEvent(event: ICAL.Event): CalendarEvent {
+    // TODO: Deal with repeating events
     return {
       id: event.uid,
       title: event.summary,
