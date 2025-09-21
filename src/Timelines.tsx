@@ -34,7 +34,7 @@ function Timelines({ events }: TimelinesProps) {
 /**
  * Generates time buckets based on the start date and end date. Each time bucket interval is 1 day.
  */
-function generateTimeBuckets(startDate: Date, endDate: Date): TimeBucket[] {
+export function generateTimeBuckets(startDate: Date, endDate: Date): TimeBucket[] {
     const timeBuckets = [];
     let curDate = startDate;
     while (curDate <= endDate) {
