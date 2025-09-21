@@ -5,3 +5,4 @@ This project is inspired by the Jira timelines for Epics. It allows you to impor
 ## Dependencies
 
 - ical.js: `npm install ical.js`
+- vitest: `npm install -D vitest`
