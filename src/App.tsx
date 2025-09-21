@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './App.css';
+import Timelines from './Timelines';
 import ICAL from "ical.js";
 
 export type CalendarEvent = {
@@ -13,6 +14,7 @@ export type CalendarEvent = {
 
 function App() {
   const [file, setFile] = useState<File | undefined>();
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
 
   const fileInput = document.getElementById("file-input");
 
@@ -27,8 +29,9 @@ function App() {
     const reader = new FileReader();
     reader.onload = () => {
       const result = reader.result as string;
-      const parsed = parseICSToCalendarEvents(result);
-      console.log(parsed);
+      const events = parseICSToCalendarEvents(result);
+      console.log(events);
+      setEvents(events);
     }
 
     reader.readAsText(uploadedFile);
@@ -59,6 +62,7 @@ function App() {
   return <>
     <h1>Epic Timelines</h1>
     <input type="file" id="file-input" accept=".ics" onChange={handleFileUpload} />
+    <Timelines events={events}></Timelines>
   </>;
 }
 
