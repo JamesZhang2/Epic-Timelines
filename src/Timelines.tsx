@@ -4,7 +4,7 @@ type TimelinesProps = {
     events: CalendarEvent[];
 }
 
-type TimeBucket = {
+export type TimeBucket = {
     start: Date;
     end: Date;
 }
