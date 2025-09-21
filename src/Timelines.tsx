@@ -10,14 +10,16 @@ type TimeBucket = {
 }
 
 function Timelines({ events }: TimelinesProps) {
-    const startDate = new Date("2025-09-22T00:00:00Z");
-    const endDate = new Date("2025-09-28T00:00:00Z");
+    const startDate = new Date("2025-09-22T00:00:00");
+    const endDate = new Date("2025-09-28T00:00:00");
     const timeBuckets: TimeBucket[] = [];
     let curDate = startDate;
     while (curDate <= endDate) {
+        let end = new Date(curDate);
+        end.setDate(end.getDate() + 1);
         timeBuckets.push({
             start: new Date(curDate),
-            end: new Date(curDate.getDate() + 1)
+            end: end
         })
         curDate.setDate(curDate.getDate() + 1);
     }
