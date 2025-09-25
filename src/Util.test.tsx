@@ -36,5 +36,5 @@ describe("parseICSToCalendarEvents", () => {
     ]
     expect(events).toEqual(expected);
     console.log(events);
-  })
+  });
 });
