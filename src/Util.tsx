@@ -9,6 +9,7 @@ export type CalendarEvent = {
   end: Date;
 }
 
+/** Parses an ICS string to CalendarEvents. */
 export function parseICSToCalendarEvents(s: string): CalendarEvent[] {
   const jcalData = ICAL.parse(s);
 
