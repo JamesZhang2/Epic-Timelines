@@ -9,6 +9,14 @@ export type TimeBucket = {
   end: Date;
 }
 
+/**
+ * Represents a list of events with nontrivial overlap with the given time bucket.
+ */
+export type BucketedEvents = {
+  bucket: TimeBucket;
+  events: CalendarEvent[];
+}
+
 function Timelines({ events }: TimelinesProps) {
   const startDate = new Date("2025-09-22T00:00:00");
   const endDate = new Date("2025-09-28T00:00:00");
@@ -63,6 +71,27 @@ export function hasNontrivialOverlap(start1: Date, end1: Date, start2: Date, end
   const laterStart = start1.getTime() > start2.getTime() ? start1 : start2;
   const earlierEnd = end1.getTime() < end2.getTime() ? end1 : end2;
   return laterStart.getTime() < earlierEnd.getTime();
+}
+
+/**
+ * @returns a list of BucketedEvents, one for each bucket in buckets.
+ * Each BucketedEvents is the subset of events with a nontrivial overlap with the time bucket.
+ */
+export function bucketEvents(events: CalendarEvent[], buckets: TimeBucket[]): BucketedEvents[] {
+  const result: BucketedEvents[] = [];
+  for (const bucket of buckets) {
+    const filteredEvents = [];
+    for (const event of events) {
+      if (hasNontrivialOverlap(bucket.start, bucket.end, event.start, event.end)) {
+        filteredEvents.push(structuredClone(event));
+      }
+    }
+    result.push({
+      bucket: bucket,
+      events: filteredEvents
+    })
+  }
+  return result;
 }
 
 export default Timelines;
