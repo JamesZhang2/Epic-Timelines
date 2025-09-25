@@ -25,8 +25,8 @@ function parseVEventToCalendarEvent(event: ICAL.Event): CalendarEvent {
   return {
     id: event.uid,
     title: event.summary,
-    description: event.description,
-    location: event.location,
+    description: event.description ?? undefined,
+    location: event.location ?? undefined,
     start: event.startDate.toJSDate(),
     end: event.endDate.toJSDate()
   }
