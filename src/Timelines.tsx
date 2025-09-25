@@ -1,4 +1,4 @@
-import type { CalendarEvent } from './Util';
+import type { CalendarEvent } from "./Util";
 
 type TimelinesProps = {
   events: CalendarEvent[];

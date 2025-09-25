@@ -1,8 +1,8 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from "vitest";
 import { generateTimeBuckets } from "./Timelines";
 import type { TimeBucket } from "./Timelines";
 
-describe("generatetimeBuckets", () => {
+describe("generateTimeBuckets", () => {
   it("generate time buckets", () => {
     const expected = [{
       start: new Date("2025-09-22T00:00:00"),

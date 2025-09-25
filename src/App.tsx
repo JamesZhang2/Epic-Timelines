@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import './App.css';
-import Timelines from './Timelines';
-import type { CalendarEvent } from './Util';
-import { parseICSToCalendarEvents } from './Util';
+import { useState } from "react";
+import "./App.css";
+import Timelines from "./Timelines";
+import type { CalendarEvent } from "./Util";
+import { parseICSToCalendarEvents } from "./Util";
 
 function App() {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
