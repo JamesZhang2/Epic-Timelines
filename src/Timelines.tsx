@@ -40,10 +40,9 @@ function Timelines({ events }: TimelinesProps) {
           <th>Epics</th>
           {timeBuckets.map((bucket) => <th key={JSON.stringify(bucket)}>{(bucket.start.getMonth() + 1) + "/" + bucket.start.getDate()}</th>)}
         </tr>
-        {keywords.map((keyword) => <TimelineRow bucketedEventsList={bucketedEventsList} keyword={keyword}></TimelineRow>)}
       </thead>
       <tbody>
-
+        {keywords.map((keyword) => <TimelineRow bucketedEventsList={bucketedEventsList} keyword={keyword}></TimelineRow>)}
       </tbody>
     </table>
     <pre>Events: {JSON.stringify(events, null, 2)}</pre>
