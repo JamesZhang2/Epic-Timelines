@@ -1,8 +1,14 @@
 import type { CalendarEvent } from "./Util";
 import { hasNontrivialOverlap } from "./Util";
+import "./Timelines.css";
 
 type TimelinesProps = {
   events: CalendarEvent[];
+}
+
+type TimelineRowProps = {
+  bucketedEventsList: BucketedEvents[];
+  keyword: string;
 }
 
 export type TimeBucket = {
@@ -19,9 +25,10 @@ export type BucketedEvents = {
 }
 
 function Timelines({ events }: TimelinesProps) {
-  const startDate = new Date("2025-09-22T00:00:00");
-  const endDate = new Date("2025-09-28T00:00:00");
+  const startDate = new Date("2025-09-21T00:00:00");
+  const endDate = new Date("2025-09-27T00:00:00");
   const timeBuckets: TimeBucket[] = generateTimeBuckets(startDate, endDate);
+  const bucketedEventsList: BucketedEvents[] = bucketEvents(events, timeBuckets);
   console.log(timeBuckets);
 
   return <div>
@@ -31,6 +38,7 @@ function Timelines({ events }: TimelinesProps) {
           <th>Epics</th>
           {timeBuckets.map((bucket) => <th key={JSON.stringify(bucket)}>{(bucket.start.getMonth() + 1) + "/" + bucket.start.getDate()}</th>)}
         </tr>
+        <TimelineRow bucketedEventsList={bucketedEventsList} keyword="Breakfast"></TimelineRow>
       </thead>
       <tbody>
 
@@ -38,6 +46,22 @@ function Timelines({ events }: TimelinesProps) {
     </table>
     <pre>Events: {JSON.stringify(events, null, 2)}</pre>
   </div>;
+}
+
+/** Represents a timeline for an epic, which is a row in the Timelines table. */
+function TimelineRow({ bucketedEventsList, keyword }: TimelineRowProps) {
+  const cells = [<th>{keyword}</th>];
+  for (const bucketedEvents of bucketedEventsList) {
+    let foundMatch = false;
+    for (const event of bucketedEvents.events) {
+      if (event.title.match(keyword) !== null || event.description?.match(keyword) !== null) {
+        foundMatch = true;
+        break;
+      }
+    }
+    cells.push(foundMatch ? <td className="colored"></td> : <td></td>);
+  }
+  return <tr>{cells}</tr>;
 }
 
 /**
