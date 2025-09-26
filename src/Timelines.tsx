@@ -1,7 +1,7 @@
 import type { CalendarEvent } from "./Util";
 import { hasNontrivialOverlap } from "./Util";
 import "./Timelines.css";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 type TimelinesProps = {
   events: CalendarEvent[];
@@ -31,9 +31,13 @@ function Timelines({ events }: TimelinesProps) {
   const timeBuckets: TimeBucket[] = generateTimeBuckets(startDate, endDate);
   const bucketedEventsList: BucketedEvents[] = bucketEvents(events, timeBuckets);
   const [keywords, setKeywords] = useState<string[]>(["Breakfast", "Lunch", "Gym", "Alpha", "Beta"]);
+  const keywordInputRef = useRef<HTMLInputElement>(null);
   console.log(timeBuckets);
 
   return <div>
+    <p id="add-epic-instructions">Add a new Epic: </p>
+    <input type="text" ref={keywordInputRef}></input>
+    <button id="add-epic-button" onClick={handleAddEpicButtonClick}>Add</button>
     <table>
       <thead>
         <tr>
@@ -47,6 +51,18 @@ function Timelines({ events }: TimelinesProps) {
     </table>
     <pre>Events: {JSON.stringify(events, null, 2)}</pre>
   </div>;
+
+  function handleAddEpicButtonClick() {
+    const value = keywordInputRef.current?.value.trim();
+    if (value) {
+      if (keywords.includes(value)) {
+        alert("The keyword " + value + " is already being tracked! Please enter another one.");
+      } else {
+        setKeywords([...keywords, value]);
+        keywordInputRef.current!.value = "";  // Clear input
+      }
+    }
+  }
 }
 
 /** Represents a timeline for an epic, which is a row in the Timelines table. */
