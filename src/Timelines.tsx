@@ -1,6 +1,7 @@
 import type { CalendarEvent } from "./Util";
 import { hasNontrivialOverlap } from "./Util";
 import "./Timelines.css";
+import { useState } from "react";
 
 type TimelinesProps = {
   events: CalendarEvent[];
@@ -29,6 +30,7 @@ function Timelines({ events }: TimelinesProps) {
   const endDate = new Date("2025-09-27T00:00:00");
   const timeBuckets: TimeBucket[] = generateTimeBuckets(startDate, endDate);
   const bucketedEventsList: BucketedEvents[] = bucketEvents(events, timeBuckets);
+  const [keywords, setKeywords] = useState<string[]>(["Breakfast", "Lunch", "Gym", "Alpha", "Beta"]);
   console.log(timeBuckets);
 
   return <div>
@@ -38,7 +40,7 @@ function Timelines({ events }: TimelinesProps) {
           <th>Epics</th>
           {timeBuckets.map((bucket) => <th key={JSON.stringify(bucket)}>{(bucket.start.getMonth() + 1) + "/" + bucket.start.getDate()}</th>)}
         </tr>
-        <TimelineRow bucketedEventsList={bucketedEventsList} keyword="Breakfast"></TimelineRow>
+        {keywords.map((keyword) => <TimelineRow bucketedEventsList={bucketedEventsList} keyword={keyword}></TimelineRow>)}
       </thead>
       <tbody>
 
