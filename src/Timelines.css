@@ -1,3 +1,20 @@
+table,
+th,
+td {
+    border-color: gray;
+    border-width: 1px;
+    border-style: solid;
+}
+
+th {
+    padding: 5px;
+    text-align: center;
+}
+
+table {
+    border-collapse: collapse;
+}
+
 td.colored {
     background-color: #6666ff;
 }
