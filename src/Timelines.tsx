@@ -54,7 +54,8 @@ function TimelineRow({ bucketedEventsList, keyword }: TimelineRowProps) {
   for (const bucketedEvents of bucketedEventsList) {
     let foundMatch = false;
     for (const event of bucketedEvents.events) {
-      if (event.title.match(keyword) !== null || event.description?.match(keyword) !== null) {
+      if (event.title.match(keyword) !== null ||
+        (event.description !== undefined && event.description.match(keyword) !== null)) {
         foundMatch = true;
         break;
       }
