@@ -62,8 +62,13 @@ function Timelines({ events }: TimelinesProps) {
   }
 
   function handleEpicClick(epic: Epic) {
-    setSelectedEpic(epic);
-    console.log("Selected epic: " + epic.name);
+    if (selectedEpic?.name === epic.name) {
+      // If the Epic is already selected, clicking the name again will unselect it.
+      setSelectedEpic(null);
+    } else {
+      setSelectedEpic(epic);
+      console.log("Selected epic: " + epic.name);
+    }
   }
 
   return <div>
