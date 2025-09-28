@@ -10,6 +10,7 @@ type TimelinesProps = {
 type TimelineRowProps = {
   bucketedEventsList: BucketedEvents[];
   epic: Epic;
+  onEpicClick: () => void;
 }
 
 type Epic = {
@@ -38,6 +39,7 @@ function Timelines({ events }: TimelinesProps) {
   const [epics, setEpics] = useState<Epic[]>([]);
   const epicNameInputRef = useRef<HTMLInputElement>(null);
   const keywordInputRef = useRef<HTMLInputElement>(null);
+  const [selectedEpic, setSelectedEpic] = useState<Epic | null>(null);
   console.log(timeBuckets);
 
   return <div>
@@ -55,6 +57,7 @@ function Timelines({ events }: TimelinesProps) {
         <button id="add-epic-button" onClick={handleAddEpicButtonClick}>Add</button>
       </div>
     </div>
+
     <table>
       <thead>
         <tr>
@@ -63,7 +66,12 @@ function Timelines({ events }: TimelinesProps) {
         </tr>
       </thead>
       <tbody>
-        {epics.map((epic) => <TimelineRow bucketedEventsList={bucketedEventsList} epic={epic}></TimelineRow>)}
+        {epics.map((epic) =>
+          <TimelineRow
+            bucketedEventsList={bucketedEventsList}
+            epic={epic}
+            onEpicClick={() => handleEpicClick(epic)}>
+          </TimelineRow>)}
       </tbody>
     </table>
     <pre>Events: {JSON.stringify(events, null, 2)}</pre>
@@ -94,11 +102,16 @@ function Timelines({ events }: TimelinesProps) {
     epicNameInputRef.current!.value = "";  // Clear input
     keywordInputRef.current!.value = "";  // Clear input
   }
+
+  function handleEpicClick(epic: Epic) {
+    setSelectedEpic(epic);
+    console.log("Selected epic: " + epic.name);
+  }
 }
 
 /** Represents a timeline for an epic, which is a row in the Timelines table. */
-function TimelineRow({ bucketedEventsList, epic }: TimelineRowProps) {
-  const cells = [<th>{epic.name}</th>];
+function TimelineRow({ bucketedEventsList, epic, onEpicClick }: TimelineRowProps) {
+  const cells = [<th onClick={onEpicClick}>{epic.name}</th>];
   for (const bucketedEvents of bucketedEventsList) {
     let foundMatch = false;
     for (const event of bucketedEvents.events) {

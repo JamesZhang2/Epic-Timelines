@@ -3,7 +3,9 @@
 - [x] Proof-of-Concept
 - [ ] Better timeline headers
 - [ ] Handle repeated events
-- [ ] Support adding, removing, and modifying Epics (keywords)
+- [x] Support adding Epics
+- [ ] Support removing Epics
+- [ ] Support modifying Epics
 - [ ] Support reordering Epics (drag to reorder)
 - [x] Allow Epics to have a different name than the keyword
 - [ ] Support case insensitive keyword matching
