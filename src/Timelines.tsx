@@ -43,9 +43,17 @@ function Timelines({ events }: TimelinesProps) {
   return <div>
     <div id="add-epic-div">
       <p id="add-epic-instructions">Add a new Epic: </p>
-      Name: <input type="text" ref={epicNameInputRef}></input>
-      Keyword: <input type="text" ref={keywordInputRef}></input>
-      <button id="add-epic-button" onClick={handleAddEpicButtonClick}>Add</button>
+      <p id="add-epic-name">
+        <label>Name: </label>
+        <input type="text" ref={epicNameInputRef}></input>
+      </p>
+      <p id="add-epic-keyword">
+        <label>Keyword:</label>
+        <input type="text" ref={keywordInputRef}></input>
+      </p>
+      <div id="add-epic-button-container">
+        <button id="add-epic-button" onClick={handleAddEpicButtonClick}>Add</button>
+      </div>
     </div>
     <table>
       <thead>
