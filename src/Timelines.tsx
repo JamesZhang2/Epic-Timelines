@@ -13,6 +13,10 @@ type TimelineRowProps = {
   onEpicClick: () => void;
 }
 
+type EpicDetailsProps = {
+  epic: Epic;
+}
+
 type Epic = {
   name: string;
   keyword: string;
@@ -67,11 +71,14 @@ function Timelines({ events }: TimelinesProps) {
       </thead>
       <tbody>
         {epics.map((epic) =>
-          <TimelineRow
-            bucketedEventsList={bucketedEventsList}
-            epic={epic}
-            onEpicClick={() => handleEpicClick(epic)}>
-          </TimelineRow>)}
+          <>
+            <TimelineRow
+              bucketedEventsList={bucketedEventsList}
+              epic={epic}
+              onEpicClick={() => handleEpicClick(epic)}>
+            </TimelineRow>
+            {selectedEpic && selectedEpic.name === epic.name && <EpicDetails epic={epic} />}
+          </>)}
       </tbody>
     </table>
     <pre>Events: {JSON.stringify(events, null, 2)}</pre>
@@ -124,6 +131,14 @@ function TimelineRow({ bucketedEventsList, epic, onEpicClick }: TimelineRowProps
     cells.push(foundMatch ? <td className="colored"></td> : <td></td>);
   }
   return <tr>{cells}</tr>;
+}
+
+/**
+ * Represents the detailed information about an Epic.
+ * It's displayed right below the selected Epic, so it's also a row in the Timelines table.
+ */
+function EpicDetails({ epic }: EpicDetailsProps) {
+  return <tr>Details for Epic {epic.name}</tr>;
 }
 
 /**
