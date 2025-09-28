@@ -7,6 +7,11 @@ type TimelinesProps = {
   events: CalendarEvent[];
 }
 
+type AddEpicCardProps = {
+  // Returns true if epic is successfully added, false otherwise
+  onAddEpic: (newEpic: Epic) => boolean;
+}
+
 type TimelineRowProps = {
   bucketedEventsList: BucketedEvents[];
   epic: Epic;
@@ -41,27 +46,28 @@ function Timelines({ events }: TimelinesProps) {
   const timeBuckets: TimeBucket[] = generateTimeBuckets(startDate, endDate);
   const bucketedEventsList: BucketedEvents[] = bucketEvents(events, timeBuckets);
   const [epics, setEpics] = useState<Epic[]>([]);
-  const epicNameInputRef = useRef<HTMLInputElement>(null);
-  const keywordInputRef = useRef<HTMLInputElement>(null);
   const [selectedEpic, setSelectedEpic] = useState<Epic | null>(null);
   console.log(timeBuckets);
 
-  return <div>
-    <div id="add-epic-div">
-      <p id="add-epic-instructions">Add a new Epic: </p>
-      <p id="add-epic-name">
-        <label>Name: </label>
-        <input type="text" ref={epicNameInputRef}></input>
-      </p>
-      <p id="add-epic-keyword">
-        <label>Keyword:</label>
-        <input type="text" ref={keywordInputRef}></input>
-      </p>
-      <div id="add-epic-button-container">
-        <button id="add-epic-button" onClick={handleAddEpicButtonClick}>Add</button>
-      </div>
-    </div>
+  function handleAddEpic(newEpic: Epic): boolean {
+    for (const epic of epics) {
+      if (epic.name === newEpic.name) {
+        alert("Error: There is an existing Epic with the name " + epic.name + ". Names of Epics must be unique.");
+        return false;
+      }
+    }
 
+    setEpics([...epics, newEpic]);
+    return true;
+  }
+
+  function handleEpicClick(epic: Epic) {
+    setSelectedEpic(epic);
+    console.log("Selected epic: " + epic.name);
+  }
+
+  return <div>
+    <AddEpicCard onAddEpic={handleAddEpic} />
     <table>
       <thead>
         <tr>
@@ -83,6 +89,14 @@ function Timelines({ events }: TimelinesProps) {
     </table>
     <pre>Events: {JSON.stringify(events, null, 2)}</pre>
   </div>;
+}
+
+/**
+ * Represents the card to add a new Epic.
+ */
+function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
+  const epicNameInputRef = useRef<HTMLInputElement>(null);
+  const keywordInputRef = useRef<HTMLInputElement>(null);
 
   function handleAddEpicButtonClick() {
     const newName = epicNameInputRef.current?.value.trim();
@@ -95,25 +109,33 @@ function Timelines({ events }: TimelinesProps) {
       alert("Error: Please provide the keyword to match for in this Epic.")
       return;
     }
-    for (const epic of epics) {
-      if (epic.name === newName) {
-        alert("Error: There is an existing Epic with the name " + epic.name + ". Names of Epics must be unique.");
-        return;
-      }
-    }
+
     const newEpic: Epic = {
       name: newName,
       keyword: newKeyword
     };
-    setEpics([...epics, newEpic]);
-    epicNameInputRef.current!.value = "";  // Clear input
-    keywordInputRef.current!.value = "";  // Clear input
+    const success = onAddEpic(newEpic);
+    if (success) {
+      // Clear input
+      epicNameInputRef.current!.value = "";
+      keywordInputRef.current!.value = "";
+    }
   }
 
-  function handleEpicClick(epic: Epic) {
-    setSelectedEpic(epic);
-    console.log("Selected epic: " + epic.name);
-  }
+  return <div id="add-epic-div">
+    <p id="add-epic-instructions">Add a new Epic: </p>
+    <p id="add-epic-name">
+      <label>Name: </label>
+      <input type="text" ref={epicNameInputRef}></input>
+    </p>
+    <p id="add-epic-keyword">
+      <label>Keyword:</label>
+      <input type="text" ref={keywordInputRef}></input>
+    </p>
+    <div id="add-epic-button-container">
+      <button id="add-epic-button" onClick={handleAddEpicButtonClick}>Add</button>
+    </div>
+  </div>;
 }
 
 /** Represents a timeline for an epic, which is a row in the Timelines table. */
