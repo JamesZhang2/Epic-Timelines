@@ -9,6 +9,11 @@ type TimelinesProps = {
 
 type TimelineRowProps = {
   bucketedEventsList: BucketedEvents[];
+  epic: Epic;
+}
+
+type Epic = {
+  name: string;
   keyword: string;
 }
 
@@ -30,14 +35,18 @@ function Timelines({ events }: TimelinesProps) {
   const endDate = new Date("2025-09-27T00:00:00");
   const timeBuckets: TimeBucket[] = generateTimeBuckets(startDate, endDate);
   const bucketedEventsList: BucketedEvents[] = bucketEvents(events, timeBuckets);
-  const [keywords, setKeywords] = useState<string[]>(["Breakfast", "Lunch", "Gym", "Alpha", "Beta"]);
+  const [epics, setEpics] = useState<Epic[]>([]);
+  const epicNameInputRef = useRef<HTMLInputElement>(null);
   const keywordInputRef = useRef<HTMLInputElement>(null);
   console.log(timeBuckets);
 
   return <div>
-    <p id="add-epic-instructions">Add a new Epic: </p>
-    <input type="text" ref={keywordInputRef}></input>
-    <button id="add-epic-button" onClick={handleAddEpicButtonClick}>Add</button>
+    <div id="add-epic-div">
+      <p id="add-epic-instructions">Add a new Epic: </p>
+      Name: <input type="text" ref={epicNameInputRef}></input>
+      Keyword: <input type="text" ref={keywordInputRef}></input>
+      <button id="add-epic-button" onClick={handleAddEpicButtonClick}>Add</button>
+    </div>
     <table>
       <thead>
         <tr>
@@ -46,19 +55,31 @@ function Timelines({ events }: TimelinesProps) {
         </tr>
       </thead>
       <tbody>
-        {keywords.map((keyword) => <TimelineRow bucketedEventsList={bucketedEventsList} keyword={keyword}></TimelineRow>)}
+        {epics.map((epic) => <TimelineRow bucketedEventsList={bucketedEventsList} epic={epic}></TimelineRow>)}
       </tbody>
     </table>
     <pre>Events: {JSON.stringify(events, null, 2)}</pre>
   </div>;
 
   function handleAddEpicButtonClick() {
-    const value = keywordInputRef.current?.value.trim();
-    if (value) {
-      if (keywords.includes(value)) {
-        alert("The keyword " + value + " is already being tracked! Please enter another one.");
-      } else {
-        setKeywords([...keywords, value]);
+    const newName = epicNameInputRef.current?.value.trim();
+    const newKeyword = keywordInputRef.current?.value.trim();
+    if (newName && newKeyword) {
+      let foundDuplicateName = false;
+      for (const epic of epics) {
+        if (epic.name === newName) {
+          alert("There is an existing Epic with the name " + epic.name + ". Names of Epics must be unique.");
+          foundDuplicateName = true;
+          break;
+        }
+      }
+      if (!foundDuplicateName) {
+        const newEpic: Epic = {
+          name: newName,
+          keyword: newKeyword
+        };
+        setEpics([...epics, newEpic]);
+        epicNameInputRef.current!.value = "";  // Clear input
         keywordInputRef.current!.value = "";  // Clear input
       }
     }
@@ -66,13 +87,13 @@ function Timelines({ events }: TimelinesProps) {
 }
 
 /** Represents a timeline for an epic, which is a row in the Timelines table. */
-function TimelineRow({ bucketedEventsList, keyword }: TimelineRowProps) {
-  const cells = [<th>{keyword}</th>];
+function TimelineRow({ bucketedEventsList, epic }: TimelineRowProps) {
+  const cells = [<th>{epic.name}</th>];
   for (const bucketedEvents of bucketedEventsList) {
     let foundMatch = false;
     for (const event of bucketedEvents.events) {
-      if (event.title.match(keyword) !== null ||
-        (event.description !== undefined && event.description.match(keyword) !== null)) {
+      if (event.title.match(epic.keyword) !== null ||
+        (event.description !== undefined && event.description.match(epic.keyword) !== null)) {
         foundMatch = true;
         break;
       }

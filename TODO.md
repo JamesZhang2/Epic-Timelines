@@ -5,7 +5,7 @@
 - [ ] Handle repeated events
 - [ ] Support adding, removing, and modifying Epics (keywords)
 - [ ] Support reordering Epics (drag to reorder)
-- [ ] Allow Epics to have a different name than the keyword
+- [x] Allow Epics to have a different name than the keyword
 - [ ] Support case insensitive keyword matching
 - [ ] Allow searching for specific fields (title, description, location)
 - [ ] Allow clicking on the name of an Epic to show & modify details
