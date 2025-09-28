@@ -20,6 +20,7 @@ type TimelineRowProps = {
 
 type EpicDetailsProps = {
   epic: Epic;
+  numCols: number;
 }
 
 type Epic = {
@@ -47,7 +48,6 @@ function Timelines({ events }: TimelinesProps) {
   const bucketedEventsList: BucketedEvents[] = bucketEvents(events, timeBuckets);
   const [epics, setEpics] = useState<Epic[]>([]);
   const [selectedEpic, setSelectedEpic] = useState<Epic | null>(null);
-  console.log(timeBuckets);
 
   function handleAddEpic(newEpic: Epic): boolean {
     for (const epic of epics) {
@@ -67,7 +67,6 @@ function Timelines({ events }: TimelinesProps) {
       setSelectedEpic(null);
     } else {
       setSelectedEpic(epic);
-      console.log("Selected epic: " + epic.name);
     }
   }
 
@@ -86,9 +85,11 @@ function Timelines({ events }: TimelinesProps) {
             <TimelineRow
               bucketedEventsList={bucketedEventsList}
               epic={epic}
-              onEpicClick={() => handleEpicClick(epic)}>
-            </TimelineRow>
-            {selectedEpic && selectedEpic.name === epic.name && <EpicDetails epic={epic} />}
+              onEpicClick={() => handleEpicClick(epic)} />
+            {selectedEpic && selectedEpic.name === epic.name &&
+              <EpicDetails
+                epic={epic}
+                numCols={timeBuckets.length + 1} />}
           </>)}
       </tbody>
     </table>
@@ -164,8 +165,13 @@ function TimelineRow({ bucketedEventsList, epic, onEpicClick }: TimelineRowProps
  * Represents the detailed information about an Epic.
  * It's displayed right below the selected Epic, so it's also a row in the Timelines table.
  */
-function EpicDetails({ epic }: EpicDetailsProps) {
-  return <tr>Details for Epic {epic.name}</tr>;
+function EpicDetails({ epic, numCols }: EpicDetailsProps) {
+  return <tr className="epic-details">
+    <td colSpan={numCols}>
+      <p>Name: {epic.name}</p>
+      <p>Keyword: {epic.keyword}</p>
+    </td>
+  </tr>;
 }
 
 /**
