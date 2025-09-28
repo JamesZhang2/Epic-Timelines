@@ -21,10 +21,11 @@ type TimelineRowProps = {
 type EpicDetailsProps = {
   epic: Epic;
   numCols: number;
+  onDeleteEpic: (epicName: string) => void;
 }
 
 type Epic = {
-  name: string;
+  name: string;  // Must be unique.
   keyword: string;
 }
 
@@ -61,6 +62,13 @@ function Timelines({ events }: TimelinesProps) {
     return true;
   }
 
+  /**
+   * Requires: epicName is the name of one of the epics in the list of epics.
+   */
+  function handleDeleteEpic(epicName: string) {
+    setEpics(epics.filter((e) => e.name !== epicName));
+  }
+
   function handleEpicClick(epic: Epic) {
     if (selectedEpic?.name === epic.name) {
       // If the Epic is already selected, clicking the name again will unselect it.
@@ -89,7 +97,8 @@ function Timelines({ events }: TimelinesProps) {
             {selectedEpic && selectedEpic.name === epic.name &&
               <EpicDetails
                 epic={epic}
-                numCols={timeBuckets.length + 1} />}
+                numCols={timeBuckets.length + 1}
+                onDeleteEpic={handleDeleteEpic} />}
           </>)}
       </tbody>
     </table>
@@ -165,11 +174,12 @@ function TimelineRow({ bucketedEventsList, epic, onEpicClick }: TimelineRowProps
  * Represents the detailed information about an Epic.
  * It's displayed right below the selected Epic, so it's also a row in the Timelines table.
  */
-function EpicDetails({ epic, numCols }: EpicDetailsProps) {
+function EpicDetails({ epic, numCols, onDeleteEpic }: EpicDetailsProps) {
   return <tr className="epic-details">
     <td colSpan={numCols}>
       <p>Name: {epic.name}</p>
       <p>Keyword: {epic.keyword}</p>
+      <button onClick={() => onDeleteEpic(epic.name)}>Delete Epic</button>
     </td>
   </tr>;
 }
