@@ -59,6 +59,7 @@ function Timelines({ events }: TimelinesProps) {
     }
 
     setEpics([...epics, newEpic]);
+    setSelectedEpic(null);
     return true;
   }
 
@@ -67,6 +68,7 @@ function Timelines({ events }: TimelinesProps) {
    */
   function handleDeleteEpic(epicName: string) {
     setEpics(epics.filter((e) => e.name !== epicName));
+    setSelectedEpic(null);
   }
 
   function handleEpicClick(epic: Epic) {
