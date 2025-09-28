@@ -1,7 +1,7 @@
 import type { CalendarEvent } from "./Util";
 import { hasNontrivialOverlap } from "./Util";
 import "./Timelines.css";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type TimelinesProps = {
   events: CalendarEvent[];
@@ -175,11 +175,32 @@ function TimelineRow({ bucketedEventsList, epic, onEpicClick }: TimelineRowProps
  * It's displayed right below the selected Epic, so it's also a row in the Timelines table.
  */
 function EpicDetails({ epic, numCols, onDeleteEpic }: EpicDetailsProps) {
+  const [confirmingDelete, setConfirmingDelete] = useState<boolean>(false);
+
+  function onDeleteEpicButtonClick(epicName: string) {
+    if (confirmingDelete) {
+      // User pressed again, delete Epic
+      onDeleteEpic(epicName);
+    } else {
+      setConfirmingDelete(true);
+    }
+  }
+
+  useEffect(() => {
+    if (!confirmingDelete) {
+      return;
+    }
+    const timer = setTimeout(() => setConfirmingDelete(false), 3000);
+    return () => clearTimeout(timer);
+  }, [confirmingDelete]);
+
   return <tr className="epic-details">
     <td colSpan={numCols}>
       <p>Name: {epic.name}</p>
       <p>Keyword: {epic.keyword}</p>
-      <button id="delete-epic-button" onClick={() => onDeleteEpic(epic.name)}>Delete Epic</button>
+      <button id="delete-epic-button" onClick={() => onDeleteEpicButtonClick(epic.name)}>
+        {confirmingDelete ? "Are you sure?" : "Delete Epic"}
+      </button>
     </td>
   </tr>;
 }
