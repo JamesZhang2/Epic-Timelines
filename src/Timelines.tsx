@@ -179,7 +179,7 @@ function EpicDetails({ epic, numCols, onDeleteEpic }: EpicDetailsProps) {
     <td colSpan={numCols}>
       <p>Name: {epic.name}</p>
       <p>Keyword: {epic.keyword}</p>
-      <button onClick={() => onDeleteEpic(epic.name)}>Delete Epic</button>
+      <button id="delete-epic-button" onClick={() => onDeleteEpic(epic.name)}>Delete Epic</button>
     </td>
   </tr>;
 }

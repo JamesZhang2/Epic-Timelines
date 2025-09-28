@@ -85,3 +85,22 @@ td.colored {
 .epic-name-cell:hover {
     background: #eee;
 }
+
+#delete-epic-button {
+    background-color: #ffa5a5;
+    color: #550000;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition-duration: 0.2s;
+}
+
+#delete-epic-button:hover {
+    background-color: #ff8888;
+}
+
+#delete-epic-button:active {
+    background-color: #ff6666;
+}
