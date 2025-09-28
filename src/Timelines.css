@@ -76,3 +76,12 @@ td.colored {
 #add-epic-button:hover {
     background-color: #ccc;
 }
+
+.epic-name-cell {
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.epic-name-cell:hover {
+    background: #eee;
+}

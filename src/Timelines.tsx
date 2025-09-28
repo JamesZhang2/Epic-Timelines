@@ -111,7 +111,7 @@ function Timelines({ events }: TimelinesProps) {
 
 /** Represents a timeline for an epic, which is a row in the Timelines table. */
 function TimelineRow({ bucketedEventsList, epic, onEpicClick }: TimelineRowProps) {
-  const cells = [<th onClick={onEpicClick}>{epic.name}</th>];
+  const cells = [<th className="epic-name-cell" onClick={onEpicClick}>{epic.name}</th>];
   for (const bucketedEvents of bucketedEventsList) {
     let foundMatch = false;
     for (const event of bucketedEvents.events) {
