@@ -72,25 +72,27 @@ function Timelines({ events }: TimelinesProps) {
   function handleAddEpicButtonClick() {
     const newName = epicNameInputRef.current?.value.trim();
     const newKeyword = keywordInputRef.current?.value.trim();
-    if (newName && newKeyword) {
-      let foundDuplicateName = false;
-      for (const epic of epics) {
-        if (epic.name === newName) {
-          alert("There is an existing Epic with the name " + epic.name + ". Names of Epics must be unique.");
-          foundDuplicateName = true;
-          break;
-        }
-      }
-      if (!foundDuplicateName) {
-        const newEpic: Epic = {
-          name: newName,
-          keyword: newKeyword
-        };
-        setEpics([...epics, newEpic]);
-        epicNameInputRef.current!.value = "";  // Clear input
-        keywordInputRef.current!.value = "";  // Clear input
+    if (!newName) {
+      alert("Error: Please give this Epic a name.");
+      return;
+    }
+    if (!newKeyword) {
+      alert("Error: Please provide the keyword to match for in this Epic.")
+      return;
+    }
+    for (const epic of epics) {
+      if (epic.name === newName) {
+        alert("Error: There is an existing Epic with the name " + epic.name + ". Names of Epics must be unique.");
+        return;
       }
     }
+    const newEpic: Epic = {
+      name: newName,
+      keyword: newKeyword
+    };
+    setEpics([...epics, newEpic]);
+    epicNameInputRef.current!.value = "";  // Clear input
+    keywordInputRef.current!.value = "";  // Clear input
   }
 }
 
