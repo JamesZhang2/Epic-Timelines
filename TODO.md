@@ -4,7 +4,7 @@
 - [ ] Better timeline headers
 - [ ] Handle repeated events
 - [x] Support adding Epics
-- [ ] Support removing Epics
+- [x] Support deleting Epics
 - [ ] Support modifying Epics
 - [ ] Support reordering Epics (drag to reorder)
 - [x] Allow Epics to have a different name than the keyword
