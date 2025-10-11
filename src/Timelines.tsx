@@ -27,6 +27,7 @@ type EpicDetailsProps = {
 type Epic = {
   name: string;  // Must be unique.
   keyword: string;
+  caseSensitive: boolean;
 }
 
 export type TimeBucket = {
@@ -114,10 +115,13 @@ function Timelines({ events }: TimelinesProps) {
 function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
   const epicNameInputRef = useRef<HTMLInputElement>(null);
   const keywordInputRef = useRef<HTMLInputElement>(null);
+  const caseSensitiveRef = useRef<HTMLInputElement>(null);
 
   function handleAddEpicButtonClick() {
     const newName = epicNameInputRef.current?.value.trim();
     const newKeyword = keywordInputRef.current?.value.trim();
+    const caseSensitive = caseSensitiveRef.current?.checked ?? false;
+
     if (!newName) {
       alert("Error: Please give this Epic a name.");
       return;
@@ -129,8 +133,10 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
 
     const newEpic: Epic = {
       name: newName,
-      keyword: newKeyword
+      keyword: newKeyword,
+      caseSensitive: caseSensitive
     };
+
     const success = onAddEpic(newEpic);
     if (success) {
       // Clear input
@@ -149,6 +155,10 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
       <label>Keyword:</label>
       <input type="text" ref={keywordInputRef}></input>
     </p>
+    <label id="add-epic-case-sensitive-checkbox">
+      Case sensitive:
+      <input type="checkbox" ref={caseSensitiveRef}></input>
+    </label>
     <div id="add-epic-button-container">
       <button id="add-epic-button" onClick={handleAddEpicButtonClick}>Add</button>
     </div>
@@ -158,11 +168,13 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
 /** Represents a timeline for an epic, which is a row in the Timelines table. */
 function TimelineRow({ bucketedEventsList, epic, onEpicClick }: TimelineRowProps) {
   const cells = [<th className="epic-name-cell" onClick={onEpicClick}>{epic.name}</th>];
+  const regex = new RegExp(epic.keyword, epic.caseSensitive ? "" : "i");  // i: ignore case flag
+
   for (const bucketedEvents of bucketedEventsList) {
     let foundMatch = false;
     for (const event of bucketedEvents.events) {
-      if (event.title.match(epic.keyword) !== null ||
-        (event.description !== undefined && event.description.match(epic.keyword) !== null)) {
+      if (regex.test(event.title) ||
+        (event.description !== undefined && regex.test(event.description))) {
         foundMatch = true;
         break;
       }
@@ -198,8 +210,9 @@ function EpicDetails({ epic, numCols, onDeleteEpic }: EpicDetailsProps) {
 
   return <tr className="epic-details">
     <td colSpan={numCols}>
-      <p>Name: {epic.name}</p>
-      <p>Keyword: {epic.keyword}</p>
+      <p>
+        Name: {epic.name}, Keyword: {epic.keyword}, Case sensitive: {epic.caseSensitive ? "true" : "false"}
+      </p>
       <button id="delete-epic-button" onClick={() => onDeleteEpicButtonClick(epic.name)}>
         {confirmingDelete ? "Are you sure?" : "Delete Epic"}
       </button>
