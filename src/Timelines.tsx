@@ -82,7 +82,7 @@ function Timelines({ events }: TimelinesProps) {
 
   return <div>
     <AddEpicCard onAddEpic={handleAddEpic} />
-    <table>
+    <table id="timelines-table">
       <thead>
         <tr>
           <th>Epics</th>
