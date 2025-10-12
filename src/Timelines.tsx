@@ -22,6 +22,7 @@ type EpicDetailsProps = {
   epic: Epic;
   numCols: number;
   onDeleteEpic: (epicName: string) => void;
+  onEditEpic: (oldEpicName: string, newEpic: Epic) => boolean;
 }
 
 type Epic = {
@@ -51,15 +52,32 @@ function Timelines({ events }: TimelinesProps) {
   const [epics, setEpics] = useState<Epic[]>([]);
   const [selectedEpic, setSelectedEpic] = useState<Epic | null>(null);
 
+  /**
+   * Throws an error if the names of the epics are not unique.
+   * No-op otherwise.
+   */
+  function assertEpicNamesUnique(epics: Epic[]) {
+    const names = epics.map((e) => e.name);
+    const uniqueNames = new Set(names);
+    if (names.length != uniqueNames.size) {
+      throw new Error("Epic names must be unique. Current Epics: " + epics);
+    }
+  }
+
+  /**
+   * Returns true if the Epic was added, and false otherwise.
+   */
   function handleAddEpic(newEpic: Epic): boolean {
     for (const epic of epics) {
       if (epic.name === newEpic.name) {
-        alert("Error: There is an existing Epic with the name " + epic.name + ". Names of Epics must be unique.");
+        alert("Error: Failed to add Epic. There is an existing Epic with the name " + epic.name + ". Names of Epics must be unique.");
         return false;
       }
     }
 
-    setEpics([...epics, newEpic]);
+    const newEpics: Epic[] = [...epics, newEpic]
+    assertEpicNamesUnique(newEpics);
+    setEpics(newEpics);
     setSelectedEpic(null);
     return true;
   }
@@ -68,8 +86,36 @@ function Timelines({ events }: TimelinesProps) {
    * Requires: epicName is the name of one of the epics in the list of epics.
    */
   function handleDeleteEpic(epicName: string) {
-    setEpics(epics.filter((e) => e.name !== epicName));
+    const newEpics: Epic[] = epics.filter((e) => e.name !== epicName);
+    assertEpicNamesUnique(newEpics);
+    setEpics(newEpics);
     setSelectedEpic(null);
+  }
+
+  /**
+   * Returns true if the Epic was updated, and false otherwise.
+   */
+  function handleEditEpic(oldEpicName: string, updatedEpic: Epic): boolean {
+    const newEpics: Epic[] = [];
+    for (const epic of epics) {
+      if (epic.name !== oldEpicName) {
+        // not the epic that we're trying to replace
+        if (epic.name == updatedEpic.name) {
+          alert("Error: Failed to update Epic. There is an existing Epic with the name " + epic.name + ". Names of Epics must be unique.");
+          return false;
+        } else {
+          newEpics.push(epic);
+        }
+      } else {
+        // this is the epic we're trying to replace
+        newEpics.push(updatedEpic);
+      }
+    }
+
+    assertEpicNamesUnique(newEpics);
+    setEpics(newEpics);
+    setSelectedEpic(updatedEpic);
+    return true;
   }
 
   function handleEpicClick(epic: Epic) {
@@ -101,7 +147,8 @@ function Timelines({ events }: TimelinesProps) {
               <EpicDetails
                 epic={epic}
                 numCols={timeBuckets.length + 1}
-                onDeleteEpic={handleDeleteEpic} />}
+                onDeleteEpic={handleDeleteEpic}
+                onEditEpic={handleEditEpic} />}
           </>)}
       </tbody>
     </table>
@@ -188,7 +235,7 @@ function TimelineRow({ bucketedEventsList, epic, onEpicClick }: TimelineRowProps
  * Represents the detailed information about an Epic.
  * It's displayed right below the selected Epic, so it's also a row in the Timelines table.
  */
-function EpicDetails({ epic, numCols, onDeleteEpic }: EpicDetailsProps) {
+function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsProps) {
   const [confirmingDelete, setConfirmingDelete] = useState<boolean>(false);
   const [editingEpic, setEditingEpic] = useState<boolean>(false);
   const epicNameInputRef = useRef<HTMLInputElement>(null);
@@ -204,8 +251,32 @@ function EpicDetails({ epic, numCols, onDeleteEpic }: EpicDetailsProps) {
     }
   }
 
-  function handleEditEpicButtonClick() {
-    setEditingEpic(!editingEpic);
+  function handleEditEpicButtonClick(oldEpicName: string) {
+    if (editingEpic) {
+      const updatedName = epicNameInputRef.current?.value.trim();
+      const updatedKeyword = keywordInputRef.current?.value.trim();
+      const updatedCaseSensitive = caseSensitiveRef.current?.checked ?? false;
+
+      if (!updatedName) {
+        alert("Error: The updated Epic must have a name.");
+        return;
+      }
+      if (!updatedKeyword) {
+        alert("Error: The updated Epic must have a keyword to match for.")
+        return;
+      }
+
+      const updatedEpic: Epic = {
+        name: updatedName,
+        keyword: updatedKeyword,
+        caseSensitive: updatedCaseSensitive
+      }
+
+      onEditEpic(oldEpicName, updatedEpic);
+      setEditingEpic(false);
+    } else {
+      setEditingEpic(true);
+    }
   }
 
   useEffect(() => {
@@ -235,7 +306,7 @@ function EpicDetails({ epic, numCols, onDeleteEpic }: EpicDetailsProps) {
           <p><strong>Keyword:</strong> {epic.keyword}</p>
           <p><strong>Case sensitive:</strong> {epic.caseSensitive ? "Yes" : "No"}</p>
         </>}
-      <button id="edit-epic-button" onClick={() => handleEditEpicButtonClick()}>
+      <button id="edit-epic-button" onClick={() => handleEditEpicButtonClick(epic.name)}>
         {editingEpic ? "Confirm" : "Edit Epic"}
       </button>
       <button id="delete-epic-button" onClick={() => handleDeleteEpicButtonClick(epic.name)}>
