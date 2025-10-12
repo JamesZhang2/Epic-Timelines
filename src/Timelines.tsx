@@ -149,15 +149,15 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
     <p id="add-epic-instructions">Add a new Epic: </p>
     <p id="add-epic-name">
       <label>Name: </label>
-      <input type="text" ref={epicNameInputRef}></input>
+      <input type="text" ref={epicNameInputRef} />
     </p>
     <p id="add-epic-keyword">
       <label>Keyword:</label>
-      <input type="text" ref={keywordInputRef}></input>
+      <input type="text" ref={keywordInputRef} />
     </p>
     <label id="add-epic-case-sensitive-checkbox">
       Case sensitive:
-      <input type="checkbox" ref={caseSensitiveRef}></input>
+      <input type="checkbox" ref={caseSensitiveRef} />
     </label>
     <div id="add-epic-button-container">
       <button id="add-epic-button" onClick={handleAddEpicButtonClick}>Add</button>
@@ -190,14 +190,22 @@ function TimelineRow({ bucketedEventsList, epic, onEpicClick }: TimelineRowProps
  */
 function EpicDetails({ epic, numCols, onDeleteEpic }: EpicDetailsProps) {
   const [confirmingDelete, setConfirmingDelete] = useState<boolean>(false);
+  const [editingEpic, setEditingEpic] = useState<boolean>(false);
+  const epicNameInputRef = useRef<HTMLInputElement>(null);
+  const keywordInputRef = useRef<HTMLInputElement>(null);
+  const caseSensitiveRef = useRef<HTMLInputElement>(null);
 
-  function onDeleteEpicButtonClick(epicName: string) {
+  function handleDeleteEpicButtonClick(epicName: string) {
     if (confirmingDelete) {
       // User pressed again, delete Epic
       onDeleteEpic(epicName);
     } else {
       setConfirmingDelete(true);
     }
+  }
+
+  function handleEditEpicButtonClick() {
+    setEditingEpic(!editingEpic);
   }
 
   useEffect(() => {
@@ -210,10 +218,27 @@ function EpicDetails({ epic, numCols, onDeleteEpic }: EpicDetailsProps) {
 
   return <tr className="epic-details">
     <td colSpan={numCols}>
-      <p>
-        Name: {epic.name}, Keyword: {epic.keyword}, Case sensitive: {epic.caseSensitive ? "true" : "false"}
-      </p>
-      <button id="delete-epic-button" onClick={() => onDeleteEpicButtonClick(epic.name)}>
+      {editingEpic ?
+        <>
+          <p>
+            <strong>Name:</strong> <input type="text" defaultValue={epic.name} ref={epicNameInputRef} />
+          </p>
+          <p>
+            <strong>Keyword:</strong> <input type="text" defaultValue={epic.keyword} ref={keywordInputRef} />
+          </p>
+          <p>
+            <strong>Case sensitive:</strong> <input type="checkbox" defaultChecked={epic.caseSensitive} ref={caseSensitiveRef} />
+          </p>
+        </> :
+        <>
+          <p><strong>Name:</strong> {epic.name}</p>
+          <p><strong>Keyword:</strong> {epic.keyword}</p>
+          <p><strong>Case sensitive:</strong> {epic.caseSensitive ? "Yes" : "No"}</p>
+        </>}
+      <button id="edit-epic-button" onClick={() => handleEditEpicButtonClick()}>
+        {editingEpic ? "Confirm" : "Edit Epic"}
+      </button>
+      <button id="delete-epic-button" onClick={() => handleDeleteEpicButtonClick(epic.name)}>
         {confirmingDelete ? "Are you sure?" : "Delete Epic"}
       </button>
     </td>
