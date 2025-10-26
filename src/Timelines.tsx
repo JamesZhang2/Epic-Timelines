@@ -164,11 +164,13 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
   const epicNameInputRef = useRef<HTMLInputElement>(null);
   const keywordInputRef = useRef<HTMLInputElement>(null);
   const caseSensitiveRef = useRef<HTMLInputElement>(null);
+  const colorRef = useRef<HTMLInputElement>(null);
 
   function handleAddEpicButtonClick() {
     const newName = epicNameInputRef.current?.value.trim();
     const newKeyword = keywordInputRef.current?.value.trim();
     const caseSensitive = caseSensitiveRef.current?.checked ?? false;
+    const color = colorRef.current?.value || "#7799ff";
 
     if (!newName) {
       alert("Error: Please give this Epic a name.");
@@ -183,7 +185,7 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
       name: newName,
       keyword: newKeyword,
       caseSensitive: caseSensitive,
-      color: "#7799ff"
+      color: color
     };
 
     const success = onAddEpic(newEpic);
@@ -205,10 +207,17 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
       <label>Keyword:</label>
       <input type="text" ref={keywordInputRef} />
     </p>
-    <label id="add-epic-case-sensitive-checkbox">
-      Case sensitive:
-      <input type="checkbox" ref={caseSensitiveRef} />
-    </label>
+    <p>
+      <label id="add-epic-case-sensitive-checkbox">
+        Case sensitive:
+        <input type="checkbox" ref={caseSensitiveRef} />
+      </label>
+    </p>
+    <p>
+      <label id="add-epic-color-picker">
+        Color: <input ref={colorRef} type="color" defaultValue="#7799ff" />
+      </label>
+    </p>
     <div id="add-epic-button-container">
       <button id="add-epic-button" onClick={handleAddEpicButtonClick}>Add</button>
     </div>
