@@ -15,10 +15,6 @@ th {
     border-collapse: collapse;
 }
 
-td.colored {
-    background-color: #6666ff;
-}
-
 #add-epic-div {
     margin: 16px 0;
     padding: 16px;
