@@ -183,7 +183,7 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
       name: newName,
       keyword: newKeyword,
       caseSensitive: caseSensitive,
-      color: "#6666ff"
+      color: "#7799ff"
     };
 
     const success = onAddEpic(newEpic);
@@ -219,7 +219,7 @@ function TimelineRow({ bucketedEventsList, epic, onEpicClick }: TimelineRowProps
   const cells = [<th className="epic-name-cell" onClick={onEpicClick}>{epic.name}</th>];
   const regex = new RegExp(epic.keyword, epic.caseSensitive ? "" : "i");  // i: ignore case flag
 
-  for (const bucketedEvents of bucketedEventsList) {
+  for (const [i, bucketedEvents] of bucketedEventsList.entries()) {
     let foundMatch = false;
     for (const event of bucketedEvents.events) {
       if (regex.test(event.title) ||
@@ -228,7 +228,8 @@ function TimelineRow({ bucketedEventsList, epic, onEpicClick }: TimelineRowProps
         break;
       }
     }
-    cells.push(foundMatch ? <td className="colored"></td> : <td></td>);
+    const style = foundMatch ? { backgroundColor: epic.color } : {};
+    cells.push(<td key={i} style={style}></td>);
   }
   return <tr>{cells}</tr>;
 }
@@ -272,7 +273,7 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
         name: updatedName,
         keyword: updatedKeyword,
         caseSensitive: updatedCaseSensitive,
-        color: "#6666ff"
+        color: "#7799ff"
       }
 
       onEditEpic(oldEpicName, updatedEpic);
