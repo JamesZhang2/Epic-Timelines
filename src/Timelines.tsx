@@ -306,12 +306,14 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
           <p><strong>Keyword:</strong> {epic.keyword}</p>
           <p><strong>Case sensitive:</strong> {epic.caseSensitive ? "Yes" : "No"}</p>
         </>}
-      <button id="edit-epic-button" onClick={() => handleEditEpicButtonClick(epic.name)}>
-        {editingEpic ? "Confirm" : "Edit Epic"}
-      </button>
-      <button id="delete-epic-button" onClick={() => handleDeleteEpicButtonClick(epic.name)}>
-        {confirmingDelete ? "Are you sure?" : "Delete Epic"}
-      </button>
+      <div id="epic-details-button-container">
+        <button id="edit-epic-button" onClick={() => handleEditEpicButtonClick(epic.name)}>
+          {editingEpic ? "Confirm" : "Edit Epic"}
+        </button>
+        <button id="delete-epic-button" onClick={() => handleDeleteEpicButtonClick(epic.name)}>
+          {confirmingDelete ? "Are you sure?" : "Delete Epic"}
+        </button>
+      </div>
     </td>
   </tr>;
 }
