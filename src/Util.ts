@@ -38,6 +38,14 @@ function parseVEventToCalendarEvent(event: ICAL.Event): CalendarEvent {
  * Requires: start1 is strictly earlier than end1, start2 is strictly earlier than end2.
  */
 export function hasNontrivialOverlap(start1: Date, end1: Date, start2: Date, end2: Date): boolean {
+  return computeOverlapHours(start1, end1, start2, end2) > 0;
+}
+
+/**
+ * Returns the amount of overlap of the two intervals in hours.
+ * Requires: start1 is strictly earlier than end1, start2 is strictly earlier than end2.
+ */
+export function computeOverlapHours(start1: Date, end1: Date, start2: Date, end2: Date): number {
   if (start1.getTime() >= end1.getTime()) {
     throw new Error("start1 must be strictly earlier than end1");
   }
@@ -46,5 +54,5 @@ export function hasNontrivialOverlap(start1: Date, end1: Date, start2: Date, end
   }
   const laterStart = start1.getTime() > start2.getTime() ? start1 : start2;
   const earlierEnd = end1.getTime() < end2.getTime() ? end1 : end2;
-  return laterStart.getTime() < earlierEnd.getTime();
+  return Math.max(0, (earlierEnd.getTime() - laterStart.getTime()) / (3600 * 1000));
 }
