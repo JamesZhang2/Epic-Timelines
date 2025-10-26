@@ -5,7 +5,7 @@
 - [ ] Handle repeated events
 - [x] Support adding Epics
 - [x] Support deleting Epics
-- [ ] Support modifying Epics
+- [x] Support modifying Epics
 - [ ] Support reordering Epics (drag to reorder)
 - [x] Allow Epics to have a different name than the keyword
 - [ ] Support case insensitive keyword matching
