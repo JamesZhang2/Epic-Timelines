@@ -14,3 +14,7 @@ This project is inspired by the Jira timelines for Epics. It allows you to impor
 
 - `npm run dev` followed by `o` to open the webpage
 - `npm run test` to run the Vitest suites
+
+## Privacy Notice
+
+All the data processing is done locally on your computer, and the project can be run offline. No data (such as your calendar events) is collected or stored.
