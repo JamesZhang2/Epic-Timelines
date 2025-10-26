@@ -29,6 +29,7 @@ type Epic = {
   name: string;  // Must be unique.
   keyword: string;
   caseSensitive: boolean;
+  color: string;
 }
 
 export type TimeBucket = {
@@ -181,7 +182,8 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
     const newEpic: Epic = {
       name: newName,
       keyword: newKeyword,
-      caseSensitive: caseSensitive
+      caseSensitive: caseSensitive,
+      color: "#6666ff"
     };
 
     const success = onAddEpic(newEpic);
@@ -269,7 +271,8 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
       const updatedEpic: Epic = {
         name: updatedName,
         keyword: updatedKeyword,
-        caseSensitive: updatedCaseSensitive
+        caseSensitive: updatedCaseSensitive,
+        color: "#6666ff"
       }
 
       onEditEpic(oldEpicName, updatedEpic);
