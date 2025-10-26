@@ -1,7 +1,7 @@
 import type { CalendarEvent } from "./Util";
 import { hasNontrivialOverlap } from "./Util";
 import "./Timelines.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type TimelinesProps = {
   events: CalendarEvent[];
@@ -52,6 +52,11 @@ function Timelines({ events }: TimelinesProps) {
   const bucketedEventsList: BucketedEvents[] = bucketEvents(events, timeBuckets);
   const [epics, setEpics] = useState<Epic[]>([]);
   const [selectedEpic, setSelectedEpic] = useState<Epic | null>(null);
+
+  // The number of hours in each bucket of each Epic.
+  const epicBucketHours: Map<string, number[]> = useMemo(
+    () => computeEpicBucketHours(epics, bucketedEventsList),
+    [epics, bucketedEventsList]);
 
   /**
    * Throws an error if the names of the epics are not unique.
@@ -374,6 +379,11 @@ export function bucketEvents(events: CalendarEvent[], buckets: TimeBucket[]): Bu
     })
   }
   return result;
+}
+
+export function computeEpicBucketHours(epics: Epic[], bucketedEventsList: BucketedEvents[]): Map<string, number[]> {
+  // TODO
+  return new Map();
 }
 
 export default Timelines;
