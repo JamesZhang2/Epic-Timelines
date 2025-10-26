@@ -1,5 +1,5 @@
 import type { CalendarEvent } from "./Util";
-import { hasNontrivialOverlap } from "./Util";
+import { computeOverlapHours, hasNontrivialOverlap } from "./Util";
 import "./Timelines.css";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -25,7 +25,7 @@ type EpicDetailsProps = {
   onEditEpic: (oldEpicName: string, newEpic: Epic) => boolean;
 }
 
-type Epic = {
+export type Epic = {
   name: string;  // Must be unique.
   keyword: string;
   caseSensitive: boolean;
@@ -382,8 +382,26 @@ export function bucketEvents(events: CalendarEvent[], buckets: TimeBucket[]): Bu
 }
 
 export function computeEpicBucketHours(epics: Epic[], bucketedEventsList: BucketedEvents[]): Map<string, number[]> {
-  // TODO
-  return new Map();
+  const result: Map<string, number[]> = new Map();
+  for (const epic of epics) {
+    const regex = new RegExp(epic.keyword, epic.caseSensitive ? "" : "i");  // i: ignore case flag
+    const epicHours: number[] = [];
+
+    for (const bucketedEvents of bucketedEventsList) {
+      const timeBucket = bucketedEvents.bucket;
+      let epicHoursInThisBucket = 0;
+
+      for (const event of bucketedEvents.events) {
+        if (regex.test(event.title) ||
+          (event.description !== undefined && regex.test(event.description))) {
+          epicHoursInThisBucket += computeOverlapHours(event.start, event.end, timeBucket.start, timeBucket.end);
+        }
+      }
+      epicHours.push(epicHoursInThisBucket);
+    }
+    result.set(epic.name, epicHours);
+  }
+  return result;
 }
 
 export default Timelines;
