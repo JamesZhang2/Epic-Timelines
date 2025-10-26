@@ -254,6 +254,7 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
   const epicNameInputRef = useRef<HTMLInputElement>(null);
   const keywordInputRef = useRef<HTMLInputElement>(null);
   const caseSensitiveRef = useRef<HTMLInputElement>(null);
+  const colorRef = useRef<HTMLInputElement>(null);
 
   function handleDeleteEpicButtonClick(epicName: string) {
     if (confirmingDelete) {
@@ -269,6 +270,7 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
       const updatedName = epicNameInputRef.current?.value.trim();
       const updatedKeyword = keywordInputRef.current?.value.trim();
       const updatedCaseSensitive = caseSensitiveRef.current?.checked ?? false;
+      const updatedColor = colorRef.current?.value || "#7799ff";
 
       if (!updatedName) {
         alert("Error: The updated Epic must have a name.");
@@ -283,7 +285,7 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
         name: updatedName,
         keyword: updatedKeyword,
         caseSensitive: updatedCaseSensitive,
-        color: "#7799ff"
+        color: updatedColor
       }
 
       onEditEpic(oldEpicName, updatedEpic);
@@ -313,6 +315,9 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
           </p>
           <p>
             <strong>Case sensitive:</strong> <input type="checkbox" defaultChecked={epic.caseSensitive} ref={caseSensitiveRef} />
+          </p>
+          <p>
+            <strong>Color: </strong> <input type="color" defaultValue={epic.color} ref={colorRef} />
           </p>
         </> :
         <>
