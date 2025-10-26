@@ -191,6 +191,7 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
       // Clear input
       epicNameInputRef.current!.value = "";
       keywordInputRef.current!.value = "";
+      caseSensitiveRef.current!.checked = false;
     }
   }
 
