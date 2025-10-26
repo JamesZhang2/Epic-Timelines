@@ -82,7 +82,7 @@ describe("hasNontrivialOverlap", () => {
 });
 
 describe("computeOverlapHours", () => {
-  it("Has overlap 1", () => {
+  it("has overlap 1", () => {
     const start1 = new Date("2025-09-22T08:00:00");
     const end1 = new Date("2025-09-22T10:00:00");
     const start2 = new Date("2025-09-22T09:00:00");
@@ -90,7 +90,7 @@ describe("computeOverlapHours", () => {
     expect(computeOverlapHours(start1, end1, start2, end2)).toEqual(1);
   });
 
-  it("Has overlap 2", () => {
+  it("has overlap 2", () => {
     const start1 = new Date("2025-09-22T12:00:00");
     const end1 = new Date("2025-09-22T16:00:00");
     const start2 = new Date("2025-09-22T09:00:00");
@@ -98,7 +98,7 @@ describe("computeOverlapHours", () => {
     expect(computeOverlapHours(start1, end1, start2, end2)).toEqual(4);
   });
 
-  it("Has overlap 3", () => {
+  it("has overlap 3", () => {
     const start1 = new Date("2025-09-21T08:00:00");
     const end1 = new Date("2025-09-22T20:00:00");
     const start2 = new Date("2025-09-21T20:00:00");
@@ -106,7 +106,7 @@ describe("computeOverlapHours", () => {
     expect(computeOverlapHours(start1, end1, start2, end2)).toEqual(12.5);
   });
 
-  it("Has overlap 4", () => {
+  it("has overlap 4", () => {
     const start1 = new Date("2025-09-22T12:00:00");
     const end1 = new Date("2025-09-22T14:00:00");
     const start2 = new Date("2025-09-21T23:00:00");
@@ -114,7 +114,7 @@ describe("computeOverlapHours", () => {
     expect(computeOverlapHours(start1, end1, start2, end2)).toEqual(1 / 3600);
   });
 
-  it("No overlap 1", () => {
+  it("no overlap 1", () => {
     const start1 = new Date("2025-09-22T08:00:00");
     const end1 = new Date("2025-09-22T10:00:00");
     const start2 = new Date("2025-09-22T11:00:00");
@@ -122,7 +122,7 @@ describe("computeOverlapHours", () => {
     expect(computeOverlapHours(start1, end1, start2, end2)).toEqual(0);
   });
 
-  it("No overlap 2", () => {
+  it("no overlap 2", () => {
     const start1 = new Date("2025-09-22T08:00:00");
     const end1 = new Date("2025-09-22T10:00:00");
     const start2 = new Date("2025-09-22T10:00:00");
