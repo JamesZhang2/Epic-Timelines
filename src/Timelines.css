@@ -6,9 +6,27 @@ td {
     border-style: solid;
 }
 
+table {
+    border-collapse: collapse;
+}
+
 th {
     padding: 5px;
     text-align: center;
+}
+
+td {
+    border-left: none;
+    border-right: none;
+    height: 30px;
+}
+
+.colored-cell {
+    border-radius: 1px;
+    /* silly workaround: hides border space */
+    margin-left: -2px;
+    margin-right: -2px;
+    height: 80%;
 }
 
 #timelines-table {

@@ -239,7 +239,7 @@ function TimelineRow({ bucketedEventsList, epic, onEpicClick }: TimelineRowProps
       }
     }
     const style = foundMatch ? { backgroundColor: epic.color } : {};
-    cells.push(<td key={i} style={style}></td>);
+    cells.push(<td key={i}><div className="colored-cell" style={style}></div></td>);
   }
   return <tr>{cells}</tr>;
 }
