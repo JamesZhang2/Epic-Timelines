@@ -20,3 +20,4 @@
 - [ ] Allow saving and loading Epics
 - [ ] UI: Make timelines look like intervals rather than colored cells
 - [ ] UI/UX: Look into relative luminance to set foreground color based on background
+- [ ] Add screenshots of the project to `README.md`
