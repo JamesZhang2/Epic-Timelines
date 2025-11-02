@@ -381,4 +381,4 @@ describe("computeEpicBucketHours", () => {
     ]);
     expect(epicBucketHours).toEqual(expected);
   });
-})
+});
