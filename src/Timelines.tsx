@@ -13,7 +13,7 @@ type AddEpicCardProps = {
 }
 
 type TimelineRowProps = {
-  bucketedEventsList: BucketedEvents[];
+  epicBucketHours: Map<string, number[]>;
   epic: Epic;
   onEpicClick: () => void;
 }
@@ -146,7 +146,7 @@ function Timelines({ events }: TimelinesProps) {
         {epics.map((epic) =>
           <>
             <TimelineRow
-              bucketedEventsList={bucketedEventsList}
+              epicBucketHours={epicBucketHours}
               epic={epic}
               onEpicClick={() => handleEpicClick(epic)} />
             {selectedEpic && selectedEpic.name === epic.name &&
@@ -230,23 +230,31 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
 }
 
 /** Represents a timeline for an epic, which is a row in the Timelines table. */
-function TimelineRow({ bucketedEventsList, epic, onEpicClick }: TimelineRowProps) {
+function TimelineRow({ epicBucketHours, epic, onEpicClick }: TimelineRowProps) {
   const cells = [<th className="epic-name-cell" onClick={onEpicClick}>{epic.name}</th>];
-  const regex = new RegExp(epic.keyword, epic.caseSensitive ? "" : "i");  // i: ignore case flag
 
-  for (const [i, bucketedEvents] of bucketedEventsList.entries()) {
-    let foundMatch = false;
-    for (const event of bucketedEvents.events) {
-      if (regex.test(event.title) ||
-        (event.description !== undefined && regex.test(event.description))) {
-        foundMatch = true;
-        break;
-      }
-    }
-    const style = foundMatch ? { backgroundColor: epic.color } : {};
+  const epicHours = epicBucketHours.get(epic.name);
+
+  if (!epicHours) {
+    throw new Error("epicBucketHours does not contain the name of the Epic")
+  }
+
+  const maxHours = Math.max(...epicHours);
+
+  for (const [i, hours] of epicHours.entries()) {
+    const cellColor = computeCellColor(hours, maxHours, epic.color);
+    const style = { backgroundColor: cellColor };
     cells.push(<td key={i}><div className="colored-cell" style={style}></div></td>);
   }
   return <tr>{cells}</tr>;
+}
+
+/**
+ * Compute the color for a cell based on the number hours in this bucket,
+ * the max number of hours, and the color of the Epic.
+ */
+function computeCellColor(hours: number, maxHours: number, epicColor: string): string {
+  return hours > 0 ? epicColor : "#ffffff";
 }
 
 /**
