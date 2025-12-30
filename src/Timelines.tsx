@@ -347,9 +347,9 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
  */
 export function generateTimeBuckets(startDate: Date, endDate: Date): TimeBucket[] {
   const timeBuckets = [];
-  let curDate = startDate;
+  const curDate = startDate;
   while (curDate <= endDate) {
-    let end = new Date(curDate);
+    const end = new Date(curDate);
     end.setDate(end.getDate() + 1);
     timeBuckets.push({
       start: new Date(curDate),
