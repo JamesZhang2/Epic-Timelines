@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { generateTimeBuckets, bucketEvents, computeEpicBucketHours } from "./Timelines";
-import type { BucketedEvents, Epic, TimeBucket } from "./Timelines";
-import { parseICSToCalendarEvents, type CalendarEvent } from "./Util";
+import { generateTimeBuckets, bucketEvents, computeEpicBucketHours } from "./TimelinesUtil.ts";
+import type { BucketedEvents, Epic, TimeBucket } from "./Timelines.tsx";
+import { parseICSToCalendarEvents, type CalendarEvent } from "./Util.ts";
 import { readFileSync } from "fs";
 import { join } from "path";
 

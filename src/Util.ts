@@ -70,6 +70,7 @@ export function colorToRGB(color: string): number[] {
   return [r, g, b];
 }
 
+/** Convert a decimal number in the range [0, 255] to a 2-digit hexadecimal number. */
 function decimalTo2DigitHex(n: number) {
   if (n < 0 || n > 255) {
     throw new Error("Number is out of range of 2-digit hexes");
@@ -78,6 +79,7 @@ function decimalTo2DigitHex(n: number) {
   return hex.length == 1 ? "0" + hex : hex;
 }
 
+/** Convert RGB values to a color string (in the format #RRGGBB). */
 export function rgbToColor(r: number, g: number, b: number) {
   return "#" + decimalTo2DigitHex(r) + decimalTo2DigitHex(g) + decimalTo2DigitHex(b);
 }
