@@ -1,5 +1,5 @@
 import type { CalendarEvent } from "./Util";
-import { computeOverlapHours, hasNontrivialOverlap } from "./Util";
+import { colorToRGB, computeOverlapHours, hasNontrivialOverlap, rgbToColor } from "./Util";
 import "./Timelines.css";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -254,7 +254,15 @@ function TimelineRow({ epicBucketHours, epic, onEpicClick }: TimelineRowProps) {
  * the max number of hours, and the color of the Epic.
  */
 function computeCellColor(hours: number, maxHours: number, epicColor: string): string {
-  return hours > 0 ? epicColor : "#ffffff";
+  if (hours === 0) {
+    return "#ffffff";
+  }
+  const rgb = colorToRGB(epicColor);
+  const factor = Math.max(hours / maxHours, 0.25);
+  const newR = Math.floor(255 - (255 - rgb[0]) * factor);
+  const newG = Math.floor(255 - (255 - rgb[1]) * factor);
+  const newB = Math.floor(255 - (255 - rgb[2]) * factor);
+  return rgbToColor(newR, newG, newB);
 }
 
 /**
