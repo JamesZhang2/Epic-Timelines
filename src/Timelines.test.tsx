@@ -341,6 +341,7 @@ describe("computeEpicBucketHours", () => {
   });
 
   it("different-hours-1 integration test", () => {
+    // TODO: Make time zones consistent 
     const epicA: Epic = {
       name: "Alpha",
       keyword: "alpha",
@@ -367,10 +368,28 @@ describe("computeEpicBucketHours", () => {
     }
     const epics: Epic[] = [epicA, epicB, epicC, epicD];
 
+    const bucket1PST: TimeBucket = {
+      start: new Date("2025-09-22T00:00:00-08:00"),
+      end: new Date("2025-09-23T00:00:00-08:00")
+    };
+    const bucket2PST: TimeBucket = {
+      start: new Date("2025-09-23T00:00:00-08:00"),
+      end: new Date("2025-09-24T00:00:00-08:00")
+    };
+    const bucket3PST: TimeBucket = {
+      start: new Date("2025-09-24T00:00:00-08:00"),
+      end: new Date("2025-09-25T00:00:00-08:00")
+    };
+    const bucket4PST: TimeBucket = {
+      start: new Date("2025-09-25T00:00:00-08:00"),
+      end: new Date("2025-09-26T00:00:00-08:00")
+    };
+    const bucketsPST: TimeBucket[] = [bucket1PST, bucket2PST, bucket3PST, bucket4PST];
+
     const filePath = join(__dirname, "../test/gcal/different-hours-1.ics");
     const text = readFileSync(filePath, "utf-8");
     const events: CalendarEvent[] = parseICSToCalendarEvents(text);
-    const bucketedEventsList: BucketedEvents[] = bucketEvents(events, buckets);
+    const bucketedEventsList: BucketedEvents[] = bucketEvents(events, bucketsPST);
     const epicBucketHours: Map<string, number[]> = computeEpicBucketHours(epics, bucketedEventsList);
 
     const expected: Map<string, number[]> = new Map([
