@@ -8,11 +8,11 @@
 - [x] Support modifying Epics
 - [ ] Support reordering Epics (drag to reorder)
 - [x] Allow Epics to have a different name than the keyword
-- [ ] Support case insensitive keyword matching
+- [x] Support case insensitive keyword matching
 - [ ] Allow searching for specific fields (title, description, location)
-- [ ] Allow clicking on the name of an Epic to show & modify details
+- [x] Allow clicking on the name of an Epic to show & modify details
 - [x] Support different colors
-- [ ] Support different shades/darkness based on number of hours of events corresponding to the Epic (GitHub style)
+- [x] Support different shades/darkness based on number of hours of events corresponding to the Epic (GitHub style)
 - [ ] Support custom date ranges (and allow users to change the ranges)
 - [ ] Support different bucket time intervals
 - [ ] Support logical and/or of keyword criteria in Epics
@@ -20,6 +20,6 @@
 - [ ] Add a column at the end showing total number of hours for this Epic
 - [ ] Add option to ignore events more than 24 hours (full-day events)
 - [ ] Allow saving and loading Epics
-- [ ] UI: Make timelines look like intervals rather than colored cells
+- [x] UI: Make timelines look like intervals rather than colored cells
 - [ ] UI/UX: Look into relative luminance to set foreground color based on background
 - [ ] Add screenshots of the project to `README.md`
