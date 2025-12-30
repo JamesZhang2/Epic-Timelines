@@ -69,3 +69,15 @@ export function colorToRGB(color: string): number[] {
   const b = parseInt(results[3], 16);
   return [r, g, b];
 }
+
+function decimalTo2DigitHex(n: number) {
+  if (n < 0 || n > 255) {
+    throw new Error("Number is out of range of 2-digit hexes");
+  }
+  const hex = n.toString(16);
+  return hex.length == 1 ? "0" + hex : hex;
+}
+
+export function rgbToColor(r: number, g: number, b: number) {
+  return "#" + decimalTo2DigitHex(r) + decimalTo2DigitHex(g) + decimalTo2DigitHex(b);
+}

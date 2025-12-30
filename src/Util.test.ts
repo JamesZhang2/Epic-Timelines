@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { CalendarEvent } from "./Util";
-import { parseICSToCalendarEvents, hasNontrivialOverlap, computeOverlapHours, colorToRGB } from "./Util";
+import { parseICSToCalendarEvents, hasNontrivialOverlap, computeOverlapHours, colorToRGB, rgbToColor } from "./Util";
 import * as fs from "fs";
 
 describe("parseICSToCalendarEvents", () => {
@@ -138,7 +138,7 @@ describe("colorToRGB", () => {
     expect(colorToRGB("#123456")).toEqual([18, 52, 86]);
     expect(colorToRGB("#a0b0c0")).toEqual([160, 176, 192]);
     expect(colorToRGB("#ff6600")).toEqual([255, 102, 0]);
-  })
+  });
 
   it("negative cases", () => {
     expect(() => colorToRGB("#123")).toThrowError(new Error("Color is not in the format #RRGGBB"));
@@ -146,5 +146,21 @@ describe("colorToRGB", () => {
     expect(() => colorToRGB("123456")).toThrowError(new Error("Color is not in the format #RRGGBB"));
     expect(() => colorToRGB("#1234567")).toThrowError(new Error("Color is not in the format #RRGGBB"));
     expect(() => colorToRGB("#abcdeg")).toThrowError(new Error("Color is not in the format #RRGGBB"));
-  })
+  });
+});
+
+describe("rgbToColor", () => {
+  it("positive cases", () => {
+    expect(rgbToColor(0, 0, 0)).toEqual("#000000");
+    expect(rgbToColor(1, 2, 3)).toEqual("#010203");
+    expect(rgbToColor(255, 255, 255)).toEqual("#ffffff");
+    expect(rgbToColor(10, 20, 30)).toEqual("#0a141e");
+    expect(rgbToColor(255, 102, 0)).toEqual("#ff6600");
+  });
+
+  it("negative cases", () => {
+    expect(() => rgbToColor(-1, 0, 0)).toThrowError(new Error("Number is out of range of 2-digit hexes"));
+    expect(() => rgbToColor(256, 0, 0)).toThrowError(new Error("Number is out of range of 2-digit hexes"));
+    expect(() => rgbToColor(12, 34, 256)).toThrowError(new Error("Number is out of range of 2-digit hexes"));
+  });
 });
