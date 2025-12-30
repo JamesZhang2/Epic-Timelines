@@ -56,3 +56,16 @@ export function computeOverlapHours(start1: Date, end1: Date, start2: Date, end2
   const earlierEnd = end1.getTime() < end2.getTime() ? end1 : end2;
   return Math.max(0, (earlierEnd.getTime() - laterStart.getTime()) / (3600 * 1000));
 }
+
+/** Convert a color string (in the format #RRGGBB) to a list of (r, g, b) values. */
+export function colorToRGB(color: string): number[] {
+  const regex = /^#([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})$/i;
+  const results = regex.exec(color);
+  if (!results) {
+    throw new Error("Color is not in the format #RRGGBB");
+  }
+  const r = parseInt(results[1], 16);
+  const g = parseInt(results[2], 16);
+  const b = parseInt(results[3], 16);
+  return [r, g, b];
+}

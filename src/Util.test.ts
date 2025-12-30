@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { CalendarEvent } from "./Util";
-import { parseICSToCalendarEvents, hasNontrivialOverlap, computeOverlapHours } from "./Util";
+import { parseICSToCalendarEvents, hasNontrivialOverlap, computeOverlapHours, colorToRGB } from "./Util";
 import * as fs from "fs";
 
 describe("parseICSToCalendarEvents", () => {
@@ -128,4 +128,23 @@ describe("computeOverlapHours", () => {
     const end2 = new Date("2025-09-22T12:00:00");
     expect(computeOverlapHours(start1, end1, start2, end2)).toEqual(0);
   });
+});
+
+describe("colorToRGB", () => {
+  it("positive cases", () => {
+    expect(colorToRGB("#000000")).toEqual([0, 0, 0]);
+    expect(colorToRGB("#010203")).toEqual([1, 2, 3]);
+    expect(colorToRGB("#ffffff")).toEqual([255, 255, 255]);
+    expect(colorToRGB("#123456")).toEqual([18, 52, 86]);
+    expect(colorToRGB("#a0b0c0")).toEqual([160, 176, 192]);
+    expect(colorToRGB("#ff6600")).toEqual([255, 102, 0]);
+  })
+
+  it("negative cases", () => {
+    expect(() => colorToRGB("#123")).toThrowError(new Error("Color is not in the format #RRGGBB"));
+    expect(() => colorToRGB("foo")).toThrowError(new Error("Color is not in the format #RRGGBB"));
+    expect(() => colorToRGB("123456")).toThrowError(new Error("Color is not in the format #RRGGBB"));
+    expect(() => colorToRGB("#1234567")).toThrowError(new Error("Color is not in the format #RRGGBB"));
+    expect(() => colorToRGB("#abcdeg")).toThrowError(new Error("Color is not in the format #RRGGBB"));
+  })
 });
