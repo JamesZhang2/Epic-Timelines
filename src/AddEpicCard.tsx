@@ -47,8 +47,8 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
     }
   }
 
-  return <div id="add-epic-div">
-    <p id="add-epic-instructions">Add a new Epic: </p>
+  return <div id="add-epic-div" className="card">
+    <p id="add-epic-title" className="card-title">Add a new Epic</p>
     <p id="add-epic-name">
       <label>Name: </label>
       <input type="text" ref={epicNameInputRef} />

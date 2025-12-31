@@ -3,6 +3,8 @@ import { bucketEvents, computeEpicBucketHours, generateTimeBuckets } from "./Buc
 import AddEpicCard from "./AddEpicCard";
 import Timelines from "./Timelines";
 import { useMemo, useState } from "react";
+import "./EpicTimelines.css";
+import OptionsCard from "./OptionsCard";
 
 type EpicTimelinesProps = {
   events: CalendarEvent[];
@@ -118,7 +120,10 @@ function EpicTimelines({ events }: EpicTimelinesProps) {
   }
 
   return <div>
-    <AddEpicCard onAddEpic={handleAddEpic} />
+    <div id="card-container">
+      <AddEpicCard onAddEpic={handleAddEpic} />
+      <OptionsCard />
+    </div>
     <Timelines
       epics={epics}
       timeBuckets={timeBuckets}

@@ -1,0 +1,25 @@
+.card {
+    margin: 16px 0;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fafafa;
+    max-width: 400px;
+    flex: 1;
+}
+
+.card p {
+    padding: 5px 0px;
+}
+
+.card-title {
+    font-weight: 600;
+    font-size: 20px;
+    text-align: center;
+}
+
+#card-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
