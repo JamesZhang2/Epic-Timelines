@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import type { Epic } from "./EpicTimelines";
+import "./AddEpicCard.css";
 
 type AddEpicCardProps = {
   // Returns true if epic is successfully added, false otherwise

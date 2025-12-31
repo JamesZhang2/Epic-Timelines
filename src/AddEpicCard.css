@@ -1,0 +1,60 @@
+#add-epic-div {
+    margin: 16px 0;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fafafa;
+    max-width: 400px;
+}
+
+#add-epic-div p {
+    padding: 5px 0px;
+}
+
+#add-epic-instructions {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+#add-epic-name,
+#add-epic-keyword {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+}
+
+#add-epic-name label,
+#add-epic-keyword label {
+    min-width: 70px;
+}
+
+#add-epic-name input,
+#add-epic-keyword input {
+    margin-left: 8px;
+    flex: 1;
+    padding: 6px 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#add-epic-button-container {
+    padding-top: 3px;
+    display: flex;
+    justify-content: center;
+}
+
+#add-epic-button {
+    padding: 8px 16px;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: #ddd;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition-duration: 0.2s;
+}
+
+#add-epic-button:hover {
+    background-color: #ccc;
+}

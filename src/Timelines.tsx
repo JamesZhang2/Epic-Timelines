@@ -2,6 +2,7 @@ import type { Epic, TimeBucket } from "./EpicTimelines";
 import TimelineRow from "./TimelineRow";
 import EpicDetails from "./EpicDetails";
 import React from "react";
+import "./Timelines.css";
 
 type TimelinesProps = {
   epics: Epic[];

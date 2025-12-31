@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import type { Epic } from "./EpicTimelines";
+import "./EpicDetails.css";
 
 type EpicDetailsProps = {
   epic: Epic;

@@ -1,5 +1,6 @@
 import type { Epic } from "./EpicTimelines";
 import { colorToRGB, rgbToColor } from "./Util";
+import "./TimelineRow.css";
 
 type TimelineRowProps = {
   epicBucketHours: Map<string, number[]>;

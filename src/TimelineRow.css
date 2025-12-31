@@ -1,0 +1,16 @@
+.epic-name-cell {
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.epic-name-cell:hover {
+    background: #eee;
+}
+
+.colored-cell {
+    border-radius: 1px;
+    /* silly workaround: hides border space */
+    margin-left: -2px;
+    margin-right: -2px;
+    height: 80%;
+}

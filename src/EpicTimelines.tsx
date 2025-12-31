@@ -1,6 +1,5 @@
 import type { CalendarEvent } from "./Util";
 import { bucketEvents, computeEpicBucketHours, generateTimeBuckets } from "./BucketUtil";
-import "./EpicTimelines.css";
 import AddEpicCard from "./AddEpicCard";
 import Timelines from "./Timelines";
 import { useMemo, useState } from "react";

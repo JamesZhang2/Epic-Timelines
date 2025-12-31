@@ -1,0 +1,26 @@
+#timelines-table {
+    border-collapse: collapse;
+}
+
+table,
+th,
+td {
+    border-color: gray;
+    border-width: 1px;
+    border-style: solid;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th {
+    padding: 5px;
+    text-align: center;
+}
+
+td {
+    border-left: none;
+    border-right: none;
+    height: 30px;
+}
