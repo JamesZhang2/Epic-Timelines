@@ -19,6 +19,7 @@
 - [ ] Show a preview/summary of events in Epic when a cell is clicked on (or just number of hours), or add an option to show them in the grid
 - [ ] Add a column at the end showing total number of hours for this Epic
 - [ ] Add option to ignore events more than 24 hours (full-day events)
+- [ ] Add option to set time zones (of time buckets)
 - [ ] Allow saving and loading Epics
 - [x] UI: Make timelines look like intervals rather than colored cells
 - [ ] UI/UX: Look into relative luminance to set foreground color based on background
