@@ -1,6 +1,6 @@
 import type { CalendarEvent } from "./Util";
 import { colorToRGB, rgbToColor } from "./Util";
-import { bucketEvents, computeEpicBucketHours, generateTimeBuckets } from "./TimelinesUtil";
+import { bucketEvents, computeEpicBucketHours, generateTimeBuckets } from "./BucketUtil";
 import "./Timelines.css";
 import AddEpicCard from "./AddEpicCard";
 import { useEffect, useMemo, useRef, useState } from "react";
