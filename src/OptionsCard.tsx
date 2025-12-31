@@ -11,8 +11,8 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
   function handleStartChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newStart = new Date(e.target.value);
     console.log(newStart);
-    if (newStart >= timelineOptions.endDate) {
-      alert("Start date must be before end date.");
+    if (newStart > timelineOptions.endDate) {
+      alert("Start date must be before or equal to end date.");
       return;
     }
     setTimelineOptions(prev => ({ ...prev, startDate: newStart }));
@@ -21,8 +21,8 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
   function handleEndChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newEnd = new Date(e.target.value);
     console.log(newEnd);
-    if (newEnd <= timelineOptions.startDate) {
-      alert("End date must be after start date.");
+    if (newEnd < timelineOptions.startDate) {
+      alert("End date must be after or equal to start date.");
       return;
     }
     setTimelineOptions(prev => ({ ...prev, endDate: newEnd }));
