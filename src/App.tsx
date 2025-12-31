@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import Timelines from "./Timelines";
+import EpicTimelines from "./EpicTimelines";
 import type { CalendarEvent } from "./Util";
 import { parseICSToCalendarEvents } from "./Util";
 
@@ -33,7 +33,7 @@ function App() {
       <p id="upload-instructions">Export the .ics file from your calendar and upload it here:</p>
       <input type="file" id="file-input" accept=".ics" onChange={handleFileUpload} />
       <p id="upload-success-text">Calendar file successfully uploaded!</p>
-      <Timelines events={events}></Timelines>
+      <EpicTimelines events={events}></EpicTimelines>
     </>;
   } else {
     return <>

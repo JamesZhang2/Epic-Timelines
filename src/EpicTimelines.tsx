@@ -1,7 +1,7 @@
 import type { CalendarEvent } from "./Util";
 import { colorToRGB, rgbToColor } from "./Util";
 import { bucketEvents, computeEpicBucketHours, generateTimeBuckets } from "./BucketUtil";
-import "./Timelines.css";
+import "./EpicTimelines.css";
 import AddEpicCard from "./AddEpicCard";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -42,7 +42,8 @@ export type BucketedEvents = {
   events: CalendarEvent[];
 }
 
-function Timelines({ events }: TimelinesProps) {
+/** Top-level component */
+function EpicTimelines({ events }: TimelinesProps) {
   const startDate = new Date("2025-09-21T00:00:00");
   const endDate = new Date("2025-09-27T00:00:00");
   const timeBuckets: TimeBucket[] = generateTimeBuckets(startDate, endDate);
@@ -288,4 +289,4 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
   </tr>;
 }
 
-export default Timelines;
+export default EpicTimelines;

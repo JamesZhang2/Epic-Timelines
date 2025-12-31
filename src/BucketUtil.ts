@@ -2,7 +2,7 @@
 
 import { computeOverlapHours, hasNontrivialOverlap } from "./Util";
 import type { CalendarEvent } from "./Util";
-import type { TimeBucket, BucketedEvents, Epic } from "./Timelines";
+import type { TimeBucket, BucketedEvents, Epic } from "./EpicTimelines";
 
 /**
  * @returns a list of BucketedEvents, one for each bucket in buckets.
