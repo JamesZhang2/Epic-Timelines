@@ -57,7 +57,7 @@ export function computeEpicBucketHours(epics: Epic[], bucketedEventsList: Bucket
  */
 export function generateTimeBuckets(startDate: Date, endDate: Date): TimeBucket[] {
   const timeBuckets = [];
-  const curDate = startDate;
+  const curDate = new Date(startDate);
   while (curDate <= endDate) {
     const end = new Date(curDate);
     end.setDate(end.getDate() + 1);

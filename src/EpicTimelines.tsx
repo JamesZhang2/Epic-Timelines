@@ -30,11 +30,19 @@ export type BucketedEvents = {
   events: CalendarEvent[];
 }
 
+export type TimelineOptions = {
+  startDate: Date;
+  endDate: Date;
+}
+
 /** Top-level component */
 function EpicTimelines({ events }: EpicTimelinesProps) {
-  const startDate = new Date("2025-09-21T00:00:00");
-  const endDate = new Date("2025-09-27T00:00:00");
-  const timeBuckets: TimeBucket[] = generateTimeBuckets(startDate, endDate);
+  const defaultTimelineOptions = {
+    startDate: new Date("2025-09-21T00:00:00"),
+    endDate: new Date("2025-09-27T00:00:00")
+  };
+  const [timelineOptions, setTimelineOptions] = useState<TimelineOptions>(defaultTimelineOptions);
+  const timeBuckets: TimeBucket[] = generateTimeBuckets(timelineOptions.startDate, timelineOptions.endDate);
   const bucketedEventsList: BucketedEvents[] = bucketEvents(events, timeBuckets);
   const [epics, setEpics] = useState<Epic[]>([]);
   const [selectedEpic, setSelectedEpic] = useState<Epic | null>(null);
