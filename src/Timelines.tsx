@@ -1,6 +1,7 @@
 import { colorToRGB, rgbToColor } from "./Util";
 import { useEffect, useRef, useState } from "react";
 import type { Epic, TimeBucket } from "./EpicTimelines";
+import React from "react";
 
 type TimelineRowProps = {
   epicBucketHours: Map<string, number[]>;
@@ -31,12 +32,12 @@ function Timelines({ epics, timeBuckets, epicBucketHours, selectedEpic, onEpicCl
       <thead>
         <tr>
           <th>Epics</th>
-          {timeBuckets.map((bucket) => <th key={JSON.stringify(bucket)}>{(bucket.start.getMonth() + 1) + "/" + bucket.start.getDate()}</th>)}
+          {timeBuckets.map((bucket) => <th key={bucket.start.toISOString()}>{(bucket.start.getMonth() + 1) + "/" + bucket.start.getDate()}</th>)}
         </tr>
       </thead>
       <tbody>
         {epics.map((epic) =>
-          <>
+          <React.Fragment key={epic.name}>
             <TimelineRow
               epicBucketHours={epicBucketHours}
               epic={epic}
@@ -47,7 +48,7 @@ function Timelines({ epics, timeBuckets, epicBucketHours, selectedEpic, onEpicCl
                 numCols={timeBuckets.length + 1}
                 onDeleteEpic={onDeleteEpic}
                 onEditEpic={onEditEpic} />}
-          </>)}
+          </React.Fragment>)}
       </tbody>
     </table>
   );
