@@ -1,5 +1,6 @@
 import type { TimelineOptions } from "./EpicTimelines";
 import "./OptionsCard.css";
+import { dateAtLocalMidnight } from "./Util";
 
 type OptionsCardProps = {
   timelineOptions: TimelineOptions;
@@ -9,7 +10,7 @@ type OptionsCardProps = {
 /** Represents the card that contains the options. */
 function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) {
   function handleStartChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const newStart = new Date(e.target.value);
+    const newStart = dateAtLocalMidnight(e.target.value);
     console.log(newStart);
     if (newStart > timelineOptions.endDate) {
       alert("Start date must be before or equal to end date.");
@@ -19,7 +20,7 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
   }
 
   function handleEndChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const newEnd = new Date(e.target.value);
+    const newEnd = dateAtLocalMidnight(e.target.value);
     console.log(newEnd);
     if (newEnd < timelineOptions.startDate) {
       alert("End date must be after or equal to start date.");

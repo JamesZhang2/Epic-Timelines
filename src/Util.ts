@@ -83,3 +83,19 @@ function decimalTo2DigitHex(n: number) {
 export function rgbToColor(r: number, g: number, b: number) {
   return "#" + decimalTo2DigitHex(r) + decimalTo2DigitHex(g) + decimalTo2DigitHex(b);
 }
+
+/**
+ * Make a new date from the date string but at local midnight
+ * @param date format: yyyy-mm-dd
+ */
+export function dateAtLocalMidnight(date: string): Date {
+  const regex = /^(\d{4})-(\d{2})-(\d{2})$/;
+  const result = regex.exec(date);
+  if (!result) {
+    throw new Error("Unexpected date format");
+  }
+  const year = parseInt(result[1]);
+  const month = parseInt(result[2]);
+  const day = parseInt(result[3]);
+  return new Date(year, month - 1, day, 0, 0, 0, 0);
+}

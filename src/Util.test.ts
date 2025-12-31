@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { CalendarEvent } from "./Util";
-import { parseICSToCalendarEvents, hasNontrivialOverlap, computeOverlapHours, colorToRGB, rgbToColor } from "./Util";
+import { parseICSToCalendarEvents, hasNontrivialOverlap, computeOverlapHours, colorToRGB, rgbToColor, dateAtLocalMidnight } from "./Util";
 import * as fs from "fs";
 
 describe("parseICSToCalendarEvents", () => {
@@ -162,5 +162,18 @@ describe("rgbToColor", () => {
     expect(() => rgbToColor(-1, 0, 0)).toThrowError(new Error("Number is out of range of 2-digit hexes"));
     expect(() => rgbToColor(256, 0, 0)).toThrowError(new Error("Number is out of range of 2-digit hexes"));
     expect(() => rgbToColor(12, 34, 256)).toThrowError(new Error("Number is out of range of 2-digit hexes"));
+  });
+});
+
+describe("dateAtLocalMidnight", () => {
+  it("positive cases", () => {
+    expect(dateAtLocalMidnight("2026-01-02")).toEqual(new Date(2026, 0, 2, 0, 0, 0, 0));
+    expect(dateAtLocalMidnight("2025-12-31")).toEqual(new Date(2025, 11, 31, 0, 0, 0, 0));
+  });
+
+  it("negative cases", () => {
+    expect(() => dateAtLocalMidnight("01-02-2026")).toThrowError(new Error("Unexpected date format"))
+    expect(() => dateAtLocalMidnight("2026/01/02")).toThrowError(new Error("Unexpected date format"))
+    expect(() => dateAtLocalMidnight("01/02/2026")).toThrowError(new Error("Unexpected date format"))
   });
 });
