@@ -37,9 +37,12 @@ export type TimelineOptions = {
 
 /** Top-level component */
 function EpicTimelines({ events }: EpicTimelinesProps) {
+  const today = new Date();
+  const weekAgo = new Date();
+  weekAgo.setDate(today.getDate() - 7);
   const defaultTimelineOptions = {
-    startDate: new Date("2025-09-21T00:00:00"),
-    endDate: new Date("2025-09-27T00:00:00")
+    startDate: weekAgo,
+    endDate: today
   };
   const [timelineOptions, setTimelineOptions] = useState<TimelineOptions>(defaultTimelineOptions);
   const timeBuckets: TimeBucket[] = generateTimeBuckets(timelineOptions.startDate, timelineOptions.endDate);
