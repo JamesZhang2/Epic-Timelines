@@ -130,7 +130,7 @@ function EpicTimelines({ events }: EpicTimelinesProps) {
   return <div>
     <div id="card-container">
       <AddEpicCard onAddEpic={handleAddEpic} />
-      <OptionsCard />
+      <OptionsCard timelineOptions={timelineOptions} setTimelineOptions={setTimelineOptions} />
     </div>
     <Timelines
       epics={epics}
