@@ -341,7 +341,6 @@ describe("computeEpicBucketHours", () => {
   });
 
   it("different-hours-1 integration test", () => {
-    // TODO: Make time zones consistent 
     const epicA: Epic = {
       name: "Alpha",
       keyword: "alpha",
