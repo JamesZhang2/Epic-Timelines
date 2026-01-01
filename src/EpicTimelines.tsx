@@ -49,7 +49,7 @@ function EpicTimelines({ events }: EpicTimelinesProps) {
     bucketGranularity: "day" as BucketGranularity
   };
   const [timelineOptions, setTimelineOptions] = useState<TimelineOptions>(defaultTimelineOptions);
-  const timeBuckets: TimeBucket[] = generateTimeBuckets(timelineOptions.startDate, timelineOptions.endDate);
+  const timeBuckets: TimeBucket[] = generateTimeBuckets(timelineOptions.startDate, timelineOptions.endDate, 1, 0, 0);
   const bucketedEventsList: BucketedEvents[] = bucketEvents(events, timeBuckets);
   const [epics, setEpics] = useState<Epic[]>([]);
   const [selectedEpic, setSelectedEpic] = useState<Epic | null>(null);

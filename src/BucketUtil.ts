@@ -53,19 +53,40 @@ export function computeEpicBucketHours(epics: Epic[], bucketedEventsList: Bucket
 }
 
 /**
- * Generates time buckets based on the start date and end date. Each time bucket interval is 1 day.
+ * Generates time buckets based on the start date and end date (both inclusive).
+ * If startDate == endDate, exactly one bucket will be generated.
+ * endDate must be later than or equal to startDate.
+ * Exactly one of yearDelta, monthDelta, and dayDelta is nonzero and positive.
+ * Each time bucket interval has length equal to yearDelta years
+ * or monthDelta months or dayDelta days, whichever is nonzero.
+ * We use anchor-day semantics: If a day doesn't exist in a month,
+ * we clamp to the last day of the month.
  */
-export function generateTimeBuckets(startDate: Date, endDate: Date): TimeBucket[] {
+export function generateTimeBuckets(startDate: Date, endDate: Date, yearDelta: number, monthDelta: number, dayDelta: number): TimeBucket[] {
+  if (yearDelta < 0 || monthDelta < 0 || dayDelta < 0) {
+    throw new Error("All deltas must be nonnegative.")
+  }
+  const nonzeroCount = (yearDelta != 0 ? 1 : 0) + (monthDelta != 0 ? 1 : 0) + (dayDelta != 0 ? 1 : 0);
+  if (nonzeroCount != 1) {
+    throw new Error("Exactly one of yearDelta, monthDelta, and dayDelta must be nonzero.")
+  }
+  if (startDate > endDate) {
+    throw new Error("endDate must be later than or equal to startDate.")
+  }
+
+  // TODO: Implement anchor-day semantics
   const timeBuckets = [];
-  const curDate = new Date(startDate);
+  let curDate = new Date(startDate);
   while (curDate <= endDate) {
     const end = new Date(curDate);
-    end.setDate(end.getDate() + 1);
+    end.setFullYear(curDate.getFullYear() + yearDelta);
+    end.setMonth(curDate.getMonth() + monthDelta);
+    end.setDate(curDate.getDate() + dayDelta);
     timeBuckets.push({
       start: new Date(curDate),
       end: end
     });
-    curDate.setDate(curDate.getDate() + 1);
+    curDate = new Date(end);
   }
   return timeBuckets;
 }

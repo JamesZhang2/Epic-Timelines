@@ -13,7 +13,7 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
     const newStart = dateAtLocalMidnight(e.target.value);
     console.log(newStart);
     if (newStart > timelineOptions.endDate) {
-      alert("Start date must be before or equal to end date.");
+      alert("Start date must be earlier than or equal to end date.");
       return;
     }
     setTimelineOptions(prev => ({ ...prev, startDate: newStart }));
@@ -23,7 +23,7 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
     const newEnd = dateAtLocalMidnight(e.target.value);
     console.log(newEnd);
     if (newEnd < timelineOptions.startDate) {
-      alert("End date must be after or equal to start date.");
+      alert("End date must be later than or equal to start date.");
       return;
     }
     setTimelineOptions(prev => ({ ...prev, endDate: newEnd }));

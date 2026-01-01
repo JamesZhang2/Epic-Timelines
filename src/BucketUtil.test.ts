@@ -6,7 +6,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 describe("generateTimeBuckets", () => {
-  it("many buckets", () => {
+  it("1 day, many buckets", () => {
     const expected = [{
       start: new Date("2025-09-22T00:00:00"),
       end: new Date("2025-09-23T00:00:00")
@@ -19,25 +19,216 @@ describe("generateTimeBuckets", () => {
       start: new Date("2025-09-24T00:00:00"),
       end: new Date("2025-09-25T00:00:00")
     },
-    ]
+    ];
 
-    expect(generateTimeBuckets(new Date("2025-09-22T00:00:00"), new Date("2025-09-24T00:00:00"))).toEqual(expected);
+    expect(generateTimeBuckets(new Date("2025-09-22T00:00:00"), new Date("2025-09-24T00:00:00"), 0, 0, 1)).toEqual(expected);
   });
 
-  it("one bucket", () => {
+  it("1 day, month boundary", () => {
+    const expected = [{
+      start: new Date("2025-09-29T00:00:00"),
+      end: new Date("2025-09-30T00:00:00")
+    },
+    {
+      start: new Date("2025-09-30T00:00:00"),
+      end: new Date("2025-10-01T00:00:00")
+    },
+    {
+      start: new Date("2025-10-01T00:00:00"),
+      end: new Date("2025-10-02T00:00:00")
+    },
+    {
+      start: new Date("2025-10-02T00:00:00"),
+      end: new Date("2025-10-03T00:00:00")
+    },
+    ];
+
+    expect(generateTimeBuckets(new Date("2025-09-29T00:00:00"), new Date("2025-10-02T00:00:00"), 0, 0, 1)).toEqual(expected);
+  });
+
+  it("1 day, one bucket", () => {
     const expected = [{
       start: new Date("2025-09-22T00:00:00"),
       end: new Date("2025-09-23T00:00:00")
-    }]
+    }];
 
-    expect(generateTimeBuckets(new Date("2025-09-22T00:00:00"), new Date("2025-09-22T00:00:00"))).toEqual(expected);
+    expect(generateTimeBuckets(new Date("2025-09-22T00:00:00"), new Date("2025-09-22T00:00:00"), 0, 0, 1)).toEqual(expected);
   });
 
-  it("empty", () => {
-    const expected: TimeBucket[] = [];
+  it("7 days, many buckets", () => {
+    const expected = [{
+      start: new Date("2025-12-01T00:00:00"),
+      end: new Date("2025-12-08T00:00:00")
+    },
+    {
+      start: new Date("2025-12-08T00:00:00"),
+      end: new Date("2025-12-15T00:00:00")
+    },
+    {
+      start: new Date("2025-12-15T00:00:00"),
+      end: new Date("2025-12-22T00:00:00")
+    },
+    {
+      start: new Date("2025-12-22T00:00:00"),
+      end: new Date("2025-12-29T00:00:00")
+    },
+    ];
 
-    expect(generateTimeBuckets(new Date("2025-09-23T00:00:00"), new Date("2025-09-22T00:00:00"))).toEqual(expected);
+    expect(generateTimeBuckets(new Date("2025-12-01T00:00:00"), new Date("2025-12-22T00:00:00"), 0, 0, 7)).toEqual(expected);
+    expect(generateTimeBuckets(new Date("2025-12-01T00:00:00"), new Date("2025-12-28T00:00:00"), 0, 0, 7)).toEqual(expected);
   });
+
+  it("7 days, one bucket", () => {
+    const expected = [{
+      start: new Date("2025-09-22T00:00:00"),
+      end: new Date("2025-09-29T00:00:00")
+    }];
+
+    expect(generateTimeBuckets(new Date("2025-09-22T00:00:00"), new Date("2025-09-22T00:00:00"), 0, 0, 7)).toEqual(expected);
+    expect(generateTimeBuckets(new Date("2025-09-22T00:00:00"), new Date("2025-09-23T00:00:00"), 0, 0, 7)).toEqual(expected);
+    expect(generateTimeBuckets(new Date("2025-09-22T00:00:00"), new Date("2025-09-28T00:00:00"), 0, 0, 7)).toEqual(expected);
+  });
+
+  it("1 month, many buckets", () => {
+    const expected = [{
+      start: new Date("2025-11-07T00:00:00"),
+      end: new Date("2025-12-07T00:00:00")
+    },
+    {
+      start: new Date("2025-12-07T00:00:00"),
+      end: new Date("2026-01-07T00:00:00")
+    },
+    {
+      start: new Date("2026-01-07T00:00:00"),
+      end: new Date("2026-02-07T00:00:00")
+    },
+    ];
+
+    expect(generateTimeBuckets(new Date("2025-11-07T00:00:00"), new Date("2026-02-01T00:00:00"), 0, 1, 0)).toEqual(expected);
+  });
+
+  it("1 month, edge cases", () => {
+    const expected1 = [{
+      start: new Date("2025-07-31T00:00:00"),
+      end: new Date("2025-08-31T00:00:00")
+    },
+    {
+      start: new Date("2025-08-31T00:00:00"),
+      end: new Date("2025-09-30T00:00:00")  // Sept 31 does not exist
+    },
+    {
+      start: new Date("2025-09-30T00:00:00"),
+      end: new Date("2025-10-31T00:00:00")
+    },
+    ];
+
+    expect(generateTimeBuckets(new Date("2025-07-31T00:00:00"), new Date("2025-10-01T00:00:00"), 0, 1, 0)).toEqual(expected1);
+
+    const expected2 = [{
+      start: new Date("2024-01-30T00:00:00"),
+      end: new Date("2024-02-29T00:00:00")  // Feb 30 doesn't exist but Feb 29 does in 2024
+    },
+    {
+      start: new Date("2024-02-29T00:00:00"),
+      end: new Date("2024-03-30T00:00:00")
+    },
+    ];
+
+    expect(generateTimeBuckets(new Date("2024-01-30T00:00:00"), new Date("2024-03-29T00:00:00"), 0, 1, 0)).toEqual(expected2);
+  });
+
+  it("2 months, edge cases", () => {
+    const expected1 = [{
+      start: new Date("2025-07-31T00:00:00"),
+      end: new Date("2025-09-30T00:00:00")  // Sept 31 does not exist
+    },
+    {
+      start: new Date("2025-09-30T00:00:00"),
+      end: new Date("2025-11-30T00:00:00")  // Nov 31 doesn't exist either
+    },
+    {
+      start: new Date("2025-11-30T00:00:00"),
+      end: new Date("2026-01-31T00:00:00")
+    },
+    ];
+
+    expect(generateTimeBuckets(new Date("2025-07-31T00:00:00"), new Date("2026-01-01T00:00:00"), 0, 2, 0)).toEqual(expected1);
+
+    const expected2 = [{
+      start: new Date("2023-12-31T00:00:00"),
+      end: new Date("2024-02-29T00:00:00")  // Feb 31 or 30 don't exist but Feb 29 does in 2024
+    },
+    {
+      start: new Date("2024-02-29T00:00:00"),
+      end: new Date("2024-04-30T00:00:00")  // Apr 31 doesn't exist
+    },
+    ];
+
+    expect(generateTimeBuckets(new Date("2023-12-31T00:00:00"), new Date("2024-02-29T00:00:00"), 0, 2, 0)).toEqual(expected2);
+  });
+
+  it("3 months, one bucket", () => {
+    const expected = [{
+      start: new Date("2025-11-07T00:00:00"),
+      end: new Date("2026-02-07T00:00:00")
+    },
+    ];
+
+    expect(generateTimeBuckets(new Date("2025-11-07T00:00:00"), new Date("2026-01-01T00:00:00"), 0, 3, 0)).toEqual(expected);
+  });
+
+  it("1 year, many buckets", () => {
+    const expected = [{
+      start: new Date("2023-03-08T00:00:00"),
+      end: new Date("2024-03-08T00:00:00")
+    },
+    {
+      start: new Date("2024-03-08T00:00:00"),
+      end: new Date("2025-03-08T00:00:00")
+    },
+    ];
+
+    expect(generateTimeBuckets(new Date("2023-03-08T00:00:00"), new Date("2025-03-07T00:00:00"), 1, 0, 0)).toEqual(expected);
+  });
+
+  it("1 year, edge case", () => {
+    const expected = [{
+      start: new Date("2024-02-29T00:00:00"),  // 2024 is a leap year
+      end: new Date("2025-02-28T00:00:00")
+    },
+    {
+      start: new Date("2025-02-28T00:00:00"),
+      end: new Date("2026-02-28T00:00:00")
+    },
+    {
+      start: new Date("2026-02-28T00:00:00"),
+      end: new Date("2027-02-28T00:00:00")
+    },
+    {
+      start: new Date("2027-02-28T00:00:00"),
+      end: new Date("2028-02-29T00:00:00")  // 2028 is a leap year
+    },
+    ];
+
+    expect(generateTimeBuckets(new Date("2024-02-29T00:00:00"), new Date("2028-02-28T00:00:00"), 1, 0, 0)).toEqual(expected);
+  });
+
+
+  it("bad cases", () => {
+    expect(() => generateTimeBuckets(new Date("2025-09-20T00:00:00"), new Date("2025-09-22T00:00:00"), -1, 0, 0)).toThrowError("All deltas must be nonnegative.");
+
+    expect(() => generateTimeBuckets(new Date("2025-09-20T00:00:00"), new Date("2025-09-22T00:00:00"), 0, 0, -1)).toThrowError("All deltas must be nonnegative.");
+
+    expect(() => generateTimeBuckets(new Date("2025-09-20T00:00:00"), new Date("2025-09-22T00:00:00"), 0, 0, 0)).toThrowError("Exactly one of yearDelta, monthDelta, and dayDelta must be nonzero.");
+
+    expect(() => generateTimeBuckets(new Date("2025-09-20T00:00:00"), new Date("2025-09-22T00:00:00"), 0, 1, 1)).toThrowError("Exactly one of yearDelta, monthDelta, and dayDelta must be nonzero.");
+
+    expect(() => generateTimeBuckets(new Date("2025-09-20T00:00:00"), new Date("2025-09-22T00:00:00"), 3, 0, 7)).toThrowError("Exactly one of yearDelta, monthDelta, and dayDelta must be nonzero.");
+
+    expect(() => generateTimeBuckets(new Date("2025-09-20T00:00:00"), new Date("2025-09-22T00:00:00"), 1, 2, 3)).toThrowError("Exactly one of yearDelta, monthDelta, and dayDelta must be nonzero.");
+
+    expect(() => generateTimeBuckets(new Date("2025-09-23T00:00:00"), new Date("2025-09-22T00:00:00"), 0, 0, 1)).toThrowError("endDate must be later than or equal to startDate.");
+  })
 });
 
 describe("getBucketedEvents", () => {
