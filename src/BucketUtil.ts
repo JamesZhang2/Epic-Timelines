@@ -90,3 +90,8 @@ export function generateTimeBuckets(startDate: Date, endDate: Date, yearDelta: n
   }
   return timeBuckets;
 }
+
+/** January is the 0th month, consistent with Typescript Date. */
+export function lastDayOfMonth(year: number, month: number): number {
+  return new Date(year, month + 1, 0).getDate();
+}

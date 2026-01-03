@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { generateTimeBuckets, bucketEvents, computeEpicBucketHours } from "./BucketUtil.ts";
+import { generateTimeBuckets, bucketEvents, computeEpicBucketHours, lastDayOfMonth } from "./BucketUtil.ts";
 import type { BucketedEvents, Epic, TimeBucket } from "./EpicTimelines.tsx";
 import { parseICSToCalendarEvents, type CalendarEvent } from "./Util.ts";
 import { readFileSync } from "fs";
@@ -591,3 +591,24 @@ describe("computeEpicBucketHours", () => {
     expect(epicBucketHours).toEqual(expected);
   });
 });
+
+describe("lastDayOfMonth", () => {
+  it("non-leap year", () => {
+    const expected: number[] = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    for (let i = 0; i < 12; i++) {
+      expect(lastDayOfMonth(2025, i)).toEqual(expected[i]);
+      expect(lastDayOfMonth(1900, i)).toEqual(expected[i]);
+    }
+  })
+
+  it("leap year", () => {
+    const expected: number[] = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    for (let i = 0; i < 12; i++) {
+      expect(lastDayOfMonth(2024, i)).toEqual(expected[i]);
+      expect(lastDayOfMonth(2020, i)).toEqual(expected[i]);
+      expect(lastDayOfMonth(2000, i)).toEqual(expected[i]);
+    }
+  })
+})
