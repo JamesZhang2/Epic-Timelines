@@ -6,10 +6,18 @@ type TimelineHeaderProps = {
 }
 
 function TimelineHeader({ timeBuckets }: TimelineHeaderProps) {
+  const headerCells = [];
+  headerCells.push(<th>Epics</th>);
+  for (let i = 0; i < timeBuckets.length; i++) {
+    if (i > 0 && timeBuckets[i].start.getFullYear() === timeBuckets[i - 1].start.getFullYear()) {
+      headerCells.push(<th key={timeBuckets[i].start.toISOString()}>{(timeBuckets[i].start.getMonth() + 1) + "/" + timeBuckets[i].start.getDate()}</th>);
+    } else {
+      headerCells.push(<th key={timeBuckets[i].start.toISOString()}>{(timeBuckets[i].start.getMonth() + 1) + "/" + timeBuckets[i].start.getDate() + "/" + timeBuckets[i].start.getFullYear() % 100}</th>);
+    }
+  }
   return (<thead>
     <tr>
-      <th>Epics</th>
-      {timeBuckets.map((bucket) => <th key={bucket.start.toISOString()}>{(bucket.start.getMonth() + 1) + "/" + bucket.start.getDate()}</th>)}
+      {headerCells}
     </tr>
   </thead>);
 }
