@@ -74,14 +74,25 @@ export function generateTimeBuckets(startDate: Date, endDate: Date, yearDelta: n
     throw new Error("endDate must be later than or equal to startDate.")
   }
 
-  // TODO: Implement anchor-day semantics
   const timeBuckets = [];
   let curDate = new Date(startDate);
   while (curDate <= endDate) {
-    const end = new Date(curDate);
-    end.setFullYear(curDate.getFullYear() + yearDelta);
-    end.setMonth(curDate.getMonth() + monthDelta);
-    end.setDate(curDate.getDate() + dayDelta);
+    let end: Date;
+    if (dayDelta != 0) {
+      end = new Date(curDate);
+      end.setDate(curDate.getDate() + dayDelta);
+    } else if (monthDelta != 0) {
+      const newYear = curDate.getFullYear() + Math.floor((curDate.getMonth() + monthDelta) / 12);
+      const newMonth = (curDate.getMonth() + monthDelta) % 12;
+      const newDate = Math.min(startDate.getDate(), lastDayOfMonth(newYear, newMonth));
+      end = new Date(newYear, newMonth, newDate, 0, 0, 0, 0);
+    } else {
+      // yearDelta != 0
+      const newYear = curDate.getFullYear() + yearDelta;
+      const newMonth = startDate.getMonth();
+      const newDate = Math.min(startDate.getDate(), lastDayOfMonth(newYear, startDate.getMonth()));
+      end = new Date(newYear, newMonth, newDate, 0, 0, 0, 0);
+    }
     timeBuckets.push({
       start: new Date(curDate),
       end: end
