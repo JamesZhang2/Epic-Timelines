@@ -13,8 +13,8 @@
 - [x] Allow clicking on the name of an Epic to show & modify details
 - [x] Support different colors
 - [x] Support different shades/darkness based on number of hours of events corresponding to the Epic (GitHub style)
-- [ ] Support custom date ranges (and allow users to change the ranges)
-- [ ] Support different bucket time intervals
+- [x] Support custom date ranges (and allow users to change the ranges)
+- [x] Support different bucket time intervals
 - [ ] Support logical and/or of keyword criteria in Epics
 - [ ] Show a preview/summary of events in Epic when a cell is clicked on (or just number of hours), or add an option to show them in the grid
 - [ ] Add a column at the end showing total number of hours for this Epic
