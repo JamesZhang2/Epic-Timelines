@@ -1,4 +1,4 @@
-import type { TimelineOptions } from "./EpicTimelines";
+import type { BucketGranularity, TimelineOptions } from "./EpicTimelines";
 import "./OptionsCard.css";
 import { dateAtLocalMidnight } from "./Util";
 
@@ -29,6 +29,11 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
     setTimelineOptions(prev => ({ ...prev, endDate: newEnd }));
   }
 
+  function handleBucketGranularityChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const bucketGranularity: BucketGranularity = e.target.value as BucketGranularity;
+    setTimelineOptions(prev => ({ ...prev, bucketGranularity: bucketGranularity }));
+  }
+
   return (
     <div id="options-div" className="card">
       <p id="options-title" className="card-title">Options</p>
@@ -51,6 +56,18 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
             onChange={handleEndChange}
           />
         </label>
+      </p>
+      <p>
+        Bucket granularity:
+        <select
+          value={timelineOptions.bucketGranularity}
+          onChange={handleBucketGranularityChange}>
+          <option value="day">Day</option>
+          <option value="week">Week</option>
+          <option value="month">Month</option>
+          <option value="3 months">3 Months</option>
+          <option value="year">Year</option>
+        </select>
       </p>
     </div>
   );
