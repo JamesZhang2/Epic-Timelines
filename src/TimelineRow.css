@@ -7,10 +7,17 @@
     background: #eee;
 }
 
-.colored-cell {
+td:not(.row-summary) .colored-cell {
     border-radius: 1px;
     /* silly workaround: hides border space */
     margin-left: -2px;
     margin-right: -2px;
     height: 80%;
+}
+
+td.row-summary {
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+    text-align: center;
+    font-weight: 500;
 }

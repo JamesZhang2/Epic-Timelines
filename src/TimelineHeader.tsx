@@ -15,6 +15,7 @@ function TimelineHeader({ timeBuckets }: TimelineHeaderProps) {
       headerCells.push(<th key={timeBuckets[i].start.toISOString()}>{(timeBuckets[i].start.getMonth() + 1) + "/" + timeBuckets[i].start.getDate() + "/" + timeBuckets[i].start.getFullYear() % 100}</th>);
     }
   }
+  headerCells.push(<th>Total</th>);
   return (<thead>
     <tr>
       {headerCells}
