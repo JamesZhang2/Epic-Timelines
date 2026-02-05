@@ -23,7 +23,8 @@ function TimelineRow({ epicBucketHours, epic, onEpicClick }: TimelineRowProps) {
   for (const [i, hours] of epicHours.entries()) {
     const cellColor = computeCellColor(hours, maxHours, epic.color);
     const style = { backgroundColor: cellColor };
-    cells.push(<td key={i}><div className="colored-cell" style={style}></div></td>);
+    const cell = <td key={i}><div className="colored-cell" style={style}><p>{hours}</p></div></td>;
+    cells.push(cell);
   }
 
   const totalHours = epicHours.reduce((acc, num) => acc + num, 0);
