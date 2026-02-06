@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import type { BucketGranularity, TimelineOptions } from "./EpicTimelines";
 import "./OptionsCard.css";
 import { dateAtLocalMidnight } from "./Util";
@@ -9,29 +10,17 @@ type OptionsCardProps = {
 
 /** Represents the card that contains the options. */
 function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) {
-  function handleStartChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const newStart = dateAtLocalMidnight(e.target.value);
-    console.log(newStart);
-    if (newStart > timelineOptions.endDate) {
-      alert("Start date must be earlier than or equal to end date.");
-      return;
-    }
-    setTimelineOptions(prev => ({ ...prev, startDate: newStart }));
-  }
+  const startRef = useRef<HTMLInputElement>(null);
+  const endRef = useRef<HTMLInputElement>(null);
+  const bucketRef = useRef<HTMLSelectElement>(null);
 
-  function handleEndChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const newEnd = dateAtLocalMidnight(e.target.value);
-    console.log(newEnd);
-    if (newEnd < timelineOptions.startDate) {
-      alert("End date must be later than or equal to start date.");
-      return;
-    }
-    setTimelineOptions(prev => ({ ...prev, endDate: newEnd }));
-  }
-
-  function handleBucketGranularityChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    const bucketGranularity: BucketGranularity = e.target.value as BucketGranularity;
-    setTimelineOptions(prev => ({ ...prev, bucketGranularity: bucketGranularity }));
+  function handleApplyOptions() {
+    // TODO: Validation
+    const startDate = dateAtLocalMidnight(startRef.current!.value);
+    const endDate = dateAtLocalMidnight(endRef.current!.value);
+    const bucketGranularity = bucketRef.current!.value as BucketGranularity;
+    const newOptions: TimelineOptions = { startDate, endDate, bucketGranularity };
+    setTimelineOptions(newOptions);
   }
 
   return (
@@ -42,8 +31,8 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
           Start Date:
           <input
             type="date"
-            value={timelineOptions.startDate.toISOString().substring(0, 10)}
-            onChange={handleStartChange}
+            defaultValue={timelineOptions.startDate.toISOString().substring(0, 10)}
+            ref={startRef}
           />
         </label>
       </p>
@@ -52,16 +41,14 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
           End Date:
           <input
             type="date"
-            value={timelineOptions.endDate.toISOString().substring(0, 10)}
-            onChange={handleEndChange}
+            defaultValue={timelineOptions.endDate.toISOString().substring(0, 10)}
+            ref={endRef}
           />
         </label>
       </p>
       <p>
         Bucket granularity:
-        <select
-          value={timelineOptions.bucketGranularity}
-          onChange={handleBucketGranularityChange}>
+        <select defaultValue={timelineOptions.bucketGranularity} ref={bucketRef}>
           <option value="day">Day</option>
           <option value="week">Week</option>
           <option value="month">Month</option>
@@ -70,7 +57,7 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
         </select>
       </p>
       <div id="options-apply-button-container">
-        <button id="options-apply-button">Apply</button>
+        <button id="options-apply-button" onClick={handleApplyOptions}>Apply</button>
       </div>
     </div>
   );
