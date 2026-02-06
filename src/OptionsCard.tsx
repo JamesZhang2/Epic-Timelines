@@ -15,10 +15,15 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
   const bucketRef = useRef<HTMLSelectElement>(null);
 
   function handleApplyOptions() {
-    // TODO: Validation
     const startDate = dateAtLocalMidnight(startRef.current!.value);
     const endDate = dateAtLocalMidnight(endRef.current!.value);
     const bucketGranularity = bucketRef.current!.value as BucketGranularity;
+
+    if (startDate > endDate) {
+      alert("Start date must be earlier than or equal to end date.");
+      return;
+    }
+
     const newOptions: TimelineOptions = { startDate, endDate, bucketGranularity };
     setTimelineOptions(newOptions);
   }
