@@ -1,7 +1,7 @@
 # TODO
 
 - [x] Proof-of-Concept
-- [ ] Better timeline headers
+- [x] Better timeline headers
 - [ ] Handle repeated events
 - [x] Support adding Epics
 - [x] Support deleting Epics
@@ -18,7 +18,7 @@
 - [ ] Support logical and/or of keyword criteria in Epics
 - [ ] Make an Apply button for options so that I can enter dates freely and only check ranges during apply
 - [ ] Show a preview/summary of events in Epic when a cell is clicked on (or just number of hours), or add an option to show them in the grid
-- [ ] Add a column at the end showing total number of hours for this Epic
+- [x] Add a column at the end showing total number of hours for this Epic
 - [ ] Add option to ignore events more than 24 hours (full-day events)
 - [ ] Add option to set time zones (of time buckets)
 - [ ] Allow saving and loading Epics
