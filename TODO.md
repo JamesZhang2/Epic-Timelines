@@ -16,6 +16,7 @@
 - [x] Support custom date ranges (and allow users to change the ranges)
 - [x] Support different bucket time intervals
 - [ ] Support logical and/or of keyword criteria in Epics
+- [ ] Make an Apply button for options so that I can enter dates freely and only check ranges during apply
 - [ ] Show a preview/summary of events in Epic when a cell is clicked on (or just number of hours), or add an option to show them in the grid
 - [ ] Add a column at the end showing total number of hours for this Epic
 - [ ] Add option to ignore events more than 24 hours (full-day events)
