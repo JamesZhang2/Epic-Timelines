@@ -15,11 +15,12 @@
 - [x] Support different shades/darkness based on number of hours of events corresponding to the Epic (GitHub style)
 - [x] Support custom date ranges (and allow users to change the ranges)
 - [x] Support different bucket time intervals
-- [ ] Support logical and/or of keyword criteria in Epics
-- [ ] Make an Apply button for options so that I can enter dates freely and only check ranges during apply
-- [ ] Show a preview/summary of events in Epic when a cell is clicked on (or just number of hours), or add an option to show them in the grid
+- [ ] Support logical "and/or" of keyword criteria in Epics
+- [x] Make an Apply button for options so that I can enter dates freely and only check ranges during apply
+- [x] Add an option to show number of hours of a bucket in the grid
+- [ ] Show a preview/summary of events in Epic when a cell is clicked on
 - [x] Add a column at the end showing total number of hours for this Epic
-- [ ] Add option to ignore events more than 24 hours (full-day events)
+- [ ] Add option to ignore events equal to or longer than 24 hours (full-day events)
 - [ ] Add option to set time zones (of time buckets)
 - [ ] Allow saving and loading Epics
 - [ ] Handle errors when parsing a corrupted ICS file
