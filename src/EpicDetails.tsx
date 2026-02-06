@@ -69,7 +69,7 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
   }, [confirmingDelete]);
 
   return <tr className="epic-details">
-    <td colSpan={numCols}>
+    <td colSpan={numCols + 1}>
       {editingEpic ?
         <>
           <p>
