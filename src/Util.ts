@@ -84,6 +84,21 @@ export function rgbToColor(r: number, g: number, b: number) {
   return "#" + decimalTo2DigitHex(r) + decimalTo2DigitHex(g) + decimalTo2DigitHex(b);
 }
 
+export function relativeLuminance(color: string): number {
+  // See https://quorumlanguage.com/tutorials/accessibility/luminanceandcolorcontrast.html
+  const [r_8bit, g_8bit, b_8bit] = colorToRGB(color);
+  const r_sRGB = r_8bit / 255;
+  const g_sRGB = g_8bit / 255;
+  const b_sRGB = b_8bit / 255;
+
+  const f = (c: number) => c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  const R = f(r_sRGB);
+  const G = f(g_sRGB);
+  const B = f(b_sRGB);
+
+  return 0.2126 * R + 0.7152 * G + 0.0722 * B;
+}
+
 /**
  * Make a new date from the date string but at local midnight
  * @param date format: yyyy-mm-dd

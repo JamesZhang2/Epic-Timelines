@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { CalendarEvent } from "./Util";
-import { parseICSToCalendarEvents, hasNontrivialOverlap, computeOverlapHours, colorToRGB, rgbToColor, dateAtLocalMidnight } from "./Util";
+import { parseICSToCalendarEvents, hasNontrivialOverlap, computeOverlapHours, colorToRGB, rgbToColor, dateAtLocalMidnight, relativeLuminance } from "./Util";
 import * as fs from "fs";
 
 describe("parseICSToCalendarEvents", () => {
@@ -177,3 +177,25 @@ describe("dateAtLocalMidnight", () => {
     expect(() => dateAtLocalMidnight("01/02/2026")).toThrowError(new Error("Unexpected date format"))
   });
 });
+
+describe("relativeLuminanceSanity", () => {
+  it("relative luminance of white is 1", () => {
+    expect(relativeLuminance("#ffffff")).toEqual(1);
+  });
+
+  it("relative luminance of black is 0", () => {
+    expect(relativeLuminance("#000000")).toEqual(0);
+  });
+
+  it("relative luminance of red is 0.2126", () => {
+    expect(relativeLuminance("#ff0000")).toEqual(0.2126);
+  });
+
+  it("relative luminance of green is 0.7152", () => {
+    expect(relativeLuminance("#00ff00")).toEqual(0.7152);
+  });
+
+  it("relative luminance of blue is 0.0722", () => {
+    expect(relativeLuminance("#0000ff")).toEqual(0.0722);
+  });
+})
