@@ -1,0 +1,26 @@
+#options-div {
+    display: flex;
+    flex-direction: column;
+}
+
+#options-apply-button-container {
+    margin-top: auto;
+    padding-top: 3px;
+    display: flex;
+    justify-content: center;
+}
+
+#options-apply-button {
+    padding: 8px 16px;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: #ddd;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition-duration: 0.2s;
+}
+
+#options-apply-button:hover {
+    background-color: #ccc;
+}

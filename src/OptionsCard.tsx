@@ -69,6 +69,9 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
           <option value="year">Year</option>
         </select>
       </p>
+      <div id="options-apply-button-container">
+        <button id="options-apply-button">Apply</button>
+      </div>
     </div>
   );
 }
