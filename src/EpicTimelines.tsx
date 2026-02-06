@@ -32,10 +32,13 @@ export type BucketedEvents = {
 
 export type BucketGranularity = "day" | "week" | "month" | "3 months" | "year";
 
+export type ShowBucketHours = "all" | "nonzero" | "none";
+
 export type TimelineOptions = {
   startDate: Date;
   endDate: Date;
   bucketGranularity: BucketGranularity;
+  showBucketHours: ShowBucketHours;
 }
 
 /** Top-level component */
@@ -46,7 +49,8 @@ function EpicTimelines({ events }: EpicTimelinesProps) {
   const defaultTimelineOptions = {
     startDate: weekAgo,
     endDate: today,
-    bucketGranularity: "day" as BucketGranularity
+    bucketGranularity: "day" as BucketGranularity,
+    showBucketHours: "nonzero" as ShowBucketHours
   };
   const [timelineOptions, setTimelineOptions] = useState<TimelineOptions>(defaultTimelineOptions);
   let timeBuckets: TimeBucket[];
