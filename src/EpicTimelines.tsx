@@ -164,6 +164,7 @@ function EpicTimelines({ events }: EpicTimelinesProps) {
       epics={epics}
       timeBuckets={timeBuckets}
       epicBucketHours={epicBucketHours}
+      showBucketHours={timelineOptions.showBucketHours}
       selectedEpic={selectedEpic}
       onEpicClick={handleEpicClick}
       onEditEpic={handleEditEpic}

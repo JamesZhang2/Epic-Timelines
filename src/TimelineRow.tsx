@@ -1,10 +1,11 @@
-import type { Epic } from "./EpicTimelines";
+import type { Epic, ShowBucketHours } from "./EpicTimelines";
 import { colorToRGB, relativeLuminance, rgbToColor } from "./Util";
 import "./TimelineRow.css";
 
 type TimelineRowProps = {
   epicBucketHours: Map<string, number[]>;
   epic: Epic;
+  showBucketHours: ShowBucketHours;
   onEpicClick: () => void;
 }
 
