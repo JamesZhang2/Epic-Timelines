@@ -24,5 +24,5 @@
 - [ ] Allow saving and loading Epics
 - [ ] Handle errors when parsing a corrupted ICS file
 - [x] UI: Make timelines look like intervals rather than colored cells
-- [ ] UI/UX: Look into relative luminance to set foreground color based on background
+- [x] UI/UX: Look into relative luminance to set foreground color based on background
 - [ ] Add screenshots of the project to `README.md`

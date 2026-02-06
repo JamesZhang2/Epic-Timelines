@@ -1,5 +1,5 @@
 import type { Epic } from "./EpicTimelines";
-import { colorToRGB, rgbToColor } from "./Util";
+import { colorToRGB, relativeLuminance, rgbToColor } from "./Util";
 import "./TimelineRow.css";
 
 type TimelineRowProps = {
@@ -22,8 +22,13 @@ function TimelineRow({ epicBucketHours, epic, onEpicClick }: TimelineRowProps) {
 
   for (const [i, hours] of epicHours.entries()) {
     const cellColor = computeCellColor(hours, maxHours, epic.color);
-    const style = { backgroundColor: cellColor };
-    const cell = <td key={i}><div className="colored-cell" style={style}><p>{hours}</p></div></td>;
+    const cellStyle = { backgroundColor: cellColor };
+    const textStyle = { color: (relativeLuminance(cellColor) < 0.5 ? "white" : "black") };
+    const cell = <td key={i}>
+      <div className="colored-cell" style={cellStyle}>
+        <p style={textStyle}>{hours}</p>
+      </div>
+    </td>;
     cells.push(cell);
   }
 
