@@ -19,7 +19,6 @@ function App() {
     reader.onload = () => {
       const result = reader.result as string;
       const events = parseICSToCalendarEvents(result);
-      console.log(events);
       setEvents(events);
       setFileUploaded(true);
     }
