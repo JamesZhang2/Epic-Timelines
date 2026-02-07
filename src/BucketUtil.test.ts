@@ -364,19 +364,28 @@ describe("computeEpicBucketHours", () => {
     name: "Alpha",
     keyword: "alpha",
     caseSensitive: false,
-    color: "#000000"
+    color: "#000000",
+    matchTitle: true,
+    matchDescription: true,
+    matchLocation: false
   };
   const epic2: Epic = {
     name: "Beta",
     keyword: "beta",
     caseSensitive: false,
-    color: "#000000"
+    color: "#000000",
+    matchTitle: true,
+    matchDescription: true,
+    matchLocation: false
   };
   const epic3: Epic = {
     name: "Gamma",
     keyword: "gamma",
     caseSensitive: false,
-    color: "#000000"
+    color: "#000000",
+    matchTitle: true,
+    matchDescription: true,
+    matchLocation: false
   };
   const epics: Epic[] = [epic1, epic2, epic3];
 
@@ -536,25 +545,37 @@ describe("computeEpicBucketHours", () => {
       name: "Alpha",
       keyword: "alpha",
       caseSensitive: false,
-      color: "#000000"
+      color: "#000000",
+      matchTitle: true,
+      matchDescription: true,
+      matchLocation: false
     };
     const epicB: Epic = {
       name: "Beta",
       keyword: "beta",
       caseSensitive: false,
-      color: "#000000"
+      color: "#000000",
+      matchTitle: true,
+      matchDescription: true,
+      matchLocation: false
     };
     const epicC: Epic = {
       name: "Gamma",
       keyword: "gamma",
       caseSensitive: false,
-      color: "#000000"
+      color: "#000000",
+      matchTitle: true,
+      matchDescription: true,
+      matchLocation: false
     };
     const epicD: Epic = {
       name: "Delta",
       keyword: "Delta",
       caseSensitive: true,
-      color: "#000000"
+      color: "#000000",
+      matchTitle: true,
+      matchDescription: true,
+      matchLocation: false
     }
     const epics: Epic[] = [epicA, epicB, epicC, epicD];
 

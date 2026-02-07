@@ -42,7 +42,7 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
         return;
       }
       if (!updatedKeyword) {
-        alert("Error: The updated Epic must have a keyword to match for.")
+        alert("Error: The updated Epic must have a keyword to match for.");
         return;
       }
 
@@ -50,7 +50,11 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
         name: updatedName,
         keyword: updatedKeyword,
         caseSensitive: updatedCaseSensitive,
-        color: updatedColor
+        color: updatedColor,
+        // TODO
+        matchTitle: true,
+        matchDescription: true,
+        matchLocation: false
       }
 
       onEditEpic(oldEpicName, updatedEpic);

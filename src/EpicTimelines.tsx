@@ -15,6 +15,9 @@ export type Epic = {
   keyword: string;
   caseSensitive: boolean;
   color: string;
+  matchTitle: boolean;
+  matchDescription: boolean;
+  matchLocation: boolean;
 }
 
 export type TimeBucket = {

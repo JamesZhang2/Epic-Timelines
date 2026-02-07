@@ -35,7 +35,11 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
       name: newName,
       keyword: newKeyword,
       caseSensitive: caseSensitive,
-      color: color
+      color: color,
+      // TODO
+      matchTitle: true,
+      matchDescription: true,
+      matchLocation: false
     };
 
     const success = onAddEpic(newEpic);
