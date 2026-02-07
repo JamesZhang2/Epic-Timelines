@@ -14,12 +14,18 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
   const epicNameInputRef = useRef<HTMLInputElement>(null);
   const keywordInputRef = useRef<HTMLInputElement>(null);
   const caseSensitiveRef = useRef<HTMLInputElement>(null);
+  const matchTitleRef = useRef<HTMLInputElement>(null);
+  const matchDescriptionRef = useRef<HTMLInputElement>(null);
+  const matchLocationRef = useRef<HTMLInputElement>(null);
   const colorRef = useRef<HTMLInputElement>(null);
 
   function handleAddEpicButtonClick() {
     const newName = epicNameInputRef.current?.value.trim();
     const newKeyword = keywordInputRef.current?.value.trim();
     const caseSensitive = caseSensitiveRef.current?.checked ?? false;
+    const matchTitle = matchTitleRef.current?.checked ?? false;
+    const matchDescription = matchDescriptionRef.current?.checked ?? false;
+    const matchLocation = matchLocationRef.current?.checked ?? false;
     const color = colorRef.current?.value || "#7799ff";
 
     if (!newName) {
@@ -36,10 +42,9 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
       keyword: newKeyword,
       caseSensitive: caseSensitive,
       color: color,
-      // TODO
-      matchTitle: true,
-      matchDescription: true,
-      matchLocation: false
+      matchTitle: matchTitle,
+      matchDescription: matchDescription,
+      matchLocation: matchLocation
     };
 
     const success = onAddEpic(newEpic);
@@ -66,6 +71,17 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
         Case sensitive:
         <input type="checkbox" ref={caseSensitiveRef} />
       </label>
+    </p>
+    <p>
+      Match:&nbsp;
+      <label id="add-epic-match-title">Title</label>
+      <input type="checkbox" ref={matchTitleRef} defaultChecked />
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <label id="add-epic-match-description">Description</label>
+      <input type="checkbox" ref={matchDescriptionRef} defaultChecked />
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <label id="add-epic-match-location">Location</label>
+      <input type="checkbox" ref={matchLocationRef} />
     </p>
     <p>
       <label id="add-epic-color-picker">
