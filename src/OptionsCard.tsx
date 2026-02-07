@@ -35,7 +35,7 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
       <p id="options-title" className="card-title">Options</p>
       <p>
         <label>
-          Start Date:
+          Start Date:&nbsp;
           <input
             type="date"
             defaultValue={timelineOptions.startDate.toISOString().substring(0, 10)}
@@ -45,7 +45,7 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
       </p>
       <p>
         <label>
-          End Date:
+          End Date:&nbsp;
           <input
             type="date"
             defaultValue={timelineOptions.endDate.toISOString().substring(0, 10)}
@@ -54,7 +54,7 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
         </label>
       </p>
       <p>
-        Bucket granularity:
+        Bucket granularity:&nbsp;
         <select defaultValue={timelineOptions.bucketGranularity} ref={granularityRef}>
           <option value="day">Day</option>
           <option value="week">Week</option>
