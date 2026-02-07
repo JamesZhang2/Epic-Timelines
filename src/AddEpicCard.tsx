@@ -33,7 +33,11 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
       return;
     }
     if (!newKeyword) {
-      alert("Error: Please provide the keyword to match for in this Epic.")
+      alert("Error: Please provide the keyword to match for in this Epic.");
+      return;
+    }
+    if (!(matchTitle || matchDescription || matchLocation)) {
+      alert("Error: At least one of the fields must be included in the match.");
       return;
     }
 
