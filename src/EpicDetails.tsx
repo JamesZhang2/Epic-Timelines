@@ -72,6 +72,17 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
     return () => clearTimeout(timer);
   }, [confirmingDelete]);
 
+  const fieldsToMatch = [];
+  if (epic.matchTitle) {
+    fieldsToMatch.push("title");
+  }
+  if (epic.matchDescription) {
+    fieldsToMatch.push("description");
+  }
+  if (epic.matchLocation) {
+    fieldsToMatch.push("location");
+  }
+
   return <tr className="epic-details">
     <td colSpan={numCols + 1}>
       {editingEpic ?
@@ -93,6 +104,7 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
           <p><strong>Name:</strong> {epic.name}</p>
           <p><strong>Keyword:</strong> {epic.keyword}</p>
           <p><strong>Case sensitive:</strong> {epic.caseSensitive ? "Yes" : "No"}</p>
+          <p><strong>Match:</strong> {fieldsToMatch.join(", ")}</p>
         </>}
       <div id="epic-details-button-container">
         <button id="edit-epic-button" onClick={() => handleEditEpicButtonClick(epic.name)}>
