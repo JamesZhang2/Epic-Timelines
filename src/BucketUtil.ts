@@ -53,6 +53,24 @@ export function computeEpicBucketHours(epics: Epic[], bucketedEventsList: Bucket
 }
 
 /**
+ * @returns true if the Epic matches the event (taking into account case sensitivity
+ * and which fields to match), false otherwise.
+ */
+export function epicMatchesEvent(epic: Epic, event: CalendarEvent) {
+  const regex = new RegExp(epic.keyword, epic.caseSensitive ? "" : "i");  // i: ignore case flag
+  if (epic.matchTitle && regex.test(event.title)) {
+    return true;
+  }
+  if (epic.matchDescription && event.description !== undefined && regex.test(event.description)) {
+    return true;
+  }
+  if (epic.matchLocation && event.location !== undefined && regex.test(event.location)) {
+    return true;
+  }
+  return false;
+}
+
+/**
  * Generates time buckets based on the start date and end date (both inclusive).
  * If startDate == endDate, exactly one bucket will be generated.
  * endDate must be later than or equal to startDate.
