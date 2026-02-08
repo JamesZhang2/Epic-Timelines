@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "./App.css";
 import EpicTimelines from "./EpicTimelines";
-import type { CalendarEvent } from "./Util";
-import { parseICSToCalendarEvents } from "./Util";
+import type { CalendarEvent } from "./ICSParser";
+import { parseICSToCalendarEvents } from "./ICSParser";
 
 function App() {
   const [events, setEvents] = useState<CalendarEvent[]>([]);

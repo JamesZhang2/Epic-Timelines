@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { generateTimeBuckets, bucketEvents, computeEpicBucketHours, lastDayOfMonth, epicMatchesEvent } from "./BucketUtil.ts";
 import type { BucketedEvents, Epic, TimeBucket } from "./EpicTimelines.tsx";
-import { parseICSToCalendarEvents, type CalendarEvent } from "./Util.ts";
+import { parseICSToCalendarEvents } from "./ICSParser.ts";
+import type { CalendarEvent } from "./ICSParser.ts";
 import { readFileSync } from "fs";
 import { join } from "path";
 

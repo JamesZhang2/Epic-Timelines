@@ -1,7 +1,7 @@
 /** This file contains helper functions for dealing with time buckets. */
 
 import { computeOverlapHours, hasNontrivialOverlap } from "./Util";
-import type { CalendarEvent } from "./Util";
+import type { CalendarEvent } from "./ICSParser";
 import type { TimeBucket, BucketedEvents, Epic } from "./EpicTimelines";
 
 /**
