@@ -612,7 +612,7 @@ describe("computeEpicBucketHours", () => {
     caseSensitive: false,
     color: "#000000",
     matchTitle: true,
-    matchDescription: true,
+    matchDescription: false,
     matchLocation: false
   };
   const epic2: Epic = {
@@ -621,7 +621,7 @@ describe("computeEpicBucketHours", () => {
     caseSensitive: false,
     color: "#000000",
     matchTitle: true,
-    matchDescription: true,
+    matchDescription: false,
     matchLocation: false
   };
   const epic3: Epic = {
@@ -630,7 +630,7 @@ describe("computeEpicBucketHours", () => {
     caseSensitive: false,
     color: "#000000",
     matchTitle: true,
-    matchDescription: true,
+    matchDescription: false,
     matchLocation: false
   };
   const epics: Epic[] = [epic1, epic2, epic3];

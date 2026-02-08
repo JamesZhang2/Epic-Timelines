@@ -32,7 +32,6 @@ export function bucketEvents(events: CalendarEvent[], buckets: TimeBucket[]): Bu
 export function computeEpicBucketHours(epics: Epic[], bucketedEventsList: BucketedEvents[]): Map<string, number[]> {
   const result: Map<string, number[]> = new Map();
   for (const epic of epics) {
-    const regex = new RegExp(epic.keyword, epic.caseSensitive ? "" : "i");  // i: ignore case flag
     const epicHours: number[] = [];
 
     for (const bucketedEvents of bucketedEventsList) {
@@ -40,9 +39,9 @@ export function computeEpicBucketHours(epics: Epic[], bucketedEventsList: Bucket
       let epicHoursInThisBucket = 0;
 
       for (const event of bucketedEvents.events) {
-        if (regex.test(event.title) ||
-          (event.description !== undefined && regex.test(event.description))) {
-          epicHoursInThisBucket += computeOverlapHours(event.start, event.end, timeBucket.start, timeBucket.end);
+        if (epicMatchesEvent(epic, event)) {
+          epicHoursInThisBucket += computeOverlapHours(
+            event.start, event.end, timeBucket.start, timeBucket.end);
         }
       }
       epicHours.push(epicHoursInThisBucket);
