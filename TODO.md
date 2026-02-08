@@ -9,13 +9,17 @@
 - [ ] Support reordering Epics (drag to reorder)
 - [x] Allow Epics to have a different name than the keyword
 - [x] Support case insensitive keyword matching
-- [ ] Allow searching for specific fields (title, description, location)
+- [x] Allow searching for specific fields (title, description, location)
 - [x] Allow clicking on the name of an Epic to show & modify details
 - [x] Support different colors
-- [x] Support different shades/darkness based on number of hours of events corresponding to the Epic (GitHub style)
+- Support different shades/darkness based on number of hours of events corresponding to the Epic (GitHub style)
+  - [x] Support per-Epic shading
+  - [ ] Support global shading (need a global color - display it instead of the color of each Epic, but don't overwrite the color of each Epic)
 - [x] Support custom date ranges (and allow users to change the ranges)
 - [x] Support different bucket time intervals
-- [ ] Support logical "and/or" of keyword criteria in Epics
+- [ ] Support logical "and" of keyword criteria in Epics
+  - Logical "or" is already supported using "|" regex
+  - Logical "and" should allow searching for different keywords for title and location (e.g. title = Dinner, location = some specific restaurant)
 - [x] Make an Apply button for options so that I can enter dates freely and only check ranges during apply
 - [x] Add an option to show number of hours of a bucket in the grid
 - [ ] Show a preview/summary of events in Epic when a cell is clicked on
