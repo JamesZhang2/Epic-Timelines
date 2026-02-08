@@ -56,7 +56,7 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
       // Clear input
       epicNameInputRef.current!.value = "";
       keywordInputRef.current!.value = "";
-      caseSensitiveRef.current!.checked = false;
+      // Leave checkboxes unchanged - user may want to input several Epics with the same settings
     }
   }
 
