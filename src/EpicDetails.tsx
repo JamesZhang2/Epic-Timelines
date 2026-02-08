@@ -19,6 +19,9 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
   const epicNameInputRef = useRef<HTMLInputElement>(null);
   const keywordInputRef = useRef<HTMLInputElement>(null);
   const caseSensitiveRef = useRef<HTMLInputElement>(null);
+  const matchTitleRef = useRef<HTMLInputElement>(null);
+  const matchDescriptionRef = useRef<HTMLInputElement>(null);
+  const matchLocationRef = useRef<HTMLInputElement>(null);
   const colorRef = useRef<HTMLInputElement>(null);
 
   function handleDeleteEpicButtonClick(epicName: string) {
@@ -35,6 +38,9 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
       const updatedName = epicNameInputRef.current?.value.trim();
       const updatedKeyword = keywordInputRef.current?.value.trim();
       const updatedCaseSensitive = caseSensitiveRef.current?.checked ?? false;
+      const updatedMatchTitle = matchTitleRef.current?.checked ?? false;
+      const updatedMatchDescription = matchDescriptionRef.current?.checked ?? false;
+      const updatedMatchLocation = matchLocationRef.current?.checked ?? false;
       const updatedColor = colorRef.current?.value || "#7799ff";
 
       if (!updatedName) {
@@ -45,16 +51,19 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
         alert("Error: The updated Epic must have a keyword to match for.");
         return;
       }
+      if (!(updatedMatchTitle || updatedMatchDescription || updatedMatchLocation)) {
+        alert("Error: At least one of the fields must be included in the match.");
+        return;
+      }
 
       const updatedEpic: Epic = {
         name: updatedName,
         keyword: updatedKeyword,
         caseSensitive: updatedCaseSensitive,
         color: updatedColor,
-        // TODO
-        matchTitle: true,
-        matchDescription: true,
-        matchLocation: false
+        matchTitle: updatedMatchTitle,
+        matchDescription: updatedMatchDescription,
+        matchLocation: updatedMatchLocation
       }
 
       onEditEpic(oldEpicName, updatedEpic);
@@ -98,6 +107,17 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
           </p>
           <p>
             <strong>Color: </strong> <input type="color" defaultValue={epic.color} ref={colorRef} />
+          </p>
+          <p>
+            <strong>Match: </strong>
+            <label>Title</label>
+            <input type="checkbox" ref={matchTitleRef} defaultChecked={epic.matchTitle} />
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <label>Description</label>
+            <input type="checkbox" ref={matchDescriptionRef} defaultChecked={epic.matchDescription} />
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <label>Location</label>
+            <input type="checkbox" ref={matchLocationRef} defaultChecked={epic.matchLocation} />
           </p>
         </> :
         <>
