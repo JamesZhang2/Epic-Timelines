@@ -1,4 +1,4 @@
-import type { CalendarEvent } from "./Util";
+import type { CalendarEvent } from "./ICSParser";
 import { bucketEvents, computeEpicBucketHours, generateTimeBuckets } from "./BucketUtil";
 import AddEpicCard from "./AddEpicCard";
 import Timelines from "./Timelines";
