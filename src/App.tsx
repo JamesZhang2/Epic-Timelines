@@ -21,26 +21,30 @@ function App() {
       const events = parseICSToCalendarEvents(result);
       setEvents(events);
       setFileUploaded(true);
-    }
+    };
 
     reader.readAsText(uploadedFile);
   }
 
   if (fileUploaded) {
-    return <>
-      <h1>Epic Timelines</h1>
-      <p id="upload-instructions">Export the .ics file from your calendar and upload it here:</p>
-      <input type="file" id="file-input" accept=".ics" onChange={handleFileUpload} />
-      <p id="upload-success-text">Calendar file successfully uploaded!</p>
-      <EpicTimelines events={events}></EpicTimelines>
-    </>;
+    return (
+      <>
+        <h1>Epic Timelines</h1>
+        <p id="upload-instructions">Export the .ics file from your calendar and upload it here:</p>
+        <input type="file" id="file-input" accept=".ics" onChange={handleFileUpload} />
+        <p id="upload-success-text">Calendar file successfully uploaded!</p>
+        <EpicTimelines events={events}></EpicTimelines>
+      </>
+    );
   } else {
-    return <>
-      <h1>Epic Timelines</h1>
-      <p id="upload-instructions">Export the .ics file from your calendar and upload it here:</p>
-      <input type="file" id="file-input" accept=".ics" onChange={handleFileUpload} />
-    </>
+    return (
+      <>
+        <h1>Epic Timelines</h1>
+        <p id="upload-instructions">Export the .ics file from your calendar and upload it here:</p>
+        <input type="file" id="file-input" accept=".ics" onChange={handleFileUpload} />
+      </>
+    );
   }
 }
 
-export default App
+export default App;

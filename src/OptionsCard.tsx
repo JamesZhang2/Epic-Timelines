@@ -6,7 +6,7 @@ import { dateAtLocalMidnight } from "./Util";
 type OptionsCardProps = {
   timelineOptions: TimelineOptions;
   setTimelineOptions: React.Dispatch<React.SetStateAction<TimelineOptions>>;
-}
+};
 
 /** Represents the card that contains the options. */
 function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) {
@@ -26,13 +26,20 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
       return;
     }
 
-    const newOptions: TimelineOptions = { startDate, endDate, bucketGranularity, showBucketHours };
+    const newOptions: TimelineOptions = {
+      startDate,
+      endDate,
+      bucketGranularity,
+      showBucketHours,
+    };
     setTimelineOptions(newOptions);
   }
 
   return (
     <div id="options-div" className="card">
-      <p id="options-title" className="card-title">Options</p>
+      <p id="options-title" className="card-title">
+        Options
+      </p>
       <p>
         <label>
           Start Date:&nbsp;
@@ -72,7 +79,9 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
         </select>
       </p>
       <div id="options-apply-button-container">
-        <button id="options-apply-button" onClick={handleApplyOptions}>Apply</button>
+        <button id="options-apply-button" onClick={handleApplyOptions}>
+          Apply
+        </button>
       </div>
     </div>
   );

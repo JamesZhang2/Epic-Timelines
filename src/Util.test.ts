@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import {hasNontrivialOverlap, computeOverlapHours, colorToRGB, rgbToColor, dateAtLocalMidnight, relativeLuminance } from "./Util";
+import {
+  hasNontrivialOverlap,
+  computeOverlapHours,
+  colorToRGB,
+  rgbToColor,
+  dateAtLocalMidnight,
+  relativeLuminance,
+} from "./Util";
 
 describe("hasNontrivialOverlap", () => {
   it("positive case 1", () => {
@@ -106,9 +113,15 @@ describe("colorToRGB", () => {
   it("negative cases", () => {
     expect(() => colorToRGB("#123")).toThrowError(new Error("Color is not in the format #RRGGBB"));
     expect(() => colorToRGB("foo")).toThrowError(new Error("Color is not in the format #RRGGBB"));
-    expect(() => colorToRGB("123456")).toThrowError(new Error("Color is not in the format #RRGGBB"));
-    expect(() => colorToRGB("#1234567")).toThrowError(new Error("Color is not in the format #RRGGBB"));
-    expect(() => colorToRGB("#abcdeg")).toThrowError(new Error("Color is not in the format #RRGGBB"));
+    expect(() => colorToRGB("123456")).toThrowError(
+      new Error("Color is not in the format #RRGGBB"),
+    );
+    expect(() => colorToRGB("#1234567")).toThrowError(
+      new Error("Color is not in the format #RRGGBB"),
+    );
+    expect(() => colorToRGB("#abcdeg")).toThrowError(
+      new Error("Color is not in the format #RRGGBB"),
+    );
   });
 });
 
@@ -122,9 +135,15 @@ describe("rgbToColor", () => {
   });
 
   it("negative cases", () => {
-    expect(() => rgbToColor(-1, 0, 0)).toThrowError(new Error("Number is out of range of 2-digit hexes"));
-    expect(() => rgbToColor(256, 0, 0)).toThrowError(new Error("Number is out of range of 2-digit hexes"));
-    expect(() => rgbToColor(12, 34, 256)).toThrowError(new Error("Number is out of range of 2-digit hexes"));
+    expect(() => rgbToColor(-1, 0, 0)).toThrowError(
+      new Error("Number is out of range of 2-digit hexes"),
+    );
+    expect(() => rgbToColor(256, 0, 0)).toThrowError(
+      new Error("Number is out of range of 2-digit hexes"),
+    );
+    expect(() => rgbToColor(12, 34, 256)).toThrowError(
+      new Error("Number is out of range of 2-digit hexes"),
+    );
   });
 });
 
@@ -135,9 +154,15 @@ describe("dateAtLocalMidnight", () => {
   });
 
   it("negative cases", () => {
-    expect(() => dateAtLocalMidnight("01-02-2026")).toThrowError(new Error("Unexpected date format"))
-    expect(() => dateAtLocalMidnight("2026/01/02")).toThrowError(new Error("Unexpected date format"))
-    expect(() => dateAtLocalMidnight("01/02/2026")).toThrowError(new Error("Unexpected date format"))
+    expect(() => dateAtLocalMidnight("01-02-2026")).toThrowError(
+      new Error("Unexpected date format"),
+    );
+    expect(() => dateAtLocalMidnight("2026/01/02")).toThrowError(
+      new Error("Unexpected date format"),
+    );
+    expect(() => dateAtLocalMidnight("01/02/2026")).toThrowError(
+      new Error("Unexpected date format"),
+    );
   });
 });
 
@@ -161,4 +186,4 @@ describe("relativeLuminanceSanity", () => {
   it("relative luminance of blue is 0.0722", () => {
     expect(relativeLuminance("#0000ff")).toEqual(0.0722);
   });
-})
+});

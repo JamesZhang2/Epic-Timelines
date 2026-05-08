@@ -7,7 +7,7 @@ export type CalendarEvent = {
   location?: string;
   start: Date;
   end: Date;
-}
+};
 
 /** Parses an ICS string to CalendarEvents. */
 export function parseICSToCalendarEvents(s: string): CalendarEvent[] {
@@ -29,6 +29,6 @@ function parseVEventToCalendarEvent(event: ICAL.Event): CalendarEvent {
     description: event.description ?? undefined,
     location: event.location ?? undefined,
     start: event.startDate.toJSDate(),
-    end: event.endDate.toJSDate()
-  }
+    end: event.endDate.toJSDate(),
+  };
 }

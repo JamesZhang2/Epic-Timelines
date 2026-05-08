@@ -7,7 +7,7 @@ type EpicDetailsProps = {
   numCols: number;
   onDeleteEpic: (epicName: string) => void;
   onEditEpic: (oldEpicName: string, newEpic: Epic) => boolean;
-}
+};
 
 /**
  * Represents the detailed information about an Epic.
@@ -63,8 +63,8 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
         color: updatedColor,
         matchTitle: updatedMatchTitle,
         matchDescription: updatedMatchDescription,
-        matchLocation: updatedMatchLocation
-      }
+        matchLocation: updatedMatchLocation,
+      };
 
       onEditEpic(oldEpicName, updatedEpic);
       setEditingEpic(false);
@@ -92,16 +92,18 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
     fieldsToMatch.push("location");
   }
 
-  const epicInfoEditing =
+  const epicInfoEditing = (
     <>
       <p>
         <strong>Name:</strong> <input type="text" defaultValue={epic.name} ref={epicNameInputRef} />
       </p>
       <p>
-        <strong>Keyword:</strong> <input type="text" defaultValue={epic.keyword} ref={keywordInputRef} />
+        <strong>Keyword:</strong>{" "}
+        <input type="text" defaultValue={epic.keyword} ref={keywordInputRef} />
       </p>
       <p>
-        <strong>Case sensitive:</strong> <input type="checkbox" defaultChecked={epic.caseSensitive} ref={caseSensitiveRef} />
+        <strong>Case sensitive:</strong>{" "}
+        <input type="checkbox" defaultChecked={epic.caseSensitive} ref={caseSensitiveRef} />
       </p>
       <p>
         <strong>Color: </strong> <input type="color" defaultValue={epic.color} ref={colorRef} />
@@ -117,29 +119,41 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
         <label>Location</label>
         <input type="checkbox" ref={matchLocationRef} defaultChecked={epic.matchLocation} />
       </p>
-    </>;
+    </>
+  );
 
-  const epicInfoNotEditing =
+  const epicInfoNotEditing = (
     <>
-      <p><strong>Name:</strong> {epic.name}</p>
-      <p><strong>Keyword:</strong> {epic.keyword}</p>
-      <p><strong>Case sensitive:</strong> {epic.caseSensitive ? "Yes" : "No"}</p>
-      <p><strong>Match:</strong> {fieldsToMatch.join(", ")}</p>
-    </>;
+      <p>
+        <strong>Name:</strong> {epic.name}
+      </p>
+      <p>
+        <strong>Keyword:</strong> {epic.keyword}
+      </p>
+      <p>
+        <strong>Case sensitive:</strong> {epic.caseSensitive ? "Yes" : "No"}
+      </p>
+      <p>
+        <strong>Match:</strong> {fieldsToMatch.join(", ")}
+      </p>
+    </>
+  );
 
-  return <tr className="epic-details">
-    <td colSpan={numCols + 1}>
-      {editingEpic ? epicInfoEditing : epicInfoNotEditing}
-      <div id="epic-details-button-container">
-        <button id="edit-epic-button" onClick={() => handleEditEpicButtonClick(epic.name)}>
-          {editingEpic ? "Confirm" : "Edit Epic"}
-        </button>
-        <button id="delete-epic-button" onClick={() => handleDeleteEpicButtonClick(epic.name)}>
-          {confirmingDelete ? "Are you sure?" : "Delete Epic"}
-        </button>
-      </div>
-    </td>
-  </tr >;
+  return (
+    <tr className="epic-details">
+      <td colSpan={numCols + 1}>
+        {editingEpic ? epicInfoEditing : epicInfoNotEditing}
+        <div id="epic-details-button-container">
+          <button id="edit-epic-button" onClick={() => handleEditEpicButtonClick(epic.name)}>
+            {editingEpic ? "Confirm" : "Edit Epic"}
+          </button>
+          <button id="delete-epic-button" onClick={() => handleDeleteEpicButtonClick(epic.name)}>
+            {confirmingDelete ? "Are you sure?" : "Delete Epic"}
+          </button>
+        </div>
+      </td>
+    </tr>
+  );
 }
 
 export default EpicDetails;

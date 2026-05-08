@@ -56,7 +56,7 @@ export function relativeLuminance(color: string): number {
   const g_sRGB = g_8bit / 255;
   const b_sRGB = b_8bit / 255;
 
-  const f = (c: number) => c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  const f = (c: number) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
   const R = f(r_sRGB);
   const G = f(g_sRGB);
   const B = f(b_sRGB);

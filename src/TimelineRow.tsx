@@ -7,16 +7,20 @@ type TimelineRowProps = {
   epic: Epic;
   showBucketHours: ShowBucketHours;
   onEpicClick: () => void;
-}
+};
 
 /** Represents a timeline for an Epic, which is a row in the Timelines table. */
 function TimelineRow({ epicBucketHours, epic, showBucketHours, onEpicClick }: TimelineRowProps) {
-  const cells = [<th className="epic-name-cell" onClick={onEpicClick}>{epic.name}</th>];
+  const cells = [
+    <th className="epic-name-cell" onClick={onEpicClick}>
+      {epic.name}
+    </th>,
+  ];
 
   const epicHours = epicBucketHours.get(epic.name);
 
   if (!epicHours) {
-    throw new Error("epicBucketHours does not contain the name of the Epic")
+    throw new Error("epicBucketHours does not contain the name of the Epic");
   }
 
   const maxHours = Math.max(...epicHours);
@@ -24,7 +28,9 @@ function TimelineRow({ epicBucketHours, epic, showBucketHours, onEpicClick }: Ti
   for (const [i, hours] of epicHours.entries()) {
     const cellColor = computeCellColor(hours, maxHours, epic.color);
     const cellStyle = { backgroundColor: cellColor };
-    const textStyle = { color: (relativeLuminance(cellColor) < 0.5 ? "white" : "black") };
+    const textStyle = {
+      color: relativeLuminance(cellColor) < 0.5 ? "white" : "black",
+    };
     let textInCell;
     if (showBucketHours === "all") {
       textInCell = <p style={textStyle}>{hours}</p>;
@@ -33,9 +39,13 @@ function TimelineRow({ epicBucketHours, epic, showBucketHours, onEpicClick }: Ti
     } else {
       textInCell = <></>;
     }
-    const cell = <td key={i}>
-      <div className="colored-cell" style={cellStyle}>{textInCell}</div>
-    </td>;
+    const cell = (
+      <td key={i}>
+        <div className="colored-cell" style={cellStyle}>
+          {textInCell}
+        </div>
+      </td>
+    );
     cells.push(cell);
   }
 

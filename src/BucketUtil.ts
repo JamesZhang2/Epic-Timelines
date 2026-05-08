@@ -19,8 +19,8 @@ export function bucketEvents(events: CalendarEvent[], buckets: TimeBucket[]): Bu
     }
     result.push({
       bucket: bucket,
-      events: filteredEvents
-    })
+      events: filteredEvents,
+    });
   }
   return result;
 }
@@ -29,7 +29,10 @@ export function bucketEvents(events: CalendarEvent[], buckets: TimeBucket[]): Bu
  * @returns a map that maps Epic names to number of hours in each bucket,
  * where the buckets are in the same order as the ones in the bucketedEventsList.
  */
-export function computeEpicBucketHours(epics: Epic[], bucketedEventsList: BucketedEvents[]): Map<string, number[]> {
+export function computeEpicBucketHours(
+  epics: Epic[],
+  bucketedEventsList: BucketedEvents[],
+): Map<string, number[]> {
   const result: Map<string, number[]> = new Map();
   for (const epic of epics) {
     const epicHours: number[] = [];
@@ -41,7 +44,11 @@ export function computeEpicBucketHours(epics: Epic[], bucketedEventsList: Bucket
       for (const event of bucketedEvents.events) {
         if (epicMatchesEvent(epic, event)) {
           epicHoursInThisBucket += computeOverlapHours(
-            event.start, event.end, timeBucket.start, timeBucket.end);
+            event.start,
+            event.end,
+            timeBucket.start,
+            timeBucket.end,
+          );
         }
       }
       epicHours.push(epicHoursInThisBucket);
@@ -56,7 +63,7 @@ export function computeEpicBucketHours(epics: Epic[], bucketedEventsList: Bucket
  * and which fields to match), false otherwise.
  */
 export function epicMatchesEvent(epic: Epic, event: CalendarEvent) {
-  const regex = new RegExp(epic.keyword, epic.caseSensitive ? "" : "i");  // i: ignore case flag
+  const regex = new RegExp(epic.keyword, epic.caseSensitive ? "" : "i"); // i: ignore case flag
   if (epic.matchTitle && regex.test(event.title)) {
     return true;
   }
@@ -79,16 +86,23 @@ export function epicMatchesEvent(epic: Epic, event: CalendarEvent) {
  * We use anchor-day semantics: If a day doesn't exist in a month,
  * we clamp to the last day of the month.
  */
-export function generateTimeBuckets(startDate: Date, endDate: Date, yearDelta: number, monthDelta: number, dayDelta: number): TimeBucket[] {
+export function generateTimeBuckets(
+  startDate: Date,
+  endDate: Date,
+  yearDelta: number,
+  monthDelta: number,
+  dayDelta: number,
+): TimeBucket[] {
   if (yearDelta < 0 || monthDelta < 0 || dayDelta < 0) {
-    throw new Error("All deltas must be nonnegative.")
+    throw new Error("All deltas must be nonnegative.");
   }
-  const nonzeroCount = (yearDelta != 0 ? 1 : 0) + (monthDelta != 0 ? 1 : 0) + (dayDelta != 0 ? 1 : 0);
+  const nonzeroCount =
+    (yearDelta != 0 ? 1 : 0) + (monthDelta != 0 ? 1 : 0) + (dayDelta != 0 ? 1 : 0);
   if (nonzeroCount != 1) {
-    throw new Error("Exactly one of yearDelta, monthDelta, and dayDelta must be nonzero.")
+    throw new Error("Exactly one of yearDelta, monthDelta, and dayDelta must be nonzero.");
   }
   if (startDate > endDate) {
-    throw new Error("endDate must be later than or equal to startDate.")
+    throw new Error("endDate must be later than or equal to startDate.");
   }
 
   const timeBuckets = [];
@@ -112,7 +126,7 @@ export function generateTimeBuckets(startDate: Date, endDate: Date, yearDelta: n
     }
     timeBuckets.push({
       start: new Date(curDate),
-      end: end
+      end: end,
     });
     curDate = new Date(end);
   }

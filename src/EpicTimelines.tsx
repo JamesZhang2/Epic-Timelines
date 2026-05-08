@@ -8,22 +8,22 @@ import OptionsCard from "./OptionsCard";
 
 type EpicTimelinesProps = {
   events: CalendarEvent[];
-}
+};
 
 export type Epic = {
-  name: string;  // Must be unique.
+  name: string; // Must be unique.
   keyword: string;
   caseSensitive: boolean;
   color: string;
   matchTitle: boolean;
   matchDescription: boolean;
   matchLocation: boolean;
-}
+};
 
 export type TimeBucket = {
   start: Date;
   end: Date;
-}
+};
 
 /**
  * Represents a list of events with nontrivial overlap with the given time bucket.
@@ -31,7 +31,7 @@ export type TimeBucket = {
 export type BucketedEvents = {
   bucket: TimeBucket;
   events: CalendarEvent[];
-}
+};
 
 export type BucketGranularity = "day" | "week" | "month" | "3 months" | "year";
 
@@ -42,7 +42,7 @@ export type TimelineOptions = {
   endDate: Date;
   bucketGranularity: BucketGranularity;
   showBucketHours: ShowBucketHours;
-}
+};
 
 /** Top-level component */
 function EpicTimelines({ events }: EpicTimelinesProps) {
@@ -53,25 +53,55 @@ function EpicTimelines({ events }: EpicTimelinesProps) {
     startDate: weekAgo,
     endDate: today,
     bucketGranularity: "day" as BucketGranularity,
-    showBucketHours: "nonzero" as ShowBucketHours
+    showBucketHours: "nonzero" as ShowBucketHours,
   };
   const [timelineOptions, setTimelineOptions] = useState<TimelineOptions>(defaultTimelineOptions);
   let timeBuckets: TimeBucket[];
   switch (timelineOptions.bucketGranularity) {
     case "day":
-      timeBuckets = generateTimeBuckets(timelineOptions.startDate, timelineOptions.endDate, 0, 0, 1);
+      timeBuckets = generateTimeBuckets(
+        timelineOptions.startDate,
+        timelineOptions.endDate,
+        0,
+        0,
+        1,
+      );
       break;
     case "week":
-      timeBuckets = generateTimeBuckets(timelineOptions.startDate, timelineOptions.endDate, 0, 0, 7);
+      timeBuckets = generateTimeBuckets(
+        timelineOptions.startDate,
+        timelineOptions.endDate,
+        0,
+        0,
+        7,
+      );
       break;
     case "month":
-      timeBuckets = generateTimeBuckets(timelineOptions.startDate, timelineOptions.endDate, 0, 1, 0);
+      timeBuckets = generateTimeBuckets(
+        timelineOptions.startDate,
+        timelineOptions.endDate,
+        0,
+        1,
+        0,
+      );
       break;
     case "3 months":
-      timeBuckets = generateTimeBuckets(timelineOptions.startDate, timelineOptions.endDate, 0, 3, 0);
+      timeBuckets = generateTimeBuckets(
+        timelineOptions.startDate,
+        timelineOptions.endDate,
+        0,
+        3,
+        0,
+      );
       break;
     case "year":
-      timeBuckets = generateTimeBuckets(timelineOptions.startDate, timelineOptions.endDate, 1, 0, 0);
+      timeBuckets = generateTimeBuckets(
+        timelineOptions.startDate,
+        timelineOptions.endDate,
+        1,
+        0,
+        0,
+      );
       break;
   }
   const bucketedEventsList: BucketedEvents[] = bucketEvents(events, timeBuckets);
@@ -81,7 +111,8 @@ function EpicTimelines({ events }: EpicTimelinesProps) {
   // The number of hours in each bucket of each Epic.
   const epicBucketHours: Map<string, number[]> = useMemo(
     () => computeEpicBucketHours(epics, bucketedEventsList),
-    [epics, bucketedEventsList]);
+    [epics, bucketedEventsList],
+  );
 
   /**
    * Throws an error if the names of the epics are not unique.
@@ -101,12 +132,16 @@ function EpicTimelines({ events }: EpicTimelinesProps) {
   function handleAddEpic(newEpic: Epic): boolean {
     for (const epic of epics) {
       if (epic.name === newEpic.name) {
-        alert("Error: Failed to add Epic. There is an existing Epic with the name " + epic.name + ". Names of Epics must be unique.");
+        alert(
+          "Error: Failed to add Epic. There is an existing Epic with the name " +
+            epic.name +
+            ". Names of Epics must be unique.",
+        );
         return false;
       }
     }
 
-    const newEpics: Epic[] = [...epics, newEpic]
+    const newEpics: Epic[] = [...epics, newEpic];
     assertEpicNamesUnique(newEpics);
     setEpics(newEpics);
     setSelectedEpic(null);
@@ -132,7 +167,11 @@ function EpicTimelines({ events }: EpicTimelinesProps) {
       if (epic.name !== oldEpicName) {
         // not the epic that we're trying to replace
         if (epic.name == updatedEpic.name) {
-          alert("Error: Failed to update Epic. There is an existing Epic with the name " + epic.name + ". Names of Epics must be unique.");
+          alert(
+            "Error: Failed to update Epic. There is an existing Epic with the name " +
+              epic.name +
+              ". Names of Epics must be unique.",
+          );
           return false;
         } else {
           newEpics.push(epic);
@@ -158,22 +197,25 @@ function EpicTimelines({ events }: EpicTimelinesProps) {
     }
   }
 
-  return <div>
-    <div id="card-container">
-      <AddEpicCard onAddEpic={handleAddEpic} />
-      <OptionsCard timelineOptions={timelineOptions} setTimelineOptions={setTimelineOptions} />
+  return (
+    <div>
+      <div id="card-container">
+        <AddEpicCard onAddEpic={handleAddEpic} />
+        <OptionsCard timelineOptions={timelineOptions} setTimelineOptions={setTimelineOptions} />
+      </div>
+      <Timelines
+        epics={epics}
+        timeBuckets={timeBuckets}
+        epicBucketHours={epicBucketHours}
+        showBucketHours={timelineOptions.showBucketHours}
+        selectedEpic={selectedEpic}
+        onEpicClick={handleEpicClick}
+        onEditEpic={handleEditEpic}
+        onDeleteEpic={handleDeleteEpic}
+      />
+      <pre>Events: {JSON.stringify(events, null, 2)}</pre>
     </div>
-    <Timelines
-      epics={epics}
-      timeBuckets={timeBuckets}
-      epicBucketHours={epicBucketHours}
-      showBucketHours={timelineOptions.showBucketHours}
-      selectedEpic={selectedEpic}
-      onEpicClick={handleEpicClick}
-      onEditEpic={handleEditEpic}
-      onDeleteEpic={handleDeleteEpic} />
-    <pre>Events: {JSON.stringify(events, null, 2)}</pre>
-  </div>;
+  );
 }
 
 export default EpicTimelines;
