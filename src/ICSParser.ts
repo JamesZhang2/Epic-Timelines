@@ -78,6 +78,7 @@ function parseICALEventToCalendarEventsInRange(
 
     const eventStart =
       details.startDate.toJSDate() < startDate ? startDate : details.startDate.toJSDate();
+    const eventEnd = details.endDate.toJSDate() > endDate ? endDate : details.endDate.toJSDate();
 
     const item = details.item;
     events.push({
@@ -86,7 +87,7 @@ function parseICALEventToCalendarEventsInRange(
       description: item.description ?? undefined,
       location: item.location ?? undefined,
       start: eventStart,
-      end: details.endDate.toJSDate(),
+      end: eventEnd,
     });
   }
   return events;
