@@ -69,18 +69,20 @@ function parseICALEventToCalendarEventsInRange(
   for (let next: ICAL.Time | null = expansion.next(); next !== null; next = expansion.next()) {
     if (next.toJSDate() < startDate) {
       continue;
+    } else if (next.toJSDate() > endDate) {
+      break;
+    } else {
+      const details = event.getOccurrenceDetails(next);
+      const item = details.item;
+      events.push({
+        id: event.uid + "-" + details.recurrenceId,
+        title: item.summary,
+        description: undefined,
+        location: undefined,
+        start: details.startDate.toJSDate(),
+        end: details.endDate.toJSDate(),
+      });
     }
-    const details = event.getOccurrenceDetails(next);
-    const item = details.item;
-    events.push({
-      id: event.uid,
-      title: item.summary,
-      description: undefined,
-      location: undefined,
-      start: details.startDate.toJSDate(),
-      end: details.endDate.toJSDate(),
-    });
-    break;
   }
   return events;
 }
