@@ -66,22 +66,28 @@ function parseICALEventToCalendarEventsInRange(
 
   // Note that next is the start time of the next occurrence of the event.
   for (let next = expansion.next(); next; next = expansion.next()) {
-    if (next.toJSDate() < startDate) {
-      continue;
-    } else if (next.toJSDate() > endDate) {
+    const details = event.getOccurrenceDetails(next);
+    if (details.startDate.toJSDate() > endDate) {
+      // This and future occurrences are all past the range
       break;
-    } else {
-      const details = event.getOccurrenceDetails(next);
-      const item = details.item;
-      events.push({
-        id: event.uid + "-" + details.recurrenceId,
-        title: item.summary,
-        description: item.description ?? undefined,
-        location: item.location ?? undefined,
-        start: details.startDate.toJSDate(),
-        end: details.endDate.toJSDate(),
-      });
     }
+    if (details.endDate.toJSDate() < startDate) {
+      // This occurrence is completely before the range
+      continue;
+    }
+
+    const eventStart =
+      details.startDate.toJSDate() < startDate ? startDate : details.startDate.toJSDate();
+
+    const item = details.item;
+    events.push({
+      id: event.uid + "-" + details.recurrenceId,
+      title: item.summary,
+      description: item.description ?? undefined,
+      location: item.location ?? undefined,
+      start: eventStart,
+      end: details.endDate.toJSDate(),
+    });
   }
   return events;
 }
