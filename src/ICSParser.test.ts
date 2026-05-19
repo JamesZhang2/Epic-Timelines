@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { CalendarEvent } from "./ICSParser";
-import { parseICSToCalendarEvents } from "./ICSParser";
+import { parseICSToCalendarEvents, parseICSToCalendarEventsInRange } from "./ICSParser";
 import * as fs from "fs";
 
 describe("parseICSToCalendarEvents", () => {
@@ -32,6 +32,29 @@ describe("parseICSToCalendarEvents", () => {
         location: undefined,
         start: new Date("2025-09-22T01:00:00.000Z"),
         end: new Date("2025-09-22T02:00:00.000Z"),
+      },
+    ];
+    expect(events).toEqual(expected);
+  });
+});
+
+describe("parseICSToCalendarEventsInRange", () => {
+  it("repeat daily for one day", () => {
+    const raw: string = fs.readFileSync("test/gcal/repeat-daily.ics", "utf-8");
+    const events: CalendarEvent[] = parseICSToCalendarEventsInRange(
+      raw,
+      new Date("2025-09-22T00:00:00.000Z"),
+      new Date("2025-09-23T00:00:00.000Z"),
+    );
+    events.sort((e1, e2) => e1.start.getTime() - e2.start.getTime());
+    const expected: CalendarEvent[] = [
+      {
+        id: "577ctadpr97srgn09srgn451oq@google.com",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-09-22T15:00:00.000Z"),
+        end: new Date("2025-09-22T16:00:00.000Z"),
       },
     ];
     expect(events).toEqual(expected);

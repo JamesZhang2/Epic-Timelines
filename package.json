@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint . && prettier . --check",
-    "lint:fix": "eslint . --fix && prettier . --write",
+    "lint": "prettier . --check && eslint .",
+    "lint:fix": "prettier . --write && eslint . --fix",
     "preview": "vite preview",
     "test": "vitest"
   },
