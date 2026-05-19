@@ -116,5 +116,42 @@ describe("parseICSToCalendarEventsInRange", () => {
       },
     ];
     expect(events).toEqual(expected);
-  })
+  });
+
+  it("repeat daily for multiple days, nonempty locations and descriptions", () => {
+    const raw: string = fs.readFileSync("test/gcal/repeat-daily-location-description.ics", "utf-8");
+    const events: CalendarEvent[] = parseICSToCalendarEventsInRange(
+      raw,
+      new Date("2025-09-24T00:00:00.000Z"),
+      new Date("2025-09-27T00:00:00.000Z"),
+    );
+    events.sort((e1, e2) => e1.start.getTime() - e2.start.getTime());
+    const expected: CalendarEvent[] = [
+      {
+        id: "577ctadpr97srgn09srgn451oq@google.com-2025-09-24T08:00:00",
+        title: "Alpha",
+        description: "Description A",
+        location: "Location A",
+        start: new Date("2025-09-24T15:00:00.000Z"),
+        end: new Date("2025-09-24T16:00:00.000Z"),
+      },
+      {
+        id: "577ctadpr97srgn09srgn451oq@google.com-2025-09-25T08:00:00",
+        title: "Alpha",
+        description: "Description A",
+        location: "Location A",
+        start: new Date("2025-09-25T15:00:00.000Z"),
+        end: new Date("2025-09-25T16:00:00.000Z"),
+      },
+      {
+        id: "577ctadpr97srgn09srgn451oq@google.com-2025-09-26T08:00:00",
+        title: "Alpha",
+        description: "Description A",
+        location: "Location A",
+        start: new Date("2025-09-26T15:00:00.000Z"),
+        end: new Date("2025-09-26T16:00:00.000Z"),
+      },
+    ];
+    expect(events).toEqual(expected);
+  });
 });

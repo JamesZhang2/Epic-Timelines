@@ -43,8 +43,7 @@ export function parseICSToCalendarEventsInRange(
 
   const comp = new ICAL.Component(jcalData);
   const vevents = comp.getAllSubcomponents("vevent");
-  const icalEvents = vevents
-    .map((e) => new ICAL.Event(e))
+  const icalEvents = vevents.map((e) => new ICAL.Event(e));
   // TODO: Filter out recurrence exceptions
 
   const events = icalEvents
@@ -77,8 +76,8 @@ function parseICALEventToCalendarEventsInRange(
       events.push({
         id: event.uid + "-" + details.recurrenceId,
         title: item.summary,
-        description: undefined,
-        location: undefined,
+        description: item.description ?? undefined,
+        location: item.location ?? undefined,
         start: details.startDate.toJSDate(),
         end: details.endDate.toJSDate(),
       });
