@@ -67,7 +67,7 @@ function parseICALEventToCalendarEventsInRange(
   // Note that next is the start time of the next occurrence of the event.
   for (let next = expansion.next(); next; next = expansion.next()) {
     const details = event.getOccurrenceDetails(next);
-    if (details.startDate.toJSDate() > endDate) {
+    if (details.startDate.toJSDate() >= endDate) {
       // This and future occurrences are all past the range
       break;
     }
