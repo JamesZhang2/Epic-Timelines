@@ -54,6 +54,22 @@ describe("parseICSToCalendarEvents", () => {
 });
 
 describe("parseICSToCalendarEventsInRange", () => {
+  it("repeat daily, range does not overlap with events", () => {
+    const events = parseRange(
+      "repeat-daily",
+      "2025-09-21T00:00:00.000Z",
+      "2025-09-22T00:00:00.000Z",
+    );
+    expect(events).toEqual([]);
+
+    const events2 = parseRange(
+      "repeat-daily",
+      "2025-09-23T00:01:00.000Z",
+      "2025-09-23T00:02:00.000Z",
+    );
+    expect(events2).toEqual([]);
+  });
+
   it("repeat daily for one day, start from the beginning", () => {
     const events = parseRange(
       "repeat-daily",
@@ -355,6 +371,23 @@ describe("parseICSToCalendarEventsInRange", () => {
         end: new Date("2025-09-24T17:00:00.000Z"),
       },
     ]);
+  });
+
+  it("repeat daily with count, range does not overlap with events", () => {
+    const events = parseRange(
+      "repeat-daily-with-count",
+      "2025-09-21T00:00:00.000Z",
+      "2025-09-22T00:00:00.000Z",
+    );
+    expect(events).toEqual([]);
+
+    // With count = 42, the last occurrence is on Nov 2
+    const events2 = parseRange(
+      "repeat-daily-with-count",
+      "2025-11-03T00:00:00.000Z",
+      "2025-11-05T00:00:00.000Z",
+    );
+    expect(events2).toEqual([]);
   });
 
   it("repeat Mon Wed Fri until", () => {
