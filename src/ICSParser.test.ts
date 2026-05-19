@@ -59,4 +59,25 @@ describe("parseICSToCalendarEventsInRange", () => {
     ];
     expect(events).toEqual(expected);
   });
+
+  it("repeat daily for one day, start in the middle", () => {
+    const raw: string = fs.readFileSync("test/gcal/repeat-daily.ics", "utf-8");
+    const events: CalendarEvent[] = parseICSToCalendarEventsInRange(
+      raw,
+      new Date("2025-09-24T00:00:00.000Z"),
+      new Date("2025-09-25T00:00:00.000Z"),
+    );
+    events.sort((e1, e2) => e1.start.getTime() - e2.start.getTime());
+    const expected: CalendarEvent[] = [
+      {
+        id: "577ctadpr97srgn09srgn451oq@google.com",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-09-24T15:00:00.000Z"),
+        end: new Date("2025-09-24T16:00:00.000Z"),
+      },
+    ];
+    expect(events).toEqual(expected);
+  });
 });
