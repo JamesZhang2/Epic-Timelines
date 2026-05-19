@@ -65,7 +65,7 @@ function parseICALEventToCalendarEventsInRange(
   const events: CalendarEvent[] = [];
 
   // Note that next is the start time of the next occurrence of the event.
-  for (let next: ICAL.Time | null = expansion.next(); next !== null; next = expansion.next()) {
+  for (let next = expansion.next(); next; next = expansion.next()) {
     if (next.toJSDate() < startDate) {
       continue;
     } else if (next.toJSDate() > endDate) {
