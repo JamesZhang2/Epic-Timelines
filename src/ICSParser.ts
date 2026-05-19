@@ -71,7 +71,7 @@ function parseICALEventToCalendarEventsInRange(
       // This and future occurrences are all past the range
       break;
     }
-    if (details.endDate.toJSDate() < startDate) {
+    if (details.endDate.toJSDate() <= startDate) {
       // This occurrence is completely before the range
       continue;
     }

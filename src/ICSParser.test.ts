@@ -184,6 +184,24 @@ describe("parseICSToCalendarEventsInRange", () => {
     ]);
   });
 
+  it("repeat daily - edge case: first occurrence end equals startDate", () => {
+    const events = parseRange(
+      "repeat-daily",
+      "2025-09-24T16:00:00.000Z",
+      "2025-09-26T00:00:00.000Z",
+    );
+    expect(events).toEqual([
+      {
+        id: "577ctadpr97srgn09srgn451oq@google.com-2025-09-25T08:00:00",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-09-25T15:00:00.000Z"),
+        end: new Date("2025-09-25T16:00:00.000Z"),
+      },
+    ]);
+  });
+
   it("repeat daily until - endDate is before event end", () => {
     const events = parseRange(
       "repeat-daily-until",
