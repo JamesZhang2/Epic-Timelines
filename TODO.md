@@ -3,6 +3,10 @@
 - [x] Proof-of-Concept
 - [x] Better timeline headers
 - [ ] Handle repeated events
+  - [x] Basic repeated events
+  - [ ] Punching holes
+  - [ ] Modifications of one event
+  - [ ] Modifications of all future events
 - [x] Support adding Epics
 - [x] Support deleting Epics
 - [x] Support modifying Epics
