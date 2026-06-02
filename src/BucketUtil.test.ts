@@ -5,12 +5,46 @@ import {
   computeEpicBucketHours,
   lastDayOfMonth,
   epicMatchesEvent,
+  filterOutAllDayEvents,
 } from "./BucketUtil.ts";
 import type { BucketedEvents, Epic, TimeBucket } from "./EpicTimelines.tsx";
 import { parseICSToCalendarEventsInRange } from "./ICSParser.ts";
 import type { CalendarEvent } from "./ICSParser.ts";
 import { readFileSync } from "fs";
 import { join } from "path";
+
+describe("filterOutAllDayEvents", () => {
+  it("removes events whose duration is 24 hours or longer", () => {
+    const shortEvent: CalendarEvent = {
+      id: "short",
+      title: "Short meeting",
+      start: new Date("2025-09-22T08:00:00"),
+      end: new Date("2025-09-22T09:00:00"),
+    };
+    const almostAllDayEvent: CalendarEvent = {
+      id: "almost-all-day",
+      title: "Almost all-day event",
+      start: new Date("2025-09-22T00:00:00"),
+      end: new Date("2025-09-22T23:59:59"),
+    };
+    const exactlyOneDayEvent: CalendarEvent = {
+      id: "exactly-all-day",
+      title: "Exactly all-day event",
+      start: new Date("2025-09-22T00:00:00"),
+      end: new Date("2025-09-23T00:00:00"),
+    };
+    const multiDayEvent: CalendarEvent = {
+      id: "multi-day",
+      title: "Multi-day event",
+      start: new Date("2025-09-22T08:00:00"),
+      end: new Date("2025-09-23T08:00:01"),
+    };
+
+    expect(
+      filterOutAllDayEvents([shortEvent, almostAllDayEvent, exactlyOneDayEvent, multiDayEvent]),
+    ).toEqual([shortEvent, almostAllDayEvent]);
+  });
+});
 
 describe("generateTimeBuckets", () => {
   it("1 day, many buckets", () => {

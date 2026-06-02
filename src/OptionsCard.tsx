@@ -88,7 +88,7 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
             defaultChecked={timelineOptions.ignoreAllDayEvents}
             ref={ignoreAllDayEventsRef}
           />
-          &nbsp;Ignore all-day events
+          &nbsp;Ignore all-day events (24 hours or longer)
         </label>
       </p>
       <div id="options-apply-button-container">
