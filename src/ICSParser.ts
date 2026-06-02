@@ -9,32 +9,6 @@ export type CalendarEvent = {
   end: Date;
 };
 
-/** Parses an ICS string to CalendarEvents. */
-// TODO: Delete this
-export function parseICSToCalendarEvents(s: string): CalendarEvent[] {
-  const jcalData = ICAL.parse(s);
-
-  const comp = new ICAL.Component(jcalData);
-  const vevents = comp.getAllSubcomponents("vevent");
-  const icalEvents = vevents.map((e) => new ICAL.Event(e));
-
-  const events = icalEvents.map(parseVEventToCalendarEvent);
-  return events;
-}
-
-// TODO: Delete this
-function parseVEventToCalendarEvent(event: ICAL.Event): CalendarEvent {
-  // TODO: Deal with repeating events
-  return {
-    id: event.uid,
-    title: event.summary,
-    description: event.description ?? undefined,
-    location: event.location ?? undefined,
-    start: event.startDate.toJSDate(),
-    end: event.endDate.toJSDate(),
-  };
-}
-
 /** Parses an ICS string to CalendarEvents in a given range. */
 export function parseICSToCalendarEventsInRange(
   s: string,
@@ -46,7 +20,6 @@ export function parseICSToCalendarEventsInRange(
   const comp = new ICAL.Component(jcalData);
   const vevents = comp.getAllSubcomponents("vevent");
   const icalEvents = vevents.map((e) => new ICAL.Event(e));
-  // TODO: Filter out recurrence exceptions
 
   const events = icalEvents
     .map((e) => parseICALEventToCalendarEventsInRange(e, startDate, endDate))

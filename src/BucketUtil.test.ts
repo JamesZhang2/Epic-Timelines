@@ -7,7 +7,7 @@ import {
   epicMatchesEvent,
 } from "./BucketUtil.ts";
 import type { BucketedEvents, Epic, TimeBucket } from "./EpicTimelines.tsx";
-import { parseICSToCalendarEvents } from "./ICSParser.ts";
+import { parseICSToCalendarEventsInRange } from "./ICSParser.ts";
 import type { CalendarEvent } from "./ICSParser.ts";
 import { readFileSync } from "fs";
 import { join } from "path";
@@ -1042,7 +1042,11 @@ describe("computeEpicBucketHours", () => {
 
     const filePath = join(__dirname, "../test/gcal/different-hours-1.ics");
     const text = readFileSync(filePath, "utf-8");
-    const events: CalendarEvent[] = parseICSToCalendarEvents(text);
+    const events: CalendarEvent[] = parseICSToCalendarEventsInRange(
+      text,
+      bucket1PST.start,
+      bucket4PST.end,
+    );
     const bucketedEventsList: BucketedEvents[] = bucketEvents(events, bucketsPST);
     const epicBucketHours: Map<string, number[]> = computeEpicBucketHours(
       epics,

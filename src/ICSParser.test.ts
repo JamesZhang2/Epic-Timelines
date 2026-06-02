@@ -1,17 +1,10 @@
 import { describe, expect, it } from "vitest";
 import type { CalendarEvent } from "./ICSParser";
-import { parseICSToCalendarEvents, parseICSToCalendarEventsInRange } from "./ICSParser";
+import { parseICSToCalendarEventsInRange } from "./ICSParser";
 import * as fs from "fs";
 
 function readIcs(file: string): string {
   return fs.readFileSync(`test/gcal/${file}.ics`, "utf-8");
-}
-
-/** Parses an ics file and sorts the events. */
-function parseFile(file: string): CalendarEvent[] {
-  const events = parseICSToCalendarEvents(readIcs(file));
-  events.sort((e1, e2) => e1.start.getTime() - e2.start.getTime());
-  return events;
 }
 
 /** Parses an ics file with the given date range and sorts the events. */
@@ -20,38 +13,6 @@ function parseRange(file: string, start: string, end: string): CalendarEvent[] {
   events.sort((e1, e2) => e1.start.getTime() - e2.start.getTime());
   return events;
 }
-
-describe("parseICSToCalendarEvents", () => {
-  it("can parse events in 1 day", () => {
-    const events = parseFile("1day-1");
-    expect(events).toEqual([
-      {
-        id: "5cfjrj5lrsig8qst3psdhjtkdm@google.com",
-        title: "Breakfast",
-        description: undefined,
-        location: undefined,
-        start: new Date("2025-09-21T15:00:00.000Z"),
-        end: new Date("2025-09-21T16:00:00.000Z"),
-      },
-      {
-        id: "7tu57hmj1rmmn80vchetafoge2@google.com",
-        title: "Lunch",
-        description: undefined,
-        location: undefined,
-        start: new Date("2025-09-21T19:00:00.000Z"),
-        end: new Date("2025-09-21T20:00:00.000Z"),
-      },
-      {
-        id: "2q8pt3qink4he7p3o84acmjfu7@google.com",
-        title: "Dinner",
-        description: undefined,
-        location: undefined,
-        start: new Date("2025-09-22T01:00:00.000Z"),
-        end: new Date("2025-09-22T02:00:00.000Z"),
-      },
-    ]);
-  });
-});
 
 describe("parseICSToCalendarEventsInRange", () => {
   it("repeat daily, range does not overlap with events", () => {
