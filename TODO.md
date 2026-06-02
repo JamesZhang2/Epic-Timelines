@@ -29,7 +29,7 @@
 - [x] Add an option to show number of hours of a bucket in the grid
 - [ ] Show a preview/summary of events in Epic when a cell is clicked on
 - [x] Add a column at the end showing total number of hours for this Epic
-- [ ] Add option to ignore events equal to or longer than 24 hours (full-day events)
+- [ ] Add option to ignore events equal to or longer than 24 hours (all-day events)
 - [ ] Add option to set time zones (of time buckets)
 - [ ] Allow saving and loading Epics
 - [ ] Handle errors when parsing a corrupted ICS file

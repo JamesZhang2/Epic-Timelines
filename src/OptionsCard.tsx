@@ -14,12 +14,14 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
   const endRef = useRef<HTMLInputElement>(null);
   const granularityRef = useRef<HTMLSelectElement>(null);
   const showHoursRef = useRef<HTMLSelectElement>(null);
+  const ignoreAllDayEventsRef = useRef<HTMLInputElement>(null);
 
   function handleApplyOptions() {
     const startDate = dateAtLocalMidnight(startRef.current!.value);
     const endDate = dateAtLocalMidnight(endRef.current!.value);
     const bucketGranularity = granularityRef.current!.value as BucketGranularity;
     const showBucketHours = showHoursRef.current!.value as ShowBucketHours;
+    const ignoreAllDayEvents = ignoreAllDayEventsRef.current!.checked;
 
     if (startDate > endDate) {
       alert("Start date must be earlier than or equal to end date.");
@@ -31,6 +33,7 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
       endDate,
       bucketGranularity,
       showBucketHours,
+      ignoreAllDayEvents,
     };
     setTimelineOptions(newOptions);
   }
@@ -77,6 +80,16 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
           <option value="nonzero">Only nonzero entries</option>
           <option value="none">Never</option>
         </select>
+      </p>
+      <p>
+        <label>
+          <input
+            type="checkbox"
+            defaultChecked={timelineOptions.ignoreAllDayEvents}
+            ref={ignoreAllDayEventsRef}
+          />
+          &nbsp;Ignore all-day events
+        </label>
       </p>
       <div id="options-apply-button-container">
         <button id="options-apply-button" onClick={handleApplyOptions}>

@@ -42,6 +42,7 @@ export type TimelineOptions = {
   endDate: Date;
   bucketGranularity: BucketGranularity;
   showBucketHours: ShowBucketHours;
+  ignoreAllDayEvents: boolean;
 };
 
 /** Top-level component */
@@ -54,6 +55,7 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
     endDate: today,
     bucketGranularity: "day" as BucketGranularity,
     showBucketHours: "nonzero" as ShowBucketHours,
+    ignoreAllDayEvents: true,
   };
   const [timelineOptions, setTimelineOptions] = useState<TimelineOptions>(defaultTimelineOptions);
   const events = useMemo(
