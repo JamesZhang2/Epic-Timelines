@@ -1,4 +1,4 @@
-import type { CalendarEvent } from "./ICSParser";
+import { parseICSToCalendarEventsInRange, type CalendarEvent } from "./ICSParser";
 import { bucketEvents, computeEpicBucketHours, generateTimeBuckets } from "./BucketUtil";
 import AddEpicCard from "./AddEpicCard";
 import Timelines from "./Timelines";
@@ -7,7 +7,7 @@ import "./EpicTimelines.css";
 import OptionsCard from "./OptionsCard";
 
 type EpicTimelinesProps = {
-  events: CalendarEvent[];
+  icsText: string;
 };
 
 export type Epic = {
@@ -45,7 +45,7 @@ export type TimelineOptions = {
 };
 
 /** Top-level component */
-function EpicTimelines({ events }: EpicTimelinesProps) {
+function EpicTimelines({ icsText }: EpicTimelinesProps) {
   const today = new Date();
   const weekAgo = new Date();
   weekAgo.setDate(today.getDate() - 7);
@@ -56,6 +56,15 @@ function EpicTimelines({ events }: EpicTimelinesProps) {
     showBucketHours: "nonzero" as ShowBucketHours,
   };
   const [timelineOptions, setTimelineOptions] = useState<TimelineOptions>(defaultTimelineOptions);
+  const events = useMemo(
+    () =>
+      parseICSToCalendarEventsInRange(
+        icsText,
+        timelineOptions.startDate,
+        timelineOptions.endDate,
+      ),
+    [icsText, timelineOptions.startDate, timelineOptions.endDate],
+  );
   let timeBuckets: TimeBucket[];
   switch (timelineOptions.bucketGranularity) {
     case "day":
@@ -134,8 +143,8 @@ function EpicTimelines({ events }: EpicTimelinesProps) {
       if (epic.name === newEpic.name) {
         alert(
           "Error: Failed to add Epic. There is an existing Epic with the name " +
-            epic.name +
-            ". Names of Epics must be unique.",
+          epic.name +
+          ". Names of Epics must be unique.",
         );
         return false;
       }
@@ -169,8 +178,8 @@ function EpicTimelines({ events }: EpicTimelinesProps) {
         if (epic.name == updatedEpic.name) {
           alert(
             "Error: Failed to update Epic. There is an existing Epic with the name " +
-              epic.name +
-              ". Names of Epics must be unique.",
+            epic.name +
+            ". Names of Epics must be unique.",
           );
           return false;
         } else {

@@ -1,11 +1,9 @@
 import { useState } from "react";
 import "./App.css";
 import EpicTimelines from "./EpicTimelines";
-import type { CalendarEvent } from "./ICSParser";
-import { parseICSToCalendarEvents } from "./ICSParser";
 
 function App() {
-  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [icsText, setIcsText] = useState<string>("");
   const [fileUploaded, setFileUploaded] = useState<boolean>(false);
 
   function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -18,8 +16,7 @@ function App() {
     const reader = new FileReader();
     reader.onload = () => {
       const result = reader.result as string;
-      const events = parseICSToCalendarEvents(result);
-      setEvents(events);
+      setIcsText(result);
       setFileUploaded(true);
     };
 
@@ -33,7 +30,7 @@ function App() {
         <p id="upload-instructions">Export the .ics file from your calendar and upload it here:</p>
         <input type="file" id="file-input" accept=".ics" onChange={handleFileUpload} />
         <p id="upload-success-text">Calendar file successfully uploaded!</p>
-        <EpicTimelines events={events}></EpicTimelines>
+        <EpicTimelines icsText={icsText}></EpicTimelines>
       </>
     );
   } else {
