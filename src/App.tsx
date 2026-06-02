@@ -8,14 +8,19 @@ function App() {
 
   function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const fileList = e.target.files;
-    if (!fileList) {
+    if (!fileList || fileList.length === 0) {
       return;
     }
 
     const uploadedFile: File = fileList[0];
     const reader = new FileReader();
+    const loadStartedAt = performance.now();
+
     reader.onload = () => {
       const result = reader.result as string;
+      const loadDelayMs = performance.now() - loadStartedAt;
+
+      console.info(`File loaded in ${loadDelayMs.toFixed(1)}ms.`);
       setIcsText(result);
       setFileUploaded(true);
     };

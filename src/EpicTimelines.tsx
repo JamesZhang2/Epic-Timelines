@@ -59,14 +59,20 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
     ignoreAllDayEvents: true,
   };
   const [timelineOptions, setTimelineOptions] = useState<TimelineOptions>(defaultTimelineOptions);
-  const parsedEvents = useMemo(
-    () =>
-      parseICSToCalendarEventsInRange(icsText, timelineOptions.startDate, timelineOptions.endDate),
-    [icsText, timelineOptions.startDate, timelineOptions.endDate],
-  );
+  const parsedEvents = useMemo(() => {
+    const parseStartedAt = performance.now();
+    const events = parseICSToCalendarEventsInRange(
+      icsText,
+      timelineOptions.startDate,
+      timelineOptions.endDate,
+    );
+    const parseDelayMs = performance.now() - parseStartedAt;
+
+    console.info(`ICS parsed in ${parseDelayMs.toFixed(1)}ms.`);
+    return events;
+  }, [icsText, timelineOptions.startDate, timelineOptions.endDate]);
   const events = useMemo(
-    () =>
-      timelineOptions.ignoreAllDayEvents ? filterOutAllDayEvents(parsedEvents) : parsedEvents,
+    () => (timelineOptions.ignoreAllDayEvents ? filterOutAllDayEvents(parsedEvents) : parsedEvents),
     [parsedEvents, timelineOptions.ignoreAllDayEvents],
   );
   let timeBuckets: TimeBucket[];
