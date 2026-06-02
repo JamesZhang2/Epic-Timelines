@@ -12,7 +12,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 describe("generateTimeBuckets", () => {
-  it("1 day, many buckets", () => {
+  it("can generate one bucket a day for many days", () => {
     const expected = [
       {
         start: new Date("2025-09-22T00:00:00"),
@@ -39,7 +39,7 @@ describe("generateTimeBuckets", () => {
     ).toEqual(expected);
   });
 
-  it("1 day, month boundary", () => {
+  it("can generate one bucket a day for days at the month boundary", () => {
     const expected = [
       {
         start: new Date("2025-09-29T00:00:00"),
@@ -70,7 +70,7 @@ describe("generateTimeBuckets", () => {
     ).toEqual(expected);
   });
 
-  it("1 day, one bucket", () => {
+  it("can generate one bucket a day for one day", () => {
     const expected = [
       {
         start: new Date("2025-09-22T00:00:00"),
@@ -89,7 +89,7 @@ describe("generateTimeBuckets", () => {
     ).toEqual(expected);
   });
 
-  it("7 days, many buckets", () => {
+  it("can generate one bucket a week for many weeks", () => {
     const expected = [
       {
         start: new Date("2025-12-01T00:00:00"),
@@ -129,7 +129,7 @@ describe("generateTimeBuckets", () => {
     ).toEqual(expected);
   });
 
-  it("7 days, one bucket", () => {
+  it("can generate one bucket a week for one week", () => {
     const expected = [
       {
         start: new Date("2025-09-22T00:00:00"),
@@ -166,7 +166,7 @@ describe("generateTimeBuckets", () => {
     ).toEqual(expected);
   });
 
-  it("1 month, many buckets", () => {
+  it("can generate one bucket a month for many months", () => {
     const expected = [
       {
         start: new Date("2025-11-07T00:00:00"),
@@ -193,7 +193,7 @@ describe("generateTimeBuckets", () => {
     ).toEqual(expected);
   });
 
-  it("1 month, edge cases", () => {
+  it("can generate one bucket a month for days at the month boundary", () => {
     const expected1 = [
       {
         start: new Date("2025-07-31T00:00:00"),
@@ -241,7 +241,7 @@ describe("generateTimeBuckets", () => {
     ).toEqual(expected2);
   });
 
-  it("2 months, edge cases", () => {
+  it("can generate one bucket every 2 months for days at the month boundary", () => {
     const expected1 = [
       {
         start: new Date("2025-07-31T00:00:00"),
@@ -289,7 +289,7 @@ describe("generateTimeBuckets", () => {
     ).toEqual(expected2);
   });
 
-  it("3 months, one bucket", () => {
+  it("can generate one bucket every 3 months for many months", () => {
     const expected = [
       {
         start: new Date("2025-11-07T00:00:00"),
@@ -308,7 +308,7 @@ describe("generateTimeBuckets", () => {
     ).toEqual(expected);
   });
 
-  it("1 year, many buckets", () => {
+  it("can generate one bucket a year for many years", () => {
     const expected = [
       {
         start: new Date("2023-03-08T00:00:00"),
@@ -331,7 +331,7 @@ describe("generateTimeBuckets", () => {
     ).toEqual(expected);
   });
 
-  it("1 year, edge case", () => {
+  it("can generate one bucket a year for many years and handles leap years correctly", () => {
     const expected = [
       {
         start: new Date("2024-02-29T00:00:00"), // 2024 is a leap year
@@ -362,7 +362,7 @@ describe("generateTimeBuckets", () => {
     ).toEqual(expected);
   });
 
-  it("bad cases", () => {
+  it("throws errors for invalid input", () => {
     expect(() =>
       generateTimeBuckets(
         new Date("2025-09-20T00:00:00"),
@@ -435,7 +435,7 @@ describe("generateTimeBuckets", () => {
   });
 });
 
-describe("getBucketedEvents", () => {
+describe("bucketEvents", () => {
   const bucket1: TimeBucket = {
     start: new Date("2025-09-22T00:00:00"),
     end: new Date("2025-09-23T00:00:00"),
@@ -454,7 +454,7 @@ describe("getBucketedEvents", () => {
   };
   const buckets: TimeBucket[] = [bucket1, bucket2, bucket3, bucket4];
 
-  it("regular case", () => {
+  it("buckets events into the correct buckets", () => {
     const event1: CalendarEvent = {
       id: "id1",
       title: "A",
@@ -509,7 +509,7 @@ describe("getBucketedEvents", () => {
     expect(bucketEvents(events, buckets)).toEqual(expected);
   });
 
-  it("multi-day events", () => {
+  it("buckets multi-day events into the correct buckets", () => {
     const event1: CalendarEvent = {
       id: "id1",
       title: "A",
@@ -607,7 +607,7 @@ describe("computeEpicBucketHours", () => {
   };
   const buckets: TimeBucket[] = [bucket1, bucket2, bucket3, bucket4];
 
-  it("regular case", () => {
+  it("computes the correct number of hours for each Epic in each bucket", () => {
     const event1: CalendarEvent = {
       id: "id1",
       title: "Alpha",
@@ -654,7 +654,7 @@ describe("computeEpicBucketHours", () => {
     expect(epicBucketHours).toEqual(expected);
   });
 
-  it("multiple events of the same title in a day", () => {
+  it("computes the correct number of hours with multiple events of the same title", () => {
     const event1: CalendarEvent = {
       id: "id1",
       title: "Alpha",
@@ -701,7 +701,7 @@ describe("computeEpicBucketHours", () => {
     expect(epicBucketHours).toEqual(expected);
   });
 
-  it("multi-day events", () => {
+  it("computes the correct number of hours for multi-day events", () => {
     const event1: CalendarEvent = {
       id: "id1",
       title: "Alpha",
@@ -742,7 +742,7 @@ describe("computeEpicBucketHours", () => {
     expect(epicBucketHours).toEqual(expected);
   });
 
-  it("different-hours-1 integration test", () => {
+  it("computes the correct number of hours for the different-hours-1 test file", () => {
     const epicA: Epic = {
       name: "Alpha",
       keyword: "alpha",
@@ -823,7 +823,7 @@ describe("computeEpicBucketHours", () => {
 });
 
 describe("lastDayOfMonth", () => {
-  it("non-leap year", () => {
+  it("returns the correct last day of the month for non-leap years", () => {
     const expected: number[] = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
     for (let i = 0; i < 12; i++) {
@@ -832,7 +832,7 @@ describe("lastDayOfMonth", () => {
     }
   });
 
-  it("leap year", () => {
+  it("returns the correct last day of the month for leap years", () => {
     const expected: number[] = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
     for (let i = 0; i < 12; i++) {

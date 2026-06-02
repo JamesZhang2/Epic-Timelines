@@ -144,7 +144,7 @@ describe("epicMatchesEvent", () => {
     }
   });
 
-  it("substring match", () => {
+  it("matches case-insensitive substring in title", () => {
     const epic = structuredClone(epicProto);
     epic.matchTitle = true;
     const matchingEvent: CalendarEvent = {
@@ -163,7 +163,7 @@ describe("epicMatchesEvent", () => {
     expect(epicMatchesEvent(epic, nonMatchingEvent)).toEqual(false);
   });
 
-  it("case sensitive", () => {
+  it("matches case-sensitive substring in title", () => {
     const epic = structuredClone(epicProto);
     epic.caseSensitive = true;
     epic.matchTitle = true;
@@ -228,7 +228,7 @@ describe("epicMatchesEvent", () => {
     end: new Date("2025-09-22T09:00:00"),
   };
 
-  it("title only", () => {
+  it("supports matching title only", () => {
     const epic = structuredClone(epicProto);
     epic.matchTitle = true;
     expect(epicMatchesEvent(epic, eventNoMatch)).toEqual(false);
@@ -239,7 +239,7 @@ describe("epicMatchesEvent", () => {
     expect(epicMatchesEvent(epic, eventDescLoc)).toEqual(false);
   });
 
-  it("location only", () => {
+  it("supports matching location only", () => {
     const epic = structuredClone(epicProto);
     epic.matchLocation = true;
     expect(epicMatchesEvent(epic, eventNoMatch)).toEqual(false);
@@ -250,7 +250,7 @@ describe("epicMatchesEvent", () => {
     expect(epicMatchesEvent(epic, eventDescLoc)).toEqual(true);
   });
 
-  it("title and description", () => {
+  it("supports matching title and description", () => {
     const epic = structuredClone(epicProto);
     epic.matchTitle = true;
     epic.matchDescription = true;
@@ -262,7 +262,7 @@ describe("epicMatchesEvent", () => {
     expect(epicMatchesEvent(epic, eventDescLoc)).toEqual(true);
   });
 
-  it("title, description, and location", () => {
+  it("supports matching title, description, and location", () => {
     const epic = structuredClone(epicProto);
     epic.matchTitle = true;
     epic.matchDescription = true;
