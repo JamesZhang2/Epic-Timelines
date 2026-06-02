@@ -1,5 +1,6 @@
 import { parseICSToCalendarEventsInRange, type CalendarEvent } from "./ICSParser";
 import { bucketEvents, computeEpicBucketHours, generateTimeBuckets } from "./BucketUtil";
+import { filterOutAllDayEvents } from "./EventUtil";
 import AddEpicCard from "./AddEpicCard";
 import Timelines from "./Timelines";
 import { useMemo, useState } from "react";
@@ -58,10 +59,15 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
     ignoreAllDayEvents: true,
   };
   const [timelineOptions, setTimelineOptions] = useState<TimelineOptions>(defaultTimelineOptions);
-  const events = useMemo(
+  const parsedEvents = useMemo(
     () =>
       parseICSToCalendarEventsInRange(icsText, timelineOptions.startDate, timelineOptions.endDate),
     [icsText, timelineOptions.startDate, timelineOptions.endDate],
+  );
+  const events = useMemo(
+    () =>
+      timelineOptions.ignoreAllDayEvents ? filterOutAllDayEvents(parsedEvents) : parsedEvents,
+    [parsedEvents, timelineOptions.ignoreAllDayEvents],
   );
   let timeBuckets: TimeBucket[];
   switch (timelineOptions.bucketGranularity) {
@@ -141,8 +147,8 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
       if (epic.name === newEpic.name) {
         alert(
           "Error: Failed to add Epic. There is an existing Epic with the name " +
-            epic.name +
-            ". Names of Epics must be unique.",
+          epic.name +
+          ". Names of Epics must be unique.",
         );
         return false;
       }
@@ -176,8 +182,8 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
         if (epic.name == updatedEpic.name) {
           alert(
             "Error: Failed to update Epic. There is an existing Epic with the name " +
-              epic.name +
-              ". Names of Epics must be unique.",
+            epic.name +
+            ". Names of Epics must be unique.",
           );
           return false;
         } else {
