@@ -33,6 +33,7 @@
 - [ ] Add option to set time zones (of time buckets)
 - [ ] Allow saving and loading Epics
 - [ ] Handle errors when parsing a corrupted ICS file
+- [ ] Advanced: Suggest Epics based on calendar events (probably with frequency count/bag-of-words)
 - [x] UI: Make timelines look like intervals rather than colored cells
 - [x] UI/UX: Look into relative luminance to set foreground color based on background
 - [ ] Add screenshots of the project to `README.md`

@@ -153,8 +153,8 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
       if (epic.name === newEpic.name) {
         alert(
           "Error: Failed to add Epic. There is an existing Epic with the name " +
-          epic.name +
-          ". Names of Epics must be unique.",
+            epic.name +
+            ". Names of Epics must be unique.",
         );
         return false;
       }
@@ -188,8 +188,8 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
         if (epic.name == updatedEpic.name) {
           alert(
             "Error: Failed to update Epic. There is an existing Epic with the name " +
-            epic.name +
-            ". Names of Epics must be unique.",
+              epic.name +
+              ". Names of Epics must be unique.",
           );
           return false;
         } else {
