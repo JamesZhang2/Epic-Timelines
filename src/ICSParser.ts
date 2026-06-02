@@ -10,6 +10,7 @@ export type CalendarEvent = {
 };
 
 /** Parses an ICS string to CalendarEvents. */
+// TODO: Delete this
 export function parseICSToCalendarEvents(s: string): CalendarEvent[] {
   const jcalData = ICAL.parse(s);
 
@@ -21,6 +22,7 @@ export function parseICSToCalendarEvents(s: string): CalendarEvent[] {
   return events;
 }
 
+// TODO: Delete this
 function parseVEventToCalendarEvent(event: ICAL.Event): CalendarEvent {
   // TODO: Deal with repeating events
   return {

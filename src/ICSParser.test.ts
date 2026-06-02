@@ -390,6 +390,182 @@ describe("parseICSToCalendarEventsInRange", () => {
     expect(events2).toEqual([]);
   });
 
+  it("repeat daily can punch one hole", () => {
+    const events = parseRange(
+      "repeat-daily-punch-one-hole",
+      "2025-09-24T00:00:00.000Z",
+      "2025-09-28T00:00:00.000Z",
+    );
+    expect(events).toEqual([
+      {
+        id: "32ap7h4k22ntornnu1cv35dc5v@google.com-2025-09-24T08:00:00",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-09-24T15:00:00.000Z"),
+        end: new Date("2025-09-24T16:00:00.000Z"),
+      },
+      {
+        id: "32ap7h4k22ntornnu1cv35dc5v@google.com-2025-09-25T08:00:00",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-09-25T15:00:00.000Z"),
+        end: new Date("2025-09-25T16:00:00.000Z"),
+      },
+      {
+        id: "32ap7h4k22ntornnu1cv35dc5v@google.com-2025-09-27T08:00:00",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-09-27T15:00:00.000Z"),
+        end: new Date("2025-09-27T16:00:00.000Z"),
+      },
+    ]);
+  });
+
+  it("repeat daily can punch many holes", () => {
+    const events = parseRange(
+      "repeat-daily-punch-many-holes",
+      "2025-10-01T00:00:00.000Z",
+      "2025-10-11T00:00:00.000Z",
+    );
+    expect(events).toEqual([
+      {
+        id: "32ap7h4k22ntornnu1cv35dc5v@google.com-2025-10-01T08:00:00",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-10-01T15:00:00.000Z"),
+        end: new Date("2025-10-01T16:00:00.000Z"),
+      },
+      {
+        id: "32ap7h4k22ntornnu1cv35dc5v@google.com-2025-10-02T08:00:00",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-10-02T15:00:00.000Z"),
+        end: new Date("2025-10-02T16:00:00.000Z"),
+      },
+      {
+        id: "32ap7h4k22ntornnu1cv35dc5v@google.com-2025-10-04T08:00:00",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-10-04T15:00:00.000Z"),
+        end: new Date("2025-10-04T16:00:00.000Z"),
+      },
+      {
+        id: "32ap7h4k22ntornnu1cv35dc5v@google.com-2025-10-05T08:00:00",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-10-05T15:00:00.000Z"),
+        end: new Date("2025-10-05T16:00:00.000Z"),
+      },
+      {
+        id: "32ap7h4k22ntornnu1cv35dc5v@google.com-2025-10-06T08:00:00",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-10-06T15:00:00.000Z"),
+        end: new Date("2025-10-06T16:00:00.000Z"),
+      },
+      {
+        id: "32ap7h4k22ntornnu1cv35dc5v@google.com-2025-10-07T08:00:00",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-10-07T15:00:00.000Z"),
+        end: new Date("2025-10-07T16:00:00.000Z"),
+      },
+      {
+        id: "32ap7h4k22ntornnu1cv35dc5v@google.com-2025-10-10T08:00:00",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-10-10T15:00:00.000Z"),
+        end: new Date("2025-10-10T16:00:00.000Z"),
+      },
+    ]);
+  });
+
+  it("repeat daily can modify one occurrence", () => {
+    const events = parseRange(
+      "repeat-daily-modify-one-occurrence",
+      "2025-09-23T00:00:00.000Z",
+      "2025-09-26T00:00:00.000Z",
+    );
+    expect(events).toEqual([
+      {
+        id: "5u5vu89a661kom4nlgese53tem@google.com-2025-09-23T08:00:00",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-09-23T15:00:00.000Z"),
+        end: new Date("2025-09-23T16:00:00.000Z"),
+      },
+      {
+        id: "5u5vu89a661kom4nlgese53tem@google.com-2025-09-24T08:00:00",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-09-24T15:00:00.000Z"),
+        end: new Date("2025-09-24T18:00:00.000Z"),
+      },
+      {
+        id: "5u5vu89a661kom4nlgese53tem@google.com-2025-09-25T08:00:00",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-09-25T15:00:00.000Z"),
+        end: new Date("2025-09-25T16:00:00.000Z"),
+      },
+    ]);
+  });
+
+  it("repeat daily can modify all later occurrences", () => {
+    const events = parseRange(
+      "repeat-daily-modify-all-later-occurrences",
+      "2025-09-23T00:00:00.000Z",
+      "2025-09-27T00:00:00.000Z",
+    );
+    expect(events).toEqual([
+      {
+        id: "4iq5gmvj5u7ai1gqba4l72m7s3@google.com-2025-09-23T08:00:00",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-09-23T15:00:00.000Z"),
+        end: new Date("2025-09-23T16:00:00.000Z"),
+      },
+      {
+        id: "4iq5gmvj5u7ai1gqba4l72m7s3@google.com-2025-09-24T08:00:00",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-09-24T15:00:00.000Z"),
+        end: new Date("2025-09-24T16:00:00.000Z"),
+      },
+      {
+        id: "g2l4e39qs75dl6qujrdvkrevdu@google.com-2025-09-25T12:00:00",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-09-25T19:00:00.000Z"),
+        end: new Date("2025-09-25T20:00:00.000Z"),
+      },
+      {
+        id: "g2l4e39qs75dl6qujrdvkrevdu@google.com-2025-09-26T12:00:00",
+        title: "Alpha",
+        description: undefined,
+        location: undefined,
+        start: new Date("2025-09-26T19:00:00.000Z"),
+        end: new Date("2025-09-26T20:00:00.000Z"),
+      },
+    ]);
+  });
+
   it("repeat Mon Wed Fri until", () => {
     const events = parseRange(
       "repeat-Mon-Wed-Fri-until",
