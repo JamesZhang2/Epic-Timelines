@@ -99,9 +99,8 @@ High-level pipeline:
   - Reorder columns/buttons are shown only while reordering.
   - Visible controls use `↑` and `↓` characters with accessible `aria-label`s.
 
-## Known limitations / TODOs
+## TODOs
 
-- `EpicTimelines.tsx` currently renders a debug `<pre>` of all parsed events.
 - Read `TODO.md` for a list of planned features/changes
 
 ## When making changes: quick test plan
