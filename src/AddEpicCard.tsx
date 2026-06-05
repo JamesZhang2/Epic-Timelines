@@ -74,21 +74,25 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
         <input type="text" ref={keywordInputRef} />
       </p>
       <p>
-        <label id="add-epic-case-sensitive-checkbox">
-          Case sensitive:
+        <label id="add-epic-case-sensitive-checkbox" className="checkbox-label">
           <input type="checkbox" ref={caseSensitiveRef} />
+          Case sensitive
         </label>
       </p>
-      <p>
-        Match:&nbsp;
-        <label id="add-epic-match-title">Title</label>
-        <input type="checkbox" ref={matchTitleRef} defaultChecked />
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <label id="add-epic-match-description">Description</label>
-        <input type="checkbox" ref={matchDescriptionRef} defaultChecked />
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <label id="add-epic-match-location">Location</label>
-        <input type="checkbox" ref={matchLocationRef} />
+      <p className="checkbox-row">
+        <span>Match:&nbsp;</span>
+        <label id="add-epic-match-title" className="checkbox-label">
+          <input type="checkbox" ref={matchTitleRef} defaultChecked />
+          Title
+        </label>
+        <label id="add-epic-match-description" className="checkbox-label">
+          <input type="checkbox" ref={matchDescriptionRef} defaultChecked />
+          Description
+        </label>
+        <label id="add-epic-match-location" className="checkbox-label">
+          <input type="checkbox" ref={matchLocationRef} />
+          Location
+        </label>
       </p>
       <p>
         <label id="add-epic-color-picker">

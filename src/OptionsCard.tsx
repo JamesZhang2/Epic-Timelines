@@ -82,13 +82,13 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
         </select>
       </p>
       <p>
-        <label>
+        <label className="checkbox-label">
           <input
             type="checkbox"
             defaultChecked={timelineOptions.ignoreAllDayEvents}
             ref={ignoreAllDayEventsRef}
           />
-          &nbsp;Ignore all-day events (24 hours or longer)
+          Ignore all-day events (24 hours or longer)
         </label>
       </p>
       <div id="options-apply-button-container">

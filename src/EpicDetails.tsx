@@ -102,22 +102,28 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
         <input type="text" defaultValue={epic.keyword} ref={keywordInputRef} />
       </p>
       <p>
-        <strong>Case sensitive:</strong>{" "}
-        <input type="checkbox" defaultChecked={epic.caseSensitive} ref={caseSensitiveRef} />
+        <label className="checkbox-label">
+          <input type="checkbox" defaultChecked={epic.caseSensitive} ref={caseSensitiveRef} />
+          <strong>Case sensitive</strong>
+        </label>
       </p>
       <p>
         <strong>Color: </strong> <input type="color" defaultValue={epic.color} ref={colorRef} />
       </p>
-      <p>
-        <strong>Match: </strong>
-        <label>Title</label>
-        <input type="checkbox" ref={matchTitleRef} defaultChecked={epic.matchTitle} />
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <label>Description</label>
-        <input type="checkbox" ref={matchDescriptionRef} defaultChecked={epic.matchDescription} />
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <label>Location</label>
-        <input type="checkbox" ref={matchLocationRef} defaultChecked={epic.matchLocation} />
+      <p className="checkbox-row">
+        <strong>Match:&nbsp;</strong>
+        <label className="checkbox-label">
+          <input type="checkbox" ref={matchTitleRef} defaultChecked={epic.matchTitle} />
+          Title
+        </label>
+        <label className="checkbox-label">
+          <input type="checkbox" ref={matchDescriptionRef} defaultChecked={epic.matchDescription} />
+          Description
+        </label>
+        <label className="checkbox-label">
+          <input type="checkbox" ref={matchLocationRef} defaultChecked={epic.matchLocation} />
+          Location
+        </label>
       </p>
     </>
   );
