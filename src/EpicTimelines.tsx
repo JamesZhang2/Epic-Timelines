@@ -246,6 +246,7 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
         showBucketHours={timelineOptions.showBucketHours}
         selectedEpic={selectedEpic}
         onEpicClick={handleEpicClick}
+        onMoveEpic={handleMoveEpic}
         onEditEpic={handleEditEpic}
         onDeleteEpic={handleDeleteEpic}
       />

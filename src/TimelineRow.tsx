@@ -9,6 +9,7 @@ type TimelineRowProps = {
   numEpics: number;
   showBucketHours: ShowBucketHours;
   onEpicClick: () => void;
+  onMoveEpic: (epicName: string, direction: "up" | "down") => void;
 };
 
 /** Represents a timeline for an Epic, which is a row in the Timelines table. */
@@ -19,13 +20,19 @@ function TimelineRow({
   numEpics,
   showBucketHours,
   onEpicClick,
+  onMoveEpic,
 }: TimelineRowProps) {
   const cells = [
     <th key="epic-name" className="epic-name-cell" onClick={onEpicClick}>
       {epic.name}
     </th>,
     <td key="move-up" className="reorder-cell">
-      <button type="button" disabled={epicIndex === 0} aria-label={`Move ${epic.name} up`}>
+      <button
+        type="button"
+        disabled={epicIndex === 0}
+        aria-label={`Move ${epic.name} up`}
+        onClick={() => onMoveEpic(epic.name, "up")}
+      >
         ↑
       </button>
     </td>,
@@ -34,6 +41,7 @@ function TimelineRow({
         type="button"
         disabled={epicIndex === numEpics - 1}
         aria-label={`Move ${epic.name} down`}
+        onClick={() => onMoveEpic(epic.name, "down")}
       >
         ↓
       </button>

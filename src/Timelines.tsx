@@ -12,6 +12,7 @@ type TimelinesProps = {
   showBucketHours: ShowBucketHours;
   selectedEpic: Epic | null;
   onEpicClick: (epic: Epic) => void;
+  onMoveEpic: (epicName: string, direction: "up" | "down") => void;
   onEditEpic: (oldEpicName: string, updatedEpic: Epic) => boolean;
   onDeleteEpic: (epicName: string) => void;
 };
@@ -23,6 +24,7 @@ function Timelines({
   showBucketHours,
   selectedEpic,
   onEpicClick,
+  onMoveEpic,
   onEditEpic,
   onDeleteEpic,
 }: TimelinesProps) {
@@ -39,6 +41,7 @@ function Timelines({
               numEpics={epics.length}
               showBucketHours={showBucketHours}
               onEpicClick={() => onEpicClick(epic)}
+              onMoveEpic={onMoveEpic}
             />
             {selectedEpic && selectedEpic.name === epic.name && (
               <EpicDetails
