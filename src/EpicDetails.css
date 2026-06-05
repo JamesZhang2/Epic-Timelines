@@ -2,6 +2,17 @@
   background-color: #eee;
 }
 
+.epic-details-edit-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 3px 0 0 3px;
+}
+
+.epic-details-view-fields {
+  padding: 3px 0 0 3px;
+}
+
 #epic-details-button-container {
   display: flex;
   flex-direction: row;

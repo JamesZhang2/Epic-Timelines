@@ -93,7 +93,7 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
   }
 
   const epicInfoEditing = (
-    <>
+    <div className="epic-details-edit-fields">
       <p>
         <strong>Name:</strong> <input type="text" defaultValue={epic.name} ref={epicNameInputRef} />
       </p>
@@ -125,11 +125,11 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
           Location
         </label>
       </p>
-    </>
+    </div>
   );
 
   const epicInfoNotEditing = (
-    <>
+    <div className="epic-details-view-fields">
       <p>
         <strong>Name:</strong> {epic.name}
       </p>
@@ -142,7 +142,7 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
       <p>
         <strong>Match:</strong> {fieldsToMatch.join(", ")}
       </p>
-    </>
+    </div>
   );
 
   return (
