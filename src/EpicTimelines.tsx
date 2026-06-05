@@ -126,6 +126,7 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
   const bucketedEventsList: BucketedEvents[] = bucketEvents(events, timeBuckets);
   const [epics, setEpics] = useState<Epic[]>([]);
   const [selectedEpic, setSelectedEpic] = useState<Epic | null>(null);
+  const [reorderingEpics, setReorderingEpics] = useState<boolean>(false);
 
   // The number of hours in each bucket of each Epic.
   const epicBucketHours: Map<string, number[]> = useMemo(
@@ -250,6 +251,15 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
         onEditEpic={handleEditEpic}
         onDeleteEpic={handleDeleteEpic}
       />
+      <div id="toggle-epic-reorder-button-container">
+        <button
+          id="toggle-epic-reorder-button"
+          type="button"
+          onClick={() => setReorderingEpics((current) => !current)}
+        >
+          {reorderingEpics ? "Done" : "Reorder Epics"}
+        </button>
+      </div>
       <pre>Events: {JSON.stringify(events, null, 2)}</pre>
     </div>
   );
