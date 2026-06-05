@@ -152,11 +152,10 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
   function handleAddEpic(newEpic: Epic): boolean {
     for (const epic of epics) {
       if (epic.name === newEpic.name) {
-        alert(
-          "Error: Failed to add Epic. There is an existing Epic with the name " +
-          epic.name +
-          ". Names of Epics must be unique.",
-        );
+        const errorMessage =
+          `Error: Failed to add Epic. There is an existing Epic with the name ${epic.name}. ` +
+          `Names of Epics must be unique.`;
+        alert(errorMessage);
         return false;
       }
     }
