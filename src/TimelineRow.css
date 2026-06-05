@@ -18,6 +18,14 @@
   padding: 0;
 }
 
+.reorder-cell button:not(:disabled) {
+  cursor: pointer;
+}
+
+.reorder-cell button:disabled {
+  cursor: not-allowed;
+}
+
 td:not(.row-summary) .colored-cell {
   border-radius: 1px;
   /* silly workaround: hides border space */
