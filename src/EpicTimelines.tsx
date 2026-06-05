@@ -153,8 +153,8 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
       if (epic.name === newEpic.name) {
         alert(
           "Error: Failed to add Epic. There is an existing Epic with the name " +
-            epic.name +
-            ". Names of Epics must be unique.",
+          epic.name +
+          ". Names of Epics must be unique.",
         );
         return false;
       }
@@ -178,6 +178,23 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
   }
 
   /**
+   * Moves the Epic with the given name in the given direction.
+   */
+  function handleMoveEpic(epicName: string, direction: "up" | "down") {
+    const index = epics.findIndex((epic) => epic.name === epicName);
+    const newIndex = direction === "up" ? index - 1 : index + 1;
+
+    if (index === -1 || newIndex < 0 || newIndex >= epics.length) {
+      return;
+    }
+
+    const newEpics = [...epics];
+    [newEpics[index], newEpics[newIndex]] = [newEpics[newIndex], newEpics[index]];
+    assertEpicNamesUnique(newEpics);
+    setEpics(newEpics);
+  }
+
+  /**
    * Returns true if the Epic was updated, and false otherwise.
    */
   function handleEditEpic(oldEpicName: string, updatedEpic: Epic): boolean {
@@ -188,8 +205,8 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
         if (epic.name == updatedEpic.name) {
           alert(
             "Error: Failed to update Epic. There is an existing Epic with the name " +
-              epic.name +
-              ". Names of Epics must be unique.",
+            epic.name +
+            ". Names of Epics must be unique.",
           );
           return false;
         } else {
