@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState, type ChangeEvent } from "react";
 import type { Epic } from "./EpicTimelines";
 import "./AddEpicCard.css";
 
@@ -18,6 +18,26 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
   const matchDescriptionRef = useRef<HTMLInputElement>(null);
   const matchLocationRef = useRef<HTMLInputElement>(null);
   const colorRef = useRef<HTMLInputElement>(null);
+  const [sameAsName, setSameAsName] = useState(false);
+
+  function syncKeywordWithName() {
+    if (keywordInputRef.current && epicNameInputRef.current) {
+      keywordInputRef.current.value = epicNameInputRef.current.value;
+    }
+  }
+
+  function handleNameChange() {
+    if (sameAsName) {
+      syncKeywordWithName();
+    }
+  }
+
+  function handleSameAsNameChange(event: ChangeEvent<HTMLInputElement>) {
+    setSameAsName(event.currentTarget.checked);
+    if (event.currentTarget.checked) {
+      syncKeywordWithName();
+    }
+  }
 
   function handleAddEpicButtonClick() {
     const newName = epicNameInputRef.current?.value.trim();
@@ -67,11 +87,25 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
       </p>
       <p id="add-epic-name">
         <label>Name: </label>
-        <input type="text" ref={epicNameInputRef} />
+        <input
+          className="add-epic-text-input"
+          type="text"
+          ref={epicNameInputRef}
+          onChange={handleNameChange}
+        />
       </p>
       <p id="add-epic-keyword">
         <label>Keyword:</label>
-        <input type="text" ref={keywordInputRef} />
+        <input
+          className="add-epic-text-input"
+          type="text"
+          ref={keywordInputRef}
+          disabled={sameAsName}
+        />
+        <label id="add-epic-same-as-name" className="checkbox-label">
+          <input type="checkbox" checked={sameAsName} onChange={handleSameAsNameChange} />
+          Same as Name
+        </label>
       </p>
       <p>
         <label id="add-epic-case-sensitive-checkbox" className="checkbox-label">
