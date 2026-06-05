@@ -7,6 +7,17 @@
   background: #eee;
 }
 
+.reorder-header-cell,
+.reorder-cell {
+  width: 2rem;
+  text-align: center;
+}
+
+.reorder-cell button {
+  width: 1.5rem;
+  padding: 0;
+}
+
 td:not(.row-summary) .colored-cell {
   border-radius: 1px;
   /* silly workaround: hides border space */

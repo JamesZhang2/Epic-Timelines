@@ -5,16 +5,39 @@ import "./TimelineRow.css";
 type TimelineRowProps = {
   epicBucketHours: Map<string, number[]>;
   epic: Epic;
+  epicIndex: number;
+  numEpics: number;
   showBucketHours: ShowBucketHours;
   onEpicClick: () => void;
 };
 
 /** Represents a timeline for an Epic, which is a row in the Timelines table. */
-function TimelineRow({ epicBucketHours, epic, showBucketHours, onEpicClick }: TimelineRowProps) {
+function TimelineRow({
+  epicBucketHours,
+  epic,
+  epicIndex,
+  numEpics,
+  showBucketHours,
+  onEpicClick,
+}: TimelineRowProps) {
   const cells = [
-    <th className="epic-name-cell" onClick={onEpicClick}>
+    <th key="epic-name" className="epic-name-cell" onClick={onEpicClick}>
       {epic.name}
     </th>,
+    <td key="move-up" className="reorder-cell">
+      <button type="button" disabled={epicIndex === 0} aria-label={`Move ${epic.name} up`}>
+        ↑
+      </button>
+    </td>,
+    <td key="move-down" className="reorder-cell">
+      <button
+        type="button"
+        disabled={epicIndex === numEpics - 1}
+        aria-label={`Move ${epic.name} down`}
+      >
+        ↓
+      </button>
+    </td>,
   ];
 
   const epicHours = epicBucketHours.get(epic.name);
@@ -50,7 +73,11 @@ function TimelineRow({ epicBucketHours, epic, showBucketHours, onEpicClick }: Ti
   }
 
   const totalHours = epicHours.reduce((acc, num) => acc + num, 0);
-  cells.push(<td className="row-summary">{totalHours}</td>);
+  cells.push(
+    <td key="row-summary" className="row-summary">
+      {totalHours}
+    </td>,
+  );
   return <tr>{cells}</tr>;
 }
 

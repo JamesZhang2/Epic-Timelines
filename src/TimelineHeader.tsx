@@ -15,7 +15,17 @@ function formatDate(date: Date, showYear: boolean) {
 
 function TimelineHeader({ timeBuckets }: TimelineHeaderProps) {
   const headerCells = [];
-  headerCells.push(<th>Epics</th>);
+  headerCells.push(<th key="epics">Epics</th>);
+  headerCells.push(
+    <th key="move-up" className="reorder-header-cell">
+      ↑
+    </th>,
+  );
+  headerCells.push(
+    <th key="move-down" className="reorder-header-cell">
+      ↓
+    </th>,
+  );
   for (let i = 0; i < timeBuckets.length; i++) {
     const showYear =
       i === 0 || timeBuckets[i].start.getFullYear() !== timeBuckets[i - 1].start.getFullYear();
@@ -25,7 +35,7 @@ function TimelineHeader({ timeBuckets }: TimelineHeaderProps) {
       </th>,
     );
   }
-  headerCells.push(<th>Total</th>);
+  headerCells.push(<th key="total">Total</th>);
   return (
     <thead>
       <tr>{headerCells}</tr>

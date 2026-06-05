@@ -30,18 +30,20 @@ function Timelines({
     <table id="timelines-table">
       <TimelineHeader timeBuckets={timeBuckets} />
       <tbody>
-        {epics.map((epic) => (
+        {epics.map((epic, index) => (
           <React.Fragment key={epic.name}>
             <TimelineRow
               epicBucketHours={epicBucketHours}
               epic={epic}
+              epicIndex={index}
+              numEpics={epics.length}
               showBucketHours={showBucketHours}
               onEpicClick={() => onEpicClick(epic)}
             />
             {selectedEpic && selectedEpic.name === epic.name && (
               <EpicDetails
                 epic={epic}
-                numCols={timeBuckets.length + 1}
+                numCols={timeBuckets.length + 3}
                 onDeleteEpic={onDeleteEpic}
                 onEditEpic={onEditEpic}
               />
