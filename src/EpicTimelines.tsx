@@ -203,11 +203,10 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
       if (epic.name !== oldEpicName) {
         // not the epic that we're trying to replace
         if (epic.name == updatedEpic.name) {
-          alert(
-            "Error: Failed to update Epic. There is an existing Epic with the name " +
-            epic.name +
-            ". Names of Epics must be unique.",
-          );
+          const errorMessage =
+            `Error: Failed to add Epic. There is an existing Epic with the name ${epic.name}. ` +
+            `Names of Epics must be unique.`;
+          alert(errorMessage);
           return false;
         } else {
           newEpics.push(epic);
@@ -234,7 +233,7 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
   }
 
   return (
-    <div>
+    <div id="epic-timelines-container">
       <div id="card-container">
         <AddEpicCard onAddEpic={handleAddEpic} />
         <OptionsCard timelineOptions={timelineOptions} setTimelineOptions={setTimelineOptions} />
