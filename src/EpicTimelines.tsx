@@ -245,6 +245,7 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
         timeBuckets={timeBuckets}
         epicBucketHours={epicBucketHours}
         showBucketHours={timelineOptions.showBucketHours}
+        showReorderButtons={reorderingEpics}
         selectedEpic={selectedEpic}
         onEpicClick={handleEpicClick}
         onMoveEpic={handleMoveEpic}

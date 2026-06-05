@@ -10,6 +10,7 @@ type TimelinesProps = {
   timeBuckets: TimeBucket[];
   epicBucketHours: Map<string, number[]>;
   showBucketHours: ShowBucketHours;
+  showReorderButtons: boolean;
   selectedEpic: Epic | null;
   onEpicClick: (epic: Epic) => void;
   onMoveEpic: (epicName: string, direction: "up" | "down") => void;
@@ -22,15 +23,18 @@ function Timelines({
   timeBuckets,
   epicBucketHours,
   showBucketHours,
+  showReorderButtons,
   selectedEpic,
   onEpicClick,
   onMoveEpic,
   onEditEpic,
   onDeleteEpic,
 }: TimelinesProps) {
+  const numColsForDetails = timeBuckets.length + (showReorderButtons ? 3 : 1);
+
   return (
     <table id="timelines-table">
-      <TimelineHeader timeBuckets={timeBuckets} />
+      <TimelineHeader timeBuckets={timeBuckets} showReorderButtons={showReorderButtons} />
       <tbody>
         {epics.map((epic, index) => (
           <React.Fragment key={epic.name}>
@@ -40,13 +44,14 @@ function Timelines({
               epicIndex={index}
               numEpics={epics.length}
               showBucketHours={showBucketHours}
+              showReorderButtons={showReorderButtons}
               onEpicClick={() => onEpicClick(epic)}
               onMoveEpic={onMoveEpic}
             />
             {selectedEpic && selectedEpic.name === epic.name && (
               <EpicDetails
                 epic={epic}
-                numCols={timeBuckets.length + 3}
+                numCols={numColsForDetails}
                 onDeleteEpic={onDeleteEpic}
                 onEditEpic={onEditEpic}
               />

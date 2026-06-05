@@ -10,7 +10,7 @@
 - [x] Support adding Epics
 - [x] Support deleting Epics
 - [x] Support modifying Epics
-- [ ] Support reordering Epics (up/down arrow is fine, drag to reorder is more advanced)
+- [x] Support reordering Epics (up/down arrow is fine, drag to reorder is more advanced)
 - [x] Allow Epics to have a different name than the keyword
 - [x] Support case insensitive keyword matching
 - [x] Allow searching for specific fields (title, description, location)

@@ -8,6 +8,7 @@ type TimelineRowProps = {
   epicIndex: number;
   numEpics: number;
   showBucketHours: ShowBucketHours;
+  showReorderButtons: boolean;
   onEpicClick: () => void;
   onMoveEpic: (epicName: string, direction: "up" | "down") => void;
 };
@@ -19,6 +20,7 @@ function TimelineRow({
   epicIndex,
   numEpics,
   showBucketHours,
+  showReorderButtons,
   onEpicClick,
   onMoveEpic,
 }: TimelineRowProps) {
@@ -26,27 +28,32 @@ function TimelineRow({
     <th key="epic-name" className="epic-name-cell" onClick={onEpicClick}>
       {epic.name}
     </th>,
-    <td key="move-up" className="reorder-cell">
-      <button
-        type="button"
-        disabled={epicIndex === 0}
-        aria-label={`Move ${epic.name} up`}
-        onClick={() => onMoveEpic(epic.name, "up")}
-      >
-        ↑
-      </button>
-    </td>,
-    <td key="move-down" className="reorder-cell">
-      <button
-        type="button"
-        disabled={epicIndex === numEpics - 1}
-        aria-label={`Move ${epic.name} down`}
-        onClick={() => onMoveEpic(epic.name, "down")}
-      >
-        ↓
-      </button>
-    </td>,
   ];
+
+  if (showReorderButtons) {
+    cells.push(
+      <td key="move-up" className="reorder-cell">
+        <button
+          type="button"
+          disabled={epicIndex === 0}
+          aria-label={`Move ${epic.name} up`}
+          onClick={() => onMoveEpic(epic.name, "up")}
+        >
+          ↑
+        </button>
+      </td>,
+      <td key="move-down" className="reorder-cell">
+        <button
+          type="button"
+          disabled={epicIndex === numEpics - 1}
+          aria-label={`Move ${epic.name} down`}
+          onClick={() => onMoveEpic(epic.name, "down")}
+        >
+          ↓
+        </button>
+      </td>,
+    );
+  }
 
   const epicHours = epicBucketHours.get(epic.name);
 
