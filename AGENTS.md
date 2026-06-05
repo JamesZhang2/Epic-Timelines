@@ -46,12 +46,12 @@ High-level pipeline:
 
 - `src/App.tsx`: file upload UI; reads `.ics` into text and parses events
 - `src/ICSParser.ts`: converts ICS text → `CalendarEvent[]`, including expanded recurring event occurrences in range
-- `src/EpicTimelines.tsx`: top-level “app” logic once events are loaded (epics/options/buckets/selection)
+- `src/EpicTimelines.tsx`: top-level “app” logic once events are loaded (epics/options/buckets/selection/reordering)
 - `src/BucketUtil.ts`: bucket generation, event bucketing, and hours aggregation
 - `src/EventUtil.ts`: event filtering and epic-to-event matching helpers
-- `src/Timelines.tsx`: table composition (header + rows + optional details row)
-- `src/TimelineHeader.tsx`: bucket labels
-- `src/TimelineRow.tsx`: per-epic row rendering + heatmap coloring
+- `src/Timelines.tsx`: table composition (header + rows + optional details row; optional reorder columns)
+- `src/TimelineHeader.tsx`: bucket labels + optional reorder column labels
+- `src/TimelineRow.tsx`: per-epic row rendering + heatmap coloring + optional reorder buttons
 - `src/AddEpicCard.tsx`: create epic form (uncontrolled inputs; submit-time validation)
 - `src/OptionsCard.tsx`: timeline options form (uncontrolled inputs; submit-time validation)
 - `src/EpicDetails.tsx`: selected epic details + edit/delete (includes delete confirmation timeout)
@@ -81,6 +81,9 @@ High-level pipeline:
   - `TimelineOptions.ignoreAllDayEvents` defaults to `true`.
   - When enabled, `EpicTimelines` filters out events whose parsed span is greater than or equal to 24 hours before bucketing.
 - **Epic names must be unique**: enforced in `EpicTimelines` when adding/editing.
+- **Epic order is user-controlled**:
+  - `EpicTimelines` owns the `epics` array order and reorders it with `setEpics`.
+  - Reordering swaps neighboring Epics only; first-row up and last-row down actions are disabled in the UI.
 - **Epics match via regex**:
   - `keyword` is compiled with `new RegExp(keyword, caseSensitive ? "" : "i")`.
   - Matches selected fields only (title/description/location).
@@ -91,6 +94,10 @@ High-level pipeline:
 - Forms use **uncontrolled inputs** + **submit-time validation** (not continuous “live” validation):
   - `AddEpicCard`, `OptionsCard`, and edit mode in `EpicDetails`
 - Deleting an epic is a 2-step confirm within a short timeout (`EpicDetails`).
+- Epic reordering is a table mode toggled below the timelines table:
+  - Button text is `Reorder Epics` when inactive and `Done` when active.
+  - Reorder columns/buttons are shown only while reordering.
+  - Visible controls use `↑` and `↓` characters with accessible `aria-label`s.
 
 ## Known limitations / TODOs
 
@@ -105,5 +112,6 @@ High-level pipeline:
   - Try a recurring `.ics` event and confirm occurrences appear only within the selected range
   - Toggle "Ignore all-day events" and confirm events 24 hours or longer are excluded/included as expected
   - Add an Epic with a simple regex and confirm hours aggregation matches expectations
+  - Add several Epics, toggle reorder mode, move Epics up/down, and verify first/last boundary buttons are disabled
   - Try month/year bucket edge cases (e.g., starting on the 31st)
   - Edit + delete epic flows (including delete confirmation timeout)
