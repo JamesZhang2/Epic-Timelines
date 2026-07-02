@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState, type ChangeEvent } from "react";
 import type { BucketGranularity, ShowBucketHours, TimelineOptions } from "./EpicTimelines";
 import "./OptionsCard.css";
 import { dateAtLocalMidnight } from "./Util";
@@ -15,6 +15,14 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
   const granularityRef = useRef<HTMLSelectElement>(null);
   const showHoursRef = useRef<HTMLSelectElement>(null);
   const ignoreAllDayEventsRef = useRef<HTMLInputElement>(null);
+  const useGlobalColorRef = useRef<HTMLInputElement>(null);
+  const useGlobalScaleRef = useRef<HTMLInputElement>(null);
+  const globalColorRef = useRef<HTMLInputElement>(null);
+  const [useGlobalColorInput, setUseGlobalColorInput] = useState(timelineOptions.useGlobalColor);
+
+  function handleUseGlobalColorChange(event: ChangeEvent<HTMLInputElement>) {
+    setUseGlobalColorInput(event.currentTarget.checked);
+  }
 
   function handleApplyOptions() {
     const startDate = dateAtLocalMidnight(startRef.current!.value);
@@ -22,6 +30,9 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
     const bucketGranularity = granularityRef.current!.value as BucketGranularity;
     const showBucketHours = showHoursRef.current!.value as ShowBucketHours;
     const ignoreAllDayEvents = ignoreAllDayEventsRef.current!.checked;
+    const useGlobalScale = useGlobalScaleRef.current!.checked;
+    const useGlobalColor = useGlobalColorRef.current!.checked;
+    const globalColor = globalColorRef.current!.value;
 
     if (startDate > endDate) {
       alert("Start date must be earlier than or equal to end date.");
@@ -34,9 +45,9 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
       bucketGranularity,
       showBucketHours,
       ignoreAllDayEvents,
-      useGlobalColor: timelineOptions.useGlobalColor,
-      useGlobalScale: timelineOptions.useGlobalScale,
-      globalColor: timelineOptions.globalColor,
+      useGlobalColor,
+      useGlobalScale,
+      globalColor,
     };
     setTimelineOptions(newOptions);
   }
@@ -92,6 +103,38 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
             ref={ignoreAllDayEventsRef}
           />
           Ignore all-day events (24 hours or longer)
+        </label>
+      </p>
+      <p>
+        <label className="checkbox-label">
+          <input
+            type="checkbox"
+            checked={useGlobalColorInput}
+            ref={useGlobalColorRef}
+            onChange={handleUseGlobalColorChange}
+          />
+          Use global color
+        </label>
+      </p>
+      <p>
+        <label>
+          Global color:&nbsp;
+          <input
+            type="color"
+            defaultValue={timelineOptions.globalColor}
+            disabled={!useGlobalColorInput}
+            ref={globalColorRef}
+          />
+        </label>
+      </p>
+      <p>
+        <label className="checkbox-label">
+          <input
+            type="checkbox"
+            defaultChecked={timelineOptions.useGlobalScale}
+            ref={useGlobalScaleRef}
+          />
+          Use global scale
         </label>
       </p>
       <div id="options-apply-button-container">
