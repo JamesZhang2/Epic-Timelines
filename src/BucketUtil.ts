@@ -68,6 +68,19 @@ export function computeGlobalMaxBucketHours(epicBucketHours: Map<string, number[
   return result;
 }
 
+/** Returns the max bucket-hours value that should be used to scale a timeline row. */
+export function getTimelineScaleMaxHours(
+  epicHours: number[],
+  useGlobalScale: boolean,
+  globalMaxBucketHours: number,
+): number {
+  const epicMaxBucketHours = Math.max(0, ...epicHours);
+  if (useGlobalScale && globalMaxBucketHours < epicMaxBucketHours) {
+    throw new Error("globalMaxBucketHours must be greater than or equal to the Epic max.");
+  }
+  return useGlobalScale ? globalMaxBucketHours : epicMaxBucketHours;
+}
+
 /**
  * Generates time buckets based on the start date and end date (both inclusive).
  * If startDate == endDate, exactly one bucket will be generated.

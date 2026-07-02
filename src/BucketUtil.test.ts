@@ -4,6 +4,7 @@ import {
   bucketEvents,
   computeEpicBucketHours,
   computeGlobalMaxBucketHours,
+  getTimelineScaleMaxHours,
   lastDayOfMonth,
 } from "./BucketUtil.ts";
 import type { BucketedEvents, Epic, TimeBucket } from "./EpicTimelines.tsx";
@@ -866,5 +867,25 @@ describe("computeGlobalMaxBucketHours", () => {
     ]);
 
     expect(computeGlobalMaxBucketHours(epicBucketHours)).toEqual(0);
+  });
+});
+
+describe("getTimelineScaleMaxHours", () => {
+  it("returns the Epic row max when global scale is disabled", () => {
+    expect(getTimelineScaleMaxHours([1, 7, 3], false, 24)).toEqual(7);
+  });
+
+  it("returns the global max when global scale is enabled", () => {
+    expect(getTimelineScaleMaxHours([1, 7, 3], true, 24)).toEqual(24);
+  });
+
+  it("returns 0 for an empty Epic row when global scale is disabled", () => {
+    expect(getTimelineScaleMaxHours([], false, 24)).toEqual(0);
+  });
+
+  it("throws when global max is less than the Epic row max", () => {
+    expect(() => getTimelineScaleMaxHours([1, 7, 3], true, 6)).toThrowError(
+      "globalMaxBucketHours must be greater than or equal to the Epic max.",
+    );
   });
 });

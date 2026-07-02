@@ -251,6 +251,7 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
         showBucketHours={timelineOptions.showBucketHours}
         useGlobalColor={timelineOptions.useGlobalColor}
         globalColor={timelineOptions.globalColor}
+        useGlobalScale={timelineOptions.useGlobalScale}
         showReorderButtons={reorderingEpics}
         selectedEpic={selectedEpic}
         onEpicClick={handleEpicClick}

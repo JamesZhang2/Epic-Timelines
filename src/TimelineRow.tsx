@@ -1,4 +1,5 @@
 import type { Epic, ShowBucketHours } from "./EpicTimelines";
+import { getTimelineScaleMaxHours } from "./BucketUtil";
 import { computeCellColor, getTimelineCellBaseColor, relativeLuminance } from "./Util";
 import "./TimelineRow.css";
 
@@ -10,6 +11,8 @@ type TimelineRowProps = {
   showBucketHours: ShowBucketHours;
   useGlobalColor: boolean;
   globalColor: string;
+  useGlobalScale: boolean;
+  globalMaxBucketHours: number;
   showReorderButtons: boolean;
   onEpicClick: () => void;
   onMoveEpic: (epicName: string, direction: "up" | "down") => void;
@@ -24,6 +27,8 @@ function TimelineRow({
   showBucketHours,
   useGlobalColor,
   globalColor,
+  useGlobalScale,
+  globalMaxBucketHours,
   showReorderButtons,
   onEpicClick,
   onMoveEpic,
@@ -65,7 +70,7 @@ function TimelineRow({
     throw new Error("epicBucketHours does not contain the name of the Epic");
   }
 
-  const maxHours = Math.max(...epicHours);
+  const maxHours = getTimelineScaleMaxHours(epicHours, useGlobalScale, globalMaxBucketHours);
   const baseColor = getTimelineCellBaseColor(useGlobalColor, globalColor, epic.color);
 
   for (const [i, hours] of epicHours.entries()) {
