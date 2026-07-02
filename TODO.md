@@ -18,7 +18,8 @@
 - [x] Support different colors
 - Support different shades/darkness based on number of hours of events corresponding to the Epic (GitHub style)
   - [x] Support per-Epic shading
-  - [ ] Support global shading (need a global color - display it instead of the color of each Epic, but don't overwrite the color of each Epic)
+  - [x] Support global shading (need a global color - display it instead of the color of each Epic, but don't overwrite the color of each Epic)
+- [x] Support global scale (use max hours for all Epics as the max hours for scaling)
 - [x] Support custom date ranges (and allow users to change the ranges)
 - [x] Support different bucket time intervals
 - [ ] Support logical "and" of keyword criteria in Epics

@@ -65,7 +65,7 @@ High-level pipeline:
 - `CalendarEvent` (`src/ICSParser.ts`): `{ id, title, description?, location?, start, end }`
 - `Epic`: `{ name (unique), keyword (regex string), caseSensitive, color, matchTitle, matchDescription, matchLocation }`
 - `TimeBucket`: `{ start: Date, end: Date }`
-- `TimelineOptions`: `{ startDate, endDate, bucketGranularity, showBucketHours, ignoreAllDayEvents }`
+- `TimelineOptions`: `{ startDate, endDate, bucketGranularity, showBucketHours, ignoreAllDayEvents, useGlobalColor, useGlobalScale, globalColor }`
 
 ## Key semantics & invariants (do not break)
 
@@ -80,6 +80,12 @@ High-level pipeline:
 - **Ignoring all-day events**:
   - `TimelineOptions.ignoreAllDayEvents` defaults to `true`.
   - When enabled, `EpicTimelines` filters out events whose parsed span is greater than or equal to 24 hours before bucketing.
+- **Timeline heatmap color and scale**:
+  - Per-Epic shading is the default: each Epic row uses `Epic.color` and scales cell darkness by that Epic's own max bucket hours.
+  - `TimelineOptions.useGlobalColor` overrides all timeline cell base colors with `TimelineOptions.globalColor`, but does not overwrite any `Epic.color`.
+  - `TimelineOptions.useGlobalScale` scales all timeline cell darkness by the global max bucket hours across every Epic and bucket.
+  - Global color and global scale are independent options: users can enable either one without the other.
+  - `getTimelineScaleMaxHours` intentionally throws if the provided global max is smaller than the current Epic row max.
 - **Epic names must be unique**: enforced in `EpicTimelines` when adding/editing.
 - **Epic order is user-controlled**:
   - `EpicTimelines` owns the `epics` array order and reorders it with `setEpics`.
@@ -93,6 +99,7 @@ High-level pipeline:
 
 - Forms use **uncontrolled inputs** + **submit-time validation** (not continuous “live” validation):
   - `AddEpicCard`, `OptionsCard`, and edit mode in `EpicDetails`
+  - Narrow exception: `OptionsCard` may use local React state for immediate UI changes on the `OptionsCard` itself, such as disabling/enabling the global color picker, while still applying option values only on submit.
 - Deleting an epic is a 2-step confirm within a short timeout (`EpicDetails`).
 - Epic reordering is a table mode toggled below the timelines table:
   - Button text is `Reorder Epics` when inactive and `Done` when active.
@@ -111,6 +118,8 @@ High-level pipeline:
   - Try a recurring `.ics` event and confirm occurrences appear only within the selected range
   - Toggle "Ignore all-day events" and confirm events 24 hours or longer are excluded/included as expected
   - Add an Epic with a simple regex and confirm hours aggregation matches expectations
+  - Toggle "Use global color" and confirm timeline cells use the global color without changing Epic colors
+  - Toggle "Use global scale" and confirm cell darkness is scaled against the max bucket hours across all Epics
   - Add several Epics, toggle reorder mode, move Epics up/down, and verify first/last boundary buttons are disabled
   - Try month/year bucket edge cases (e.g., starting on the 31st)
   - Edit + delete epic flows (including delete confirmation timeout)
