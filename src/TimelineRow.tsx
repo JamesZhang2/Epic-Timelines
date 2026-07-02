@@ -1,5 +1,5 @@
 import type { Epic, ShowBucketHours } from "./EpicTimelines";
-import { computeCellColor, relativeLuminance } from "./Util";
+import { computeCellColor, getTimelineCellBaseColor, relativeLuminance } from "./Util";
 import "./TimelineRow.css";
 
 type TimelineRowProps = {
@@ -8,6 +8,8 @@ type TimelineRowProps = {
   epicIndex: number;
   numEpics: number;
   showBucketHours: ShowBucketHours;
+  useGlobalColor: boolean;
+  globalColor: string;
   showReorderButtons: boolean;
   onEpicClick: () => void;
   onMoveEpic: (epicName: string, direction: "up" | "down") => void;
@@ -20,6 +22,8 @@ function TimelineRow({
   epicIndex,
   numEpics,
   showBucketHours,
+  useGlobalColor,
+  globalColor,
   showReorderButtons,
   onEpicClick,
   onMoveEpic,
@@ -62,9 +66,10 @@ function TimelineRow({
   }
 
   const maxHours = Math.max(...epicHours);
+  const baseColor = getTimelineCellBaseColor(useGlobalColor, globalColor, epic.color);
 
   for (const [i, hours] of epicHours.entries()) {
-    const cellColor = computeCellColor(hours, maxHours, epic.color);
+    const cellColor = computeCellColor(hours, maxHours, baseColor);
     const cellStyle = { backgroundColor: cellColor };
     const textStyle = {
       color: relativeLuminance(cellColor) < 0.5 ? "white" : "black",

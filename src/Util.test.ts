@@ -7,6 +7,7 @@ import {
   dateAtLocalMidnight,
   relativeLuminance,
   computeCellColor,
+  getTimelineCellBaseColor,
 } from "./Util";
 
 describe("hasNontrivialOverlap", () => {
@@ -204,5 +205,15 @@ describe("computeCellColor", () => {
 
   it("scales intermediate cells by hours relative to max hours", () => {
     expect(computeCellColor(4, 8, "#000000")).toEqual("#7f7f7f");
+  });
+});
+
+describe("getTimelineCellBaseColor", () => {
+  it("returns the global color when global color is enabled", () => {
+    expect(getTimelineCellBaseColor(true, "#2f80ed", "#ff6600")).toEqual("#2f80ed");
+  });
+
+  it("returns the Epic color when global color is disabled", () => {
+    expect(getTimelineCellBaseColor(false, "#2f80ed", "#ff6600")).toEqual("#ff6600");
   });
 });

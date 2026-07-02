@@ -10,6 +10,8 @@ type TimelinesProps = {
   timeBuckets: TimeBucket[];
   epicBucketHours: Map<string, number[]>;
   showBucketHours: ShowBucketHours;
+  useGlobalColor: boolean;
+  globalColor: string;
   showReorderButtons: boolean;
   selectedEpic: Epic | null;
   onEpicClick: (epic: Epic) => void;
@@ -23,6 +25,8 @@ function Timelines({
   timeBuckets,
   epicBucketHours,
   showBucketHours,
+  useGlobalColor,
+  globalColor,
   showReorderButtons,
   selectedEpic,
   onEpicClick,
@@ -44,6 +48,8 @@ function Timelines({
               epicIndex={index}
               numEpics={epics.length}
               showBucketHours={showBucketHours}
+              useGlobalColor={useGlobalColor}
+              globalColor={globalColor}
               showReorderButtons={showReorderButtons}
               onEpicClick={() => onEpicClick(epic)}
               onMoveEpic={onMoveEpic}

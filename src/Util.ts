@@ -80,6 +80,15 @@ export function computeCellColor(hours: number, maxHours: number, baseColor: str
   return rgbToColor(newR, newG, newB);
 }
 
+/** Returns the color that should be used as the base for timeline cells. */
+export function getTimelineCellBaseColor(
+  useGlobalColor: boolean,
+  globalColor: string,
+  epicColor: string,
+): string {
+  return useGlobalColor ? globalColor : epicColor;
+}
+
 /**
  * Make a new date from the date string but at local midnight
  * @param date format: yyyy-mm-dd
