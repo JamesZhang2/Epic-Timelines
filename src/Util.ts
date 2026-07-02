@@ -65,6 +65,22 @@ export function relativeLuminance(color: string): number {
 }
 
 /**
+ * Compute the color for a cell based on the number of hours in this bucket,
+ * the max number of hours, and the base color.
+ */
+export function computeCellColor(hours: number, maxHours: number, baseColor: string): string {
+  if (hours === 0) {
+    return "#ffffff";
+  }
+  const rgb = colorToRGB(baseColor);
+  const factor = Math.max(hours / maxHours, 0.25);
+  const newR = Math.floor(255 - (255 - rgb[0]) * factor);
+  const newG = Math.floor(255 - (255 - rgb[1]) * factor);
+  const newB = Math.floor(255 - (255 - rgb[2]) * factor);
+  return rgbToColor(newR, newG, newB);
+}
+
+/**
  * Make a new date from the date string but at local midnight
  * @param date format: yyyy-mm-dd
  */

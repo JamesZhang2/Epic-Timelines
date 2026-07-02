@@ -6,6 +6,7 @@ import {
   rgbToColor,
   dateAtLocalMidnight,
   relativeLuminance,
+  computeCellColor,
 } from "./Util";
 
 describe("hasNontrivialOverlap", () => {
@@ -185,5 +186,23 @@ describe("relativeLuminanceSanity", () => {
 
   it("relative luminance of blue is 0.0722", () => {
     expect(relativeLuminance("#0000ff")).toEqual(0.0722);
+  });
+});
+
+describe("computeCellColor", () => {
+  it("returns white for zero hours", () => {
+    expect(computeCellColor(0, 8, "#2f80ed")).toEqual("#ffffff");
+  });
+
+  it("uses the base color at max hours", () => {
+    expect(computeCellColor(8, 8, "#2f80ed")).toEqual("#2f80ed");
+  });
+
+  it("uses a minimum intensity for nonzero low-hour cells", () => {
+    expect(computeCellColor(1, 8, "#000000")).toEqual("#bfbfbf");
+  });
+
+  it("scales intermediate cells by hours relative to max hours", () => {
+    expect(computeCellColor(4, 8, "#000000")).toEqual("#7f7f7f");
   });
 });

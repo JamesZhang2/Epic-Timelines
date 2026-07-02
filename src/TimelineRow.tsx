@@ -1,5 +1,5 @@
 import type { Epic, ShowBucketHours } from "./EpicTimelines";
-import { colorToRGB, relativeLuminance, rgbToColor } from "./Util";
+import { computeCellColor, relativeLuminance } from "./Util";
 import "./TimelineRow.css";
 
 type TimelineRowProps = {
@@ -94,22 +94,6 @@ function TimelineRow({
     </td>,
   );
   return <tr>{cells}</tr>;
-}
-
-/**
- * Compute the color for a cell based on the number hours in this bucket,
- * the max number of hours, and the color of the Epic.
- */
-function computeCellColor(hours: number, maxHours: number, epicColor: string): string {
-  if (hours === 0) {
-    return "#ffffff";
-  }
-  const rgb = colorToRGB(epicColor);
-  const factor = Math.max(hours / maxHours, 0.25);
-  const newR = Math.floor(255 - (255 - rgb[0]) * factor);
-  const newG = Math.floor(255 - (255 - rgb[1]) * factor);
-  const newB = Math.floor(255 - (255 - rgb[2]) * factor);
-  return rgbToColor(newR, newG, newB);
 }
 
 export default TimelineRow;
