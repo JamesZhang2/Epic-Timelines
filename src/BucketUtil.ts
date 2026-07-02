@@ -59,6 +59,15 @@ export function computeEpicBucketHours(
   return result;
 }
 
+/** @returns the maximum bucket-hours value across all Epics and buckets. */
+export function computeGlobalMaxBucketHours(epicBucketHours: Map<string, number[]>): number {
+  let result = 0;
+  for (const bucketHours of epicBucketHours.values()) {
+    result = Math.max(result, ...bucketHours);
+  }
+  return result;
+}
+
 /**
  * Generates time buckets based on the start date and end date (both inclusive).
  * If startDate == endDate, exactly one bucket will be generated.

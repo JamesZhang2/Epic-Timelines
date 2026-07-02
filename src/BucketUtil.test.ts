@@ -3,6 +3,7 @@ import {
   generateTimeBuckets,
   bucketEvents,
   computeEpicBucketHours,
+  computeGlobalMaxBucketHours,
   lastDayOfMonth,
 } from "./BucketUtil.ts";
 import type { BucketedEvents, Epic, TimeBucket } from "./EpicTimelines.tsx";
@@ -840,5 +841,30 @@ describe("lastDayOfMonth", () => {
       expect(lastDayOfMonth(2020, i)).toEqual(expected[i]);
       expect(lastDayOfMonth(2000, i)).toEqual(expected[i]);
     }
+  });
+});
+
+describe("computeGlobalMaxBucketHours", () => {
+  it("returns the maximum bucket-hours value across all Epics", () => {
+    const epicBucketHours: Map<string, number[]> = new Map([
+      ["Alpha", [1, 0, 4]],
+      ["Beta", [0, 7, 2]],
+      ["Gamma", [3, 0, 5]],
+    ]);
+
+    expect(computeGlobalMaxBucketHours(epicBucketHours)).toEqual(7);
+  });
+
+  it("returns 0 for an empty map", () => {
+    expect(computeGlobalMaxBucketHours(new Map())).toEqual(0);
+  });
+
+  it("returns 0 when Epics have no bucket hours", () => {
+    const epicBucketHours: Map<string, number[]> = new Map([
+      ["Alpha", []],
+      ["Beta", []],
+    ]);
+
+    expect(computeGlobalMaxBucketHours(epicBucketHours)).toEqual(0);
   });
 });
