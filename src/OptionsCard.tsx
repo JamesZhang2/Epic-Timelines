@@ -34,6 +34,9 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
       bucketGranularity,
       showBucketHours,
       ignoreAllDayEvents,
+      useGlobalColor: timelineOptions.useGlobalColor,
+      useGlobalScale: timelineOptions.useGlobalScale,
+      globalColor: timelineOptions.globalColor,
     };
     setTimelineOptions(newOptions);
   }

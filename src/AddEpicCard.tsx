@@ -46,7 +46,7 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
     const matchTitle = matchTitleRef.current?.checked ?? false;
     const matchDescription = matchDescriptionRef.current?.checked ?? false;
     const matchLocation = matchLocationRef.current?.checked ?? false;
-    const color = colorRef.current?.value || "#7799ff";
+    const color = colorRef.current?.value || "#2f80ed";
 
     if (!newName) {
       alert("Error: Please give this Epic a name.");
@@ -130,7 +130,7 @@ function AddEpicCard({ onAddEpic }: AddEpicCardProps) {
       </p>
       <p>
         <label id="add-epic-color-picker">
-          Color: <input ref={colorRef} type="color" defaultValue="#7799ff" />
+          Color: <input ref={colorRef} type="color" defaultValue="#2f80ed" />
         </label>
       </p>
       <div id="add-epic-button-container">

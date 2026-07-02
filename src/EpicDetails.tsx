@@ -41,7 +41,7 @@ function EpicDetails({ epic, numCols, onDeleteEpic, onEditEpic }: EpicDetailsPro
       const updatedMatchTitle = matchTitleRef.current?.checked ?? false;
       const updatedMatchDescription = matchDescriptionRef.current?.checked ?? false;
       const updatedMatchLocation = matchLocationRef.current?.checked ?? false;
-      const updatedColor = colorRef.current?.value || "#7799ff";
+      const updatedColor = colorRef.current?.value || "#2f80ed";
 
       if (!updatedName) {
         alert("Error: The updated Epic must have a name.");

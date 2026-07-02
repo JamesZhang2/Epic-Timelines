@@ -44,6 +44,9 @@ export type TimelineOptions = {
   bucketGranularity: BucketGranularity;
   showBucketHours: ShowBucketHours;
   ignoreAllDayEvents: boolean;
+  useGlobalColor: boolean;
+  useGlobalScale: boolean;
+  globalColor: string;
 };
 
 /** Top-level component */
@@ -57,6 +60,9 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
     bucketGranularity: "day" as BucketGranularity,
     showBucketHours: "nonzero" as ShowBucketHours,
     ignoreAllDayEvents: true,
+    useGlobalColor: false,
+    useGlobalScale: false,
+    globalColor: "#2f80ed",
   };
   const [timelineOptions, setTimelineOptions] = useState<TimelineOptions>(defaultTimelineOptions);
   const parsedEvents = useMemo(() => {

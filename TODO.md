@@ -31,7 +31,8 @@
 - [x] Add a column at the end showing total number of hours for this Epic
 - [x] Add option to ignore events equal to or longer than 24 hours (all-day events)
 - [ ] Add option to set time zones (of time buckets)
-- [ ] Allow saving and loading Epics
+- [ ] Allow saving and loading Epics & Options to/from a file
+  - [ ] Handle errors when loading
 - [ ] Handle errors when parsing a corrupted ICS file
 - [ ] Advanced: Suggest Epics based on calendar events (probably with frequency count/bag-of-words)
 - [x] UI: Make timelines look like intervals rather than colored cells
