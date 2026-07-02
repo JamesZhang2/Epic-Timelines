@@ -116,7 +116,7 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
           Use global color
         </label>
       </p>
-      <p>
+      <p className={useGlobalColorInput ? undefined : "disabled-option"}>
         <label>
           Global color:&nbsp;
           <input
@@ -125,6 +125,9 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
             disabled={!useGlobalColorInput}
             ref={globalColorRef}
           />
+          {!useGlobalColorInput && (
+            <span className="disabled-option-hint"> Global color disabled</span>
+          )}
         </label>
       </p>
       <p>
