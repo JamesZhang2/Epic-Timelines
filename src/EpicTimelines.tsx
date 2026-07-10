@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 import "./EpicTimelines.css";
 import OptionsCard from "./OptionsCard";
 import SaveLoadCard from "./SaveLoadCard";
+import { serializeConfig } from "./ConfigPersistence";
 
 type EpicTimelinesProps = {
   icsText: string;
@@ -239,6 +240,18 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
     }
   }
 
+  function handleSaveConfig() {
+    const serializedConfig = serializeConfig(epics, timelineOptions);
+    const blob = new Blob([serializedConfig], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const downloadLink = document.createElement("a");
+
+    downloadLink.href = url;
+    downloadLink.download = "epic-timelines-config.json";
+    downloadLink.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <div id="epic-timelines-container">
       <div id="card-container">
@@ -246,7 +259,7 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
         <OptionsCard timelineOptions={timelineOptions} setTimelineOptions={setTimelineOptions} />
       </div>
       <div id="save-load-container">
-        <SaveLoadCard />
+        <SaveLoadCard onSave={handleSaveConfig} />
       </div>
       <Timelines
         epics={epics}
