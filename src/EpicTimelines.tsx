@@ -6,6 +6,7 @@ import Timelines from "./Timelines";
 import { useMemo, useState } from "react";
 import "./EpicTimelines.css";
 import OptionsCard from "./OptionsCard";
+import SaveLoadCard from "./SaveLoadCard";
 
 type EpicTimelinesProps = {
   icsText: string;
@@ -243,6 +244,9 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
       <div id="card-container">
         <AddEpicCard onAddEpic={handleAddEpic} />
         <OptionsCard timelineOptions={timelineOptions} setTimelineOptions={setTimelineOptions} />
+      </div>
+      <div id="save-load-container">
+        <SaveLoadCard />
       </div>
       <Timelines
         epics={epics}

@@ -28,6 +28,10 @@
   gap: 20px;
 }
 
+#save-load-container {
+  margin: 4px 0 16px;
+}
+
 #toggle-epic-reorder-button-container {
   margin-top: 12px;
 }
