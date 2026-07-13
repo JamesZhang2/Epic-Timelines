@@ -79,6 +79,20 @@ function parseShowBucketHours(value: unknown): ShowBucketHours {
   return value as ShowBucketHours;
 }
 
+function isConfigBoolean(value: unknown): value is boolean {
+  return typeof value === "boolean";
+}
+
+function parseConfigBoolean(
+  fieldName: "ignoreAllDayEvents" | "useGlobalColor" | "useGlobalScale",
+  value: unknown,
+): boolean {
+  if (!isConfigBoolean(value)) {
+    throw new Error(`Config timelineOptions.${fieldName} must be a boolean.`);
+  }
+  return value as boolean;
+}
+
 export function serializeConfig(epics: Epic[], timelineOptions: TimelineOptions): string {
   const saveFile: ConfigSaveFile = {
     version: SAVE_FILE_VERSION,
@@ -127,6 +141,18 @@ export function deserializeConfig(jsonText: string): LoadedConfig {
 
   const bucketGranularity = parseBucketGranularity(saveFile.timelineOptions.bucketGranularity);
   const showBucketHours = parseShowBucketHours(saveFile.timelineOptions.showBucketHours);
+  const ignoreAllDayEvents = parseConfigBoolean(
+    "ignoreAllDayEvents",
+    saveFile.timelineOptions.ignoreAllDayEvents,
+  );
+  const useGlobalColor = parseConfigBoolean(
+    "useGlobalColor",
+    saveFile.timelineOptions.useGlobalColor,
+  );
+  const useGlobalScale = parseConfigBoolean(
+    "useGlobalScale",
+    saveFile.timelineOptions.useGlobalScale,
+  );
 
   return {
     epics: saveFile.epics,
@@ -135,10 +161,10 @@ export function deserializeConfig(jsonText: string): LoadedConfig {
       endDate,
       bucketGranularity,
       showBucketHours,
+      ignoreAllDayEvents,
+      useGlobalColor,
+      useGlobalScale,
       // TODO: Add validation for the following
-      ignoreAllDayEvents: saveFile.timelineOptions.ignoreAllDayEvents,
-      useGlobalColor: saveFile.timelineOptions.useGlobalColor,
-      useGlobalScale: saveFile.timelineOptions.useGlobalScale,
       globalColor: saveFile.timelineOptions.globalColor,
     },
   };

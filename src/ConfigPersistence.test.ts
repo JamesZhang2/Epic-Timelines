@@ -187,4 +187,28 @@ describe("ConfigPersistence", () => {
       "Config timelineOptions.showBucketHours must be all, nonzero, or none.",
     );
   });
+
+  it("rejects invalid boolean values", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.timelineOptions.ignoreAllDayEvents = "true";
+
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config timelineOptions.ignoreAllDayEvents must be a boolean.",
+    );
+
+    saveFile.timelineOptions.ignoreAllDayEvents = true;
+    saveFile.timelineOptions.useGlobalColor = "false";
+
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config timelineOptions.useGlobalColor must be a boolean.",
+    );
+
+    saveFile.timelineOptions.useGlobalColor = false;
+    saveFile.timelineOptions.useGlobalScale = "true";
+
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config timelineOptions.useGlobalScale must be a boolean.",
+    );
+  });
 });
