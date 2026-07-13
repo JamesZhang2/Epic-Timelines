@@ -2,7 +2,7 @@
  * Saves/loads the config (Epics and TimelineOptions) to/from a JSON file.
  */
 
-import type { Epic, TimelineOptions } from "./EpicTimelines";
+import type { Epic, TimelineOptions } from "./Timelines.types";
 import { dateAtLocalMidnight } from "./Util";
 
 const SAVE_FILE_VERSION = 1;

@@ -1,4 +1,4 @@
-import type { Epic, ShowBucketHours, TimeBucket } from "./EpicTimelines";
+import type { Epic, ShowBucketHours, TimeBucket } from "./Timelines.types";
 import TimelineRow from "./TimelineRow";
 import EpicDetails from "./EpicDetails";
 import React from "react";

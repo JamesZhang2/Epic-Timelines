@@ -1,4 +1,4 @@
-import type { TimeBucket } from "./EpicTimelines";
+import type { TimeBucket } from "./Timelines.types";
 import "./TimelineHeader.css";
 
 type TimelineHeaderProps = {

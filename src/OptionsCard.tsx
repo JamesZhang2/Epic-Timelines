@@ -1,5 +1,5 @@
 import { useRef, useState, type ChangeEvent } from "react";
-import type { BucketGranularity, ShowBucketHours, TimelineOptions } from "./EpicTimelines";
+import type { BucketGranularity, ShowBucketHours, TimelineOptions } from "./Timelines.types";
 import "./OptionsCard.css";
 import { dateAtLocalMidnight } from "./Util";
 

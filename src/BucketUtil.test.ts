@@ -7,7 +7,7 @@ import {
   getTimelineScaleMaxHours,
   lastDayOfMonth,
 } from "./BucketUtil.ts";
-import type { BucketedEvents, Epic, TimeBucket } from "./EpicTimelines.tsx";
+import type { BucketedEvents, Epic, TimeBucket } from "./Timelines.types.ts";
 import { parseICSToCalendarEventsInRange } from "./ICSParser.ts";
 import type { CalendarEvent } from "./ICSParser.ts";
 import { readFileSync } from "fs";

@@ -1,5 +1,5 @@
 import { useRef, useState, type ChangeEvent } from "react";
-import type { Epic } from "./EpicTimelines";
+import type { Epic } from "./Timelines.types";
 import "./AddEpicCard.css";
 
 type AddEpicCardProps = {

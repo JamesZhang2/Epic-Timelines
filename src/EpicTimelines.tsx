@@ -1,4 +1,4 @@
-import { parseICSToCalendarEventsInRange, type CalendarEvent } from "./ICSParser";
+import { parseICSToCalendarEventsInRange } from "./ICSParser";
 import { bucketEvents, computeEpicBucketHours, generateTimeBuckets } from "./BucketUtil";
 import { filterOutAllDayEvents } from "./EventUtil";
 import AddEpicCard from "./AddEpicCard";
@@ -8,47 +8,17 @@ import "./EpicTimelines.css";
 import OptionsCard from "./OptionsCard";
 import SaveLoadCard from "./SaveLoadCard";
 import { deserializeConfig, serializeConfig } from "./ConfigPersistence";
+import type {
+  BucketedEvents,
+  BucketGranularity,
+  Epic,
+  ShowBucketHours,
+  TimeBucket,
+  TimelineOptions,
+} from "./Timelines.types";
 
 type EpicTimelinesProps = {
   icsText: string;
-};
-
-export type Epic = {
-  name: string; // Must be unique.
-  keyword: string;
-  caseSensitive: boolean;
-  color: string;
-  matchTitle: boolean;
-  matchDescription: boolean;
-  matchLocation: boolean;
-};
-
-export type TimeBucket = {
-  start: Date;
-  end: Date;
-};
-
-/**
- * Represents a list of events with nontrivial overlap with the given time bucket.
- */
-export type BucketedEvents = {
-  bucket: TimeBucket;
-  events: CalendarEvent[];
-};
-
-export type BucketGranularity = "day" | "week" | "month" | "3 months" | "year";
-
-export type ShowBucketHours = "all" | "nonzero" | "none";
-
-export type TimelineOptions = {
-  startDate: Date;
-  endDate: Date;
-  bucketGranularity: BucketGranularity;
-  showBucketHours: ShowBucketHours;
-  ignoreAllDayEvents: boolean;
-  useGlobalColor: boolean;
-  useGlobalScale: boolean;
-  globalColor: string;
 };
 
 /** Top-level component */

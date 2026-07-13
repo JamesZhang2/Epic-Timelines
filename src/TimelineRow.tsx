@@ -1,4 +1,4 @@
-import type { Epic, ShowBucketHours } from "./EpicTimelines";
+import type { Epic, ShowBucketHours } from "./Timelines.types";
 import { getTimelineScaleMaxHours } from "./BucketUtil";
 import { computeCellColor, getTimelineCellBaseColor, relativeLuminance } from "./Util";
 import "./TimelineRow.css";

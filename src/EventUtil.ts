@@ -1,6 +1,6 @@
 /** This file contains helper functions for dealing with calendar events. */
 
-import type { Epic } from "./EpicTimelines";
+import type { Epic } from "./Timelines.types";
 import type { CalendarEvent } from "./ICSParser";
 
 const ALL_DAY_EVENT_MIN_DURATION_MS = 24 * 60 * 60 * 1000;

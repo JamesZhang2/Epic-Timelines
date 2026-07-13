@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Epic, TimelineOptions } from "./EpicTimelines";
+import type { Epic, TimelineOptions } from "./Timelines.types";
 import { deserializeConfig, serializeConfig } from "./ConfigPersistence";
 
 describe("ConfigPersistence", () => {
@@ -145,6 +145,16 @@ describe("ConfigPersistence", () => {
     saveFile.timelineOptions.endDate = "2026-02-30";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
       "Config timelineOptions.endDate must be a valid yyyy-mm-dd date.",
+    );
+  });
+
+  it("rejects invalid bucket granularities", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.timelineOptions.bucketGranularity = "quarter";
+
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config timelineOptions.bucketGranularity must be a valid bucket granularity.",
     );
   });
 
