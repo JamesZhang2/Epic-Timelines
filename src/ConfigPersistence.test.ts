@@ -132,4 +132,19 @@ describe("ConfigPersistence", () => {
       'Config file must include a "timelineOptions" object.',
     );
   });
+
+  it("rejects invalid timeline option date strings", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.timelineOptions.startDate = "06/24/2026";
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config timelineOptions.startDate must be a valid yyyy-mm-dd date.",
+    );
+
+    saveFile.timelineOptions.startDate = "2026-06-24";
+    saveFile.timelineOptions.endDate = "2026-02-30";
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config timelineOptions.endDate must be a valid yyyy-mm-dd date.",
+    );
+  });
 });

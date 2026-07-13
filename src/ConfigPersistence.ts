@@ -34,6 +34,28 @@ function isJsonObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+function parseConfigDate(fieldName: "startDate" | "endDate", value: unknown): Date {
+  if (typeof value !== "string") {
+    throw new Error(`Config timelineOptions.${fieldName} must be a valid yyyy-mm-dd date.`);
+  }
+
+  const result = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (!result) {
+    throw new Error(`Config timelineOptions.${fieldName} must be a valid yyyy-mm-dd date.`);
+  }
+
+  const year = Number(result[1]);
+  const month = Number(result[2]);
+  const day = Number(result[3]);
+  const date = dateAtLocalMidnight(value);
+
+  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
+    throw new Error(`Config timelineOptions.${fieldName} must be a valid yyyy-mm-dd date.`);
+  }
+
+  return date;
+}
+
 export function serializeConfig(epics: Epic[], timelineOptions: TimelineOptions): string {
   const saveFile: ConfigSaveFile = {
     version: SAVE_FILE_VERSION,
@@ -78,8 +100,8 @@ export function deserializeConfig(jsonText: string): LoadedConfig {
     epics: saveFile.epics,
     timelineOptions: {
       ...saveFile.timelineOptions,
-      startDate: dateAtLocalMidnight(saveFile.timelineOptions.startDate),
-      endDate: dateAtLocalMidnight(saveFile.timelineOptions.endDate),
+      startDate: parseConfigDate("startDate", saveFile.timelineOptions.startDate),
+      endDate: parseConfigDate("endDate", saveFile.timelineOptions.endDate),
     },
   };
 }
