@@ -74,7 +74,7 @@ function isShowBucketHours(value: unknown): value is ShowBucketHours {
 
 function parseShowBucketHours(value: unknown): ShowBucketHours {
   if (!isShowBucketHours(value)) {
-    throw new Error("Config timelineOptions.showBucketHours must be a valid show bucket hours.");
+    throw new Error("Config timelineOptions.showBucketHours must be all, nonzero, or none.");
   }
   return value as ShowBucketHours;
 }
@@ -91,6 +91,17 @@ function parseConfigBoolean(
     throw new Error(`Config timelineOptions.${fieldName} must be a boolean.`);
   }
   return value as boolean;
+}
+
+function isConfigColor(value: unknown): value is string {
+  return typeof value === "string" && /^#[a-f0-9]{6}$/i.test(value);
+}
+
+function parseConfigColor(fieldName: "globalColor", value: unknown): string {
+  if (!isConfigColor(value)) {
+    throw new Error(`Config timelineOptions.${fieldName} must be a color in the format #RRGGBB.`);
+  }
+  return value;
 }
 
 export function serializeConfig(epics: Epic[], timelineOptions: TimelineOptions): string {
@@ -153,6 +164,7 @@ export function deserializeConfig(jsonText: string): LoadedConfig {
     "useGlobalScale",
     saveFile.timelineOptions.useGlobalScale,
   );
+  const globalColor = parseConfigColor("globalColor", saveFile.timelineOptions.globalColor);
 
   return {
     epics: saveFile.epics,
@@ -164,8 +176,7 @@ export function deserializeConfig(jsonText: string): LoadedConfig {
       ignoreAllDayEvents,
       useGlobalColor,
       useGlobalScale,
-      // TODO: Add validation for the following
-      globalColor: saveFile.timelineOptions.globalColor,
+      globalColor,
     },
   };
 }

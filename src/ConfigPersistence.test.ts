@@ -211,4 +211,23 @@ describe("ConfigPersistence", () => {
       "Config timelineOptions.useGlobalScale must be a boolean.",
     );
   });
+
+  it("rejects invalid global color values", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.timelineOptions.globalColor = 123;
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config timelineOptions.globalColor must be a color in the format #RRGGBB.",
+    );
+
+    saveFile.timelineOptions.globalColor = "#123";
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config timelineOptions.globalColor must be a color in the format #RRGGBB.",
+    );
+
+    saveFile.timelineOptions.globalColor = "2f80ed";
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config timelineOptions.globalColor must be a color in the format #RRGGBB.",
+    );
+  });
 });
