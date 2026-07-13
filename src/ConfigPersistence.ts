@@ -30,6 +30,10 @@ function formatLocalDate(date: Date): string {
   return `${year}-${month}-${day}`;
 }
 
+function isJsonObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
 export function serializeConfig(epics: Epic[], timelineOptions: TimelineOptions): string {
   const saveFile: ConfigSaveFile = {
     version: SAVE_FILE_VERSION,
@@ -45,7 +49,30 @@ export function serializeConfig(epics: Epic[], timelineOptions: TimelineOptions)
 }
 
 export function deserializeConfig(jsonText: string): LoadedConfig {
-  const saveFile = JSON.parse(jsonText) as ConfigSaveFile;
+  let parsedConfig: unknown;
+  try {
+    parsedConfig = JSON.parse(jsonText);
+  } catch {
+    throw new Error("Config file must be valid JSON.");
+  }
+
+  if (!isJsonObject(parsedConfig)) {
+    throw new Error("Config file must be a JSON object.");
+  }
+
+  if (parsedConfig.version !== SAVE_FILE_VERSION) {
+    throw new Error(`Unsupported config file version: ${parsedConfig.version}.`);
+  }
+
+  if (!Array.isArray(parsedConfig.epics)) {
+    throw new Error('Config file must include an "epics" array.');
+  }
+
+  if (!isJsonObject(parsedConfig.timelineOptions)) {
+    throw new Error('Config file must include a "timelineOptions" object.');
+  }
+
+  const saveFile = parsedConfig as ConfigSaveFile;
 
   return {
     epics: saveFile.epics,

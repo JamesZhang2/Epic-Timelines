@@ -84,4 +84,52 @@ describe("ConfigPersistence", () => {
       endDate: new Date(2026, 6, 1, 0, 0, 0, 0),
     });
   });
+
+  it("rejects invalid JSON", () => {
+    expect(() => deserializeConfig("{")).toThrow("Config file must be valid JSON.");
+  });
+
+  it("rejects unsupported save file versions", () => {
+    const saveFile = cloneValidSaveFile();
+    saveFile.version = 2;
+
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Unsupported config file version: 2.",
+    );
+  });
+
+  it("rejects configs that are not JSON objects", () => {
+    expect(() => deserializeConfig("null")).toThrow("Config file must be a JSON object.");
+    expect(() => deserializeConfig("[]")).toThrow("Config file must be a JSON object.");
+  });
+
+  it("rejects configs missing top-level keys", () => {
+    const saveFile = cloneValidSaveFile();
+
+    delete saveFile.epics;
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      'Config file must include an "epics" array.',
+    );
+
+    saveFile.epics = epics;
+    delete saveFile.timelineOptions;
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      'Config file must include a "timelineOptions" object.',
+    );
+  });
+
+  it("rejects configs with wrong top-level data types", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.epics = {};
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      'Config file must include an "epics" array.',
+    );
+
+    saveFile.epics = epics;
+    saveFile.timelineOptions = [];
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      'Config file must include a "timelineOptions" object.',
+    );
+  });
 });
