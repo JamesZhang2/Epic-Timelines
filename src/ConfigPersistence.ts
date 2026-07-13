@@ -2,8 +2,8 @@
  * Saves/loads the config (Epics and TimelineOptions) to/from a JSON file.
  */
 
-import { BUCKET_GRANULARITIES } from "./Timelines.types";
-import type { BucketGranularity, Epic, TimelineOptions } from "./Timelines.types";
+import { BUCKET_GRANULARITIES, SHOW_BUCKET_HOURS } from "./Timelines.types";
+import type { BucketGranularity, Epic, ShowBucketHours, TimelineOptions } from "./Timelines.types";
 import { dateAtLocalMidnight } from "./Util";
 
 const SAVE_FILE_VERSION = 1;
@@ -68,6 +68,17 @@ function parseBucketGranularity(value: unknown): BucketGranularity {
   return value as BucketGranularity;
 }
 
+function isShowBucketHours(value: unknown): value is ShowBucketHours {
+  return SHOW_BUCKET_HOURS.includes(value as ShowBucketHours);
+}
+
+function parseShowBucketHours(value: unknown): ShowBucketHours {
+  if (!isShowBucketHours(value)) {
+    throw new Error("Config timelineOptions.showBucketHours must be a valid show bucket hours.");
+  }
+  return value as ShowBucketHours;
+}
+
 export function serializeConfig(epics: Epic[], timelineOptions: TimelineOptions): string {
   const saveFile: ConfigSaveFile = {
     version: SAVE_FILE_VERSION,
@@ -115,6 +126,7 @@ export function deserializeConfig(jsonText: string): LoadedConfig {
   }
 
   const bucketGranularity = parseBucketGranularity(saveFile.timelineOptions.bucketGranularity);
+  const showBucketHours = parseShowBucketHours(saveFile.timelineOptions.showBucketHours);
 
   return {
     epics: saveFile.epics,
@@ -122,8 +134,8 @@ export function deserializeConfig(jsonText: string): LoadedConfig {
       startDate,
       endDate,
       bucketGranularity,
+      showBucketHours,
       // TODO: Add validation for the following
-      showBucketHours: saveFile.timelineOptions.showBucketHours,
       ignoreAllDayEvents: saveFile.timelineOptions.ignoreAllDayEvents,
       useGlobalColor: saveFile.timelineOptions.useGlobalColor,
       useGlobalScale: saveFile.timelineOptions.useGlobalScale,

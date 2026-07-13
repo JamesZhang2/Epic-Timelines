@@ -177,4 +177,14 @@ describe("ConfigPersistence", () => {
       "Config timelineOptions.bucketGranularity must be a valid bucket granularity.",
     );
   });
+
+  it("rejects invalid ShowBucketHours values", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.timelineOptions.showBucketHours = "true";
+
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config timelineOptions.showBucketHours must be all, nonzero, or none.",
+    );
+  });
 });

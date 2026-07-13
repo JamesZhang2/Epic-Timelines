@@ -26,7 +26,8 @@ export type BucketedEvents = {
 export const BUCKET_GRANULARITIES = ["day", "week", "month", "3 months", "year"] as const;
 export type BucketGranularity = (typeof BUCKET_GRANULARITIES)[number];
 
-export type ShowBucketHours = "all" | "nonzero" | "none";
+export const SHOW_BUCKET_HOURS = ["all", "nonzero", "none"] as const;
+export type ShowBucketHours = (typeof SHOW_BUCKET_HOURS)[number];
 
 export type TimelineOptions = {
   startDate: Date;
