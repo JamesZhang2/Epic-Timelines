@@ -2,7 +2,8 @@
  * Saves/loads the config (Epics and TimelineOptions) to/from a JSON file.
  */
 
-import type { Epic, TimelineOptions } from "./Timelines.types";
+import { BUCKET_GRANULARITIES } from "./Timelines.types";
+import type { BucketGranularity, Epic, TimelineOptions } from "./Timelines.types";
 import { dateAtLocalMidnight } from "./Util";
 
 const SAVE_FILE_VERSION = 1;
@@ -56,6 +57,17 @@ function parseConfigDate(fieldName: "startDate" | "endDate", value: unknown): Da
   return date;
 }
 
+function isBucketGranularity(value: unknown): value is BucketGranularity {
+  return BUCKET_GRANULARITIES.includes(value as BucketGranularity);
+}
+
+function parseBucketGranularity(value: unknown): BucketGranularity {
+  if (!isBucketGranularity(value)) {
+    throw new Error("Config timelineOptions.bucketGranularity must be a valid bucket granularity.");
+  }
+  return value as BucketGranularity;
+}
+
 export function serializeConfig(epics: Epic[], timelineOptions: TimelineOptions): string {
   const saveFile: ConfigSaveFile = {
     version: SAVE_FILE_VERSION,
@@ -102,12 +114,20 @@ export function deserializeConfig(jsonText: string): LoadedConfig {
     throw new Error("Config timelineOptions.startDate must be before timelineOptions.endDate.");
   }
 
+  const bucketGranularity = parseBucketGranularity(saveFile.timelineOptions.bucketGranularity);
+
   return {
     epics: saveFile.epics,
     timelineOptions: {
-      ...saveFile.timelineOptions,
       startDate,
       endDate,
+      bucketGranularity,
+      // TODO: Add validation for the following
+      showBucketHours: saveFile.timelineOptions.showBucketHours,
+      ignoreAllDayEvents: saveFile.timelineOptions.ignoreAllDayEvents,
+      useGlobalColor: saveFile.timelineOptions.useGlobalColor,
+      useGlobalScale: saveFile.timelineOptions.useGlobalScale,
+      globalColor: saveFile.timelineOptions.globalColor,
     },
   };
 }

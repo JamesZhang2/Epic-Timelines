@@ -23,7 +23,8 @@ export type BucketedEvents = {
   events: CalendarEvent[];
 };
 
-export type BucketGranularity = "day" | "week" | "month" | "3 months" | "year";
+export const BUCKET_GRANULARITIES = ["day", "week", "month", "3 months", "year"] as const;
+export type BucketGranularity = (typeof BUCKET_GRANULARITIES)[number];
 
 export type ShowBucketHours = "all" | "nonzero" | "none";
 

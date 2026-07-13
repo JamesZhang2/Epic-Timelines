@@ -167,4 +167,14 @@ describe("ConfigPersistence", () => {
       "Config timelineOptions.startDate must be before timelineOptions.endDate.",
     );
   });
+
+  it("rejects invalid BucketGranularity values", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.timelineOptions.bucketGranularity = "quarter";
+
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config timelineOptions.bucketGranularity must be a valid bucket granularity.",
+    );
+  });
 });
