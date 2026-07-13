@@ -35,23 +35,29 @@ describe("ConfigPersistence", () => {
     globalColor: "#2f80ed",
   };
 
+  const validSaveFile = {
+    version: 1,
+    epics,
+    timelineOptions: {
+      startDate: "2026-06-24",
+      endDate: "2026-07-01",
+      bucketGranularity: "week",
+      showBucketHours: "all",
+      ignoreAllDayEvents: false,
+      useGlobalColor: true,
+      useGlobalScale: true,
+      globalColor: "#2f80ed",
+    },
+  };
+
+  function cloneValidSaveFile() {
+    return JSON.parse(JSON.stringify(validSaveFile));
+  }
+
   it("serializes epics and options to the versioned save file shape", () => {
     const serialized = serializeConfig(epics, timelineOptions);
 
-    expect(JSON.parse(serialized)).toEqual({
-      version: 1,
-      epics,
-      timelineOptions: {
-        startDate: "2026-06-24",
-        endDate: "2026-07-01",
-        bucketGranularity: "week",
-        showBucketHours: "all",
-        ignoreAllDayEvents: false,
-        useGlobalColor: true,
-        useGlobalScale: true,
-        globalColor: "#2f80ed",
-      },
-    });
+    expect(JSON.parse(serialized)).toEqual(validSaveFile);
   });
 
   it("round trips epics and options", () => {
