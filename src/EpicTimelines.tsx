@@ -7,7 +7,7 @@ import { useMemo, useState } from "react";
 import "./EpicTimelines.css";
 import OptionsCard from "./OptionsCard";
 import SaveLoadCard from "./SaveLoadCard";
-import { serializeConfig } from "./ConfigPersistence";
+import { deserializeConfig, serializeConfig } from "./ConfigPersistence";
 
 type EpicTimelinesProps = {
   icsText: string;
@@ -135,6 +135,7 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
   const [epics, setEpics] = useState<Epic[]>([]);
   const [selectedEpic, setSelectedEpic] = useState<Epic | null>(null);
   const [reorderingEpics, setReorderingEpics] = useState<boolean>(false);
+  const [optionsCardKey, setOptionsCardKey] = useState(0);
 
   // The number of hours in each bucket of each Epic.
   const epicBucketHours: Map<string, number[]> = useMemo(
@@ -252,14 +253,39 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
     URL.revokeObjectURL(url);
   }
 
+  function handleLoadConfig(jsonText: string) {
+    const loadedConfig = deserializeConfig(jsonText);
+    const shouldReplaceConfig = confirm(
+      "Loading a config will replace the current Epics and Options.",
+    );
+
+    if (!shouldReplaceConfig) {
+      return;
+    }
+
+    assertEpicNamesUnique(loadedConfig.epics);
+    setEpics(loadedConfig.epics);
+    setTimelineOptions(loadedConfig.timelineOptions);
+    setSelectedEpic(null);
+    setReorderingEpics(false);
+
+    // This forces the OptionsCard to re-render, which is necessary to ensure that the OptionsCard
+    // is updated with the new options.
+    setOptionsCardKey((current) => current + 1);
+  }
+
   return (
     <div id="epic-timelines-container">
       <div id="card-container">
         <AddEpicCard onAddEpic={handleAddEpic} />
-        <OptionsCard timelineOptions={timelineOptions} setTimelineOptions={setTimelineOptions} />
+        <OptionsCard
+          key={optionsCardKey}
+          timelineOptions={timelineOptions}
+          setTimelineOptions={setTimelineOptions}
+        />
       </div>
       <div id="save-load-container">
-        <SaveLoadCard onSave={handleSaveConfig} />
+        <SaveLoadCard onSave={handleSaveConfig} onLoad={handleLoadConfig} />
       </div>
       <Timelines
         epics={epics}
