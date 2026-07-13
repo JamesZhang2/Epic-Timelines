@@ -147,4 +147,14 @@ describe("ConfigPersistence", () => {
       "Config timelineOptions.endDate must be a valid yyyy-mm-dd date.",
     );
   });
+
+  it("rejects start dates that are after end dates", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.timelineOptions.startDate = "2026-07-01";
+    saveFile.timelineOptions.endDate = "2026-06-24";
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config timelineOptions.startDate must be before timelineOptions.endDate.",
+    );
+  });
 });

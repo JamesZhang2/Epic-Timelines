@@ -95,13 +95,19 @@ export function deserializeConfig(jsonText: string): LoadedConfig {
   }
 
   const saveFile = parsedConfig as ConfigSaveFile;
+  const startDate = parseConfigDate("startDate", saveFile.timelineOptions.startDate);
+  const endDate = parseConfigDate("endDate", saveFile.timelineOptions.endDate);
+
+  if (startDate > endDate) {
+    throw new Error("Config timelineOptions.startDate must be before timelineOptions.endDate.");
+  }
 
   return {
     epics: saveFile.epics,
     timelineOptions: {
       ...saveFile.timelineOptions,
-      startDate: parseConfigDate("startDate", saveFile.timelineOptions.startDate),
-      endDate: parseConfigDate("endDate", saveFile.timelineOptions.endDate),
+      startDate,
+      endDate,
     },
   };
 }
