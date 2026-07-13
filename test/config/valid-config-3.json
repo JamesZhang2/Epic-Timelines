@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "epics": [
+    {
+      "name": "a",
+      "keyword": "a",
+      "caseSensitive": false,
+      "color": "#cc0000",
+      "matchTitle": true,
+      "matchDescription": true,
+      "matchLocation": false
+    },
+    {
+      "name": "B",
+      "keyword": "B",
+      "caseSensitive": true,
+      "color": "#49dc09",
+      "matchTitle": true,
+      "matchDescription": false,
+      "matchLocation": true
+    },
+    {
+      "name": "c",
+      "keyword": "c",
+      "caseSensitive": false,
+      "color": "#0414fb",
+      "matchTitle": true,
+      "matchDescription": true,
+      "matchLocation": true
+    }
+  ],
+  "timelineOptions": {
+    "startDate": "2025-01-01",
+    "endDate": "2026-12-31",
+    "bucketGranularity": "3 months",
+    "showBucketHours": "nonzero",
+    "ignoreAllDayEvents": false,
+    "useGlobalColor": false,
+    "useGlobalScale": true,
+    "globalColor": "#2f80ed"
+  }
+}
