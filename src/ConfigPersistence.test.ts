@@ -98,50 +98,62 @@ describe("ConfigPersistence", () => {
     );
   });
 
-  it("rejects configs that are not JSON objects", () => {
+  it("rejects null configs", () => {
     expect(() => deserializeConfig("null")).toThrow("Config file must be a JSON object.");
+  });
+
+  it("rejects array configs", () => {
     expect(() => deserializeConfig("[]")).toThrow("Config file must be a JSON object.");
   });
 
-  it("rejects configs missing top-level keys", () => {
+  it("rejects configs missing epics", () => {
     const saveFile = cloneValidSaveFile();
 
     delete saveFile.epics;
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
       'Config file must include an "epics" array.',
     );
+  });
 
-    saveFile.epics = epics;
+  it("rejects configs missing timeline options", () => {
+    const saveFile = cloneValidSaveFile();
+
     delete saveFile.timelineOptions;
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
       'Config file must include a "timelineOptions" object.',
     );
   });
 
-  it("rejects configs with wrong top-level data types", () => {
+  it("rejects configs where epics is not an array", () => {
     const saveFile = cloneValidSaveFile();
 
     saveFile.epics = {};
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
       'Config file must include an "epics" array.',
     );
+  });
 
-    saveFile.epics = epics;
+  it("rejects configs where timeline options is an array", () => {
+    const saveFile = cloneValidSaveFile();
+
     saveFile.timelineOptions = [];
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
       'Config file must include a "timelineOptions" object.',
     );
   });
 
-  it("rejects invalid timeline option date strings", () => {
+  it("rejects invalid start date strings", () => {
     const saveFile = cloneValidSaveFile();
 
     saveFile.timelineOptions.startDate = "06/24/2026";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
       "Config timelineOptions.startDate must be a valid yyyy-mm-dd date.",
     );
+  });
 
-    saveFile.timelineOptions.startDate = "2026-06-24";
+  it("rejects invalid end date strings", () => {
+    const saveFile = cloneValidSaveFile();
+
     saveFile.timelineOptions.endDate = "2026-02-30";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
       "Config timelineOptions.endDate must be a valid yyyy-mm-dd date.",
@@ -188,7 +200,7 @@ describe("ConfigPersistence", () => {
     );
   });
 
-  it("rejects invalid boolean values", () => {
+  it("rejects non-boolean ignoreAllDayEvents values", () => {
     const saveFile = cloneValidSaveFile();
 
     saveFile.timelineOptions.ignoreAllDayEvents = "true";
@@ -196,15 +208,21 @@ describe("ConfigPersistence", () => {
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
       "Config timelineOptions.ignoreAllDayEvents must be a boolean.",
     );
+  });
 
-    saveFile.timelineOptions.ignoreAllDayEvents = true;
+  it("rejects non-boolean useGlobalColor values", () => {
+    const saveFile = cloneValidSaveFile();
+
     saveFile.timelineOptions.useGlobalColor = "false";
 
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
       "Config timelineOptions.useGlobalColor must be a boolean.",
     );
+  });
 
-    saveFile.timelineOptions.useGlobalColor = false;
+  it("rejects non-boolean useGlobalScale values", () => {
+    const saveFile = cloneValidSaveFile();
+
     saveFile.timelineOptions.useGlobalScale = "true";
 
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
@@ -212,18 +230,26 @@ describe("ConfigPersistence", () => {
     );
   });
 
-  it("rejects invalid global color values", () => {
+  it("rejects numeric global color values", () => {
     const saveFile = cloneValidSaveFile();
 
     saveFile.timelineOptions.globalColor = 123;
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
       "Config timelineOptions.globalColor must be a color in the format #RRGGBB.",
     );
+  });
+
+  it("rejects short global color values", () => {
+    const saveFile = cloneValidSaveFile();
 
     saveFile.timelineOptions.globalColor = "#123";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
       "Config timelineOptions.globalColor must be a color in the format #RRGGBB.",
     );
+  });
+
+  it("rejects global color values without a leading hash", () => {
+    const saveFile = cloneValidSaveFile();
 
     saveFile.timelineOptions.globalColor = "2f80ed";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
