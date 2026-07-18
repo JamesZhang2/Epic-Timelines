@@ -94,9 +94,9 @@ function isConfigColor(value: unknown): value is string {
   return typeof value === "string" && /^#[a-f0-9]{6}$/i.test(value);
 }
 
-function parseConfigColor(fieldName: "globalColor", value: unknown): string {
+function parseConfigColor(fieldName: string, value: unknown): string {
   if (!isConfigColor(value)) {
-    throw new Error(`Config timelineOptions.${fieldName} must be a color in the format #RRGGBB.`);
+    throw new Error(`Config ${fieldName} must be a color in the format #RRGGBB.`);
   }
   return value;
 }
@@ -133,6 +133,7 @@ function parseEpic(epicIndex: number, value: unknown): Epic {
     name: parseEpicName(epicIndex, value.name),
     keyword: parseEpicKeyword(epicIndex, value.keyword),
     caseSensitive: parseConfigBoolean(`epics[${epicIndex}].caseSensitive`, value.caseSensitive),
+    color: parseConfigColor(`epics[${epicIndex}].color`, value.color),
   } as Epic;
 }
 
@@ -201,7 +202,10 @@ export function deserializeConfig(jsonText: string): LoadedConfig {
     "timelineOptions.useGlobalScale",
     saveFile.timelineOptions.useGlobalScale,
   );
-  const globalColor = parseConfigColor("globalColor", saveFile.timelineOptions.globalColor);
+  const globalColor = parseConfigColor(
+    "timelineOptions.globalColor",
+    saveFile.timelineOptions.globalColor,
+  );
 
   return {
     epics,

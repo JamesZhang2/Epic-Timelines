@@ -85,6 +85,8 @@ describe("ConfigPersistence", () => {
     });
   });
 
+  // Top-level error cases
+
   it("rejects invalid JSON", () => {
     expect(() => deserializeConfig("{")).toThrow("Config file must be valid JSON.");
   });
@@ -105,6 +107,8 @@ describe("ConfigPersistence", () => {
   it("rejects array configs", () => {
     expect(() => deserializeConfig("[]")).toThrow("Config file must be a JSON object.");
   });
+
+  // Epics error cases
 
   it("rejects configs missing epics", () => {
     const saveFile = cloneValidSaveFile();
@@ -177,6 +181,35 @@ describe("ConfigPersistence", () => {
       "Config epics[0].caseSensitive must be a boolean.",
     );
   });
+
+  it("rejects epics with numeric color values", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.epics[0].color = 123;
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config epics[0].color must be a color in the format #RRGGBB.",
+    );
+  });
+
+  it("rejects epics with short color values", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.epics[0].color = "#123";
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config epics[0].color must be a color in the format #RRGGBB.",
+    );
+  });
+
+  it("rejects epics with color values without a leading hash", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.epics[0].color = "2f80ed";
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config epics[0].color must be a color in the format #RRGGBB.",
+    );
+  });
+
+  // Timeline options error cases
 
   it("rejects configs where timeline options is an array", () => {
     const saveFile = cloneValidSaveFile();
