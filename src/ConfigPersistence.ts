@@ -104,6 +104,32 @@ function parseConfigColor(fieldName: "globalColor", value: unknown): string {
   return value;
 }
 
+function isEpicName(value: unknown): value is string {
+  return typeof value === "string" && value.trim() !== "";
+}
+
+function parseEpicName(epicIndex: number, value: unknown): string {
+  if (!isEpicName(value)) {
+    throw new Error(`Config epics[${epicIndex}].name must be a non-empty string.`);
+  }
+  return value;
+}
+
+function parseEpic(epicIndex: number, value: unknown): Epic {
+  if (!isJsonObject(value)) {
+    throw new Error(`Config epics[${epicIndex}] must be an object.`);
+  }
+
+  return {
+    ...value,
+    name: parseEpicName(epicIndex, value.name),
+  } as Epic;
+}
+
+function parseEpics(value: unknown[]): Epic[] {
+  return value.map((epic, index) => parseEpic(index, epic));
+}
+
 export function serializeConfig(epics: Epic[], timelineOptions: TimelineOptions): string {
   const saveFile: ConfigSaveFile = {
     version: SAVE_FILE_VERSION,
@@ -143,6 +169,7 @@ export function deserializeConfig(jsonText: string): LoadedConfig {
   }
 
   const saveFile = parsedConfig as ConfigSaveFile;
+  const epics = parseEpics(parsedConfig.epics);
   const startDate = parseConfigDate("startDate", saveFile.timelineOptions.startDate);
   const endDate = parseConfigDate("endDate", saveFile.timelineOptions.endDate);
 
@@ -167,7 +194,7 @@ export function deserializeConfig(jsonText: string): LoadedConfig {
   const globalColor = parseConfigColor("globalColor", saveFile.timelineOptions.globalColor);
 
   return {
-    epics: saveFile.epics,
+    epics,
     timelineOptions: {
       startDate,
       endDate,

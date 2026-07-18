@@ -133,6 +133,24 @@ describe("ConfigPersistence", () => {
     );
   });
 
+  it("rejects epics with non-string names", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.epics[0].name = 123;
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config epics[0].name must be a non-empty string.",
+    );
+  });
+
+  it("rejects epics with blank names", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.epics[0].name = "   ";
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config epics[0].name must be a non-empty string.",
+    );
+  });
+
   it("rejects configs where timeline options is an array", () => {
     const saveFile = cloneValidSaveFile();
 
