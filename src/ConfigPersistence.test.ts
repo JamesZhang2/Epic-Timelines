@@ -159,7 +159,7 @@ describe("ConfigPersistence", () => {
 
     saveFile.epics[0].keyword = 123;
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "epics[0].keyword must be a non-empty string.",
+      "epics[0].keyword must be a non-empty string and a valid regex.",
     );
   });
 
@@ -168,7 +168,15 @@ describe("ConfigPersistence", () => {
 
     saveFile.epics[0].keyword = "   ";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "epics[0].keyword must be a non-empty string.",
+      "epics[0].keyword must be a non-empty string and a valid regex.",
+    );
+  });
+
+  it("rejects epics with malformed keyword regexes", () => {
+    const saveFile = cloneValidSaveFile();
+    saveFile.epics[0].keyword = "[a-z"; // Invalid regex.
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "epics[0].keyword must be a non-empty string and a valid regex.",
     );
   });
 

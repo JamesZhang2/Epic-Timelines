@@ -112,13 +112,22 @@ function parseEpicName(epicIndex: number, value: unknown): string {
   return value;
 }
 
+// Note that keyword must be a valid regex.
 function isEpicKeyword(value: unknown): value is string {
-  return typeof value === "string" && value.trim() !== "";
+  if (typeof value !== "string" || value.trim() === "") {
+    return false;
+  }
+  try {
+    new RegExp(value);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function parseEpicKeyword(epicIndex: number, value: unknown): string {
   if (!isEpicKeyword(value)) {
-    throw new Error(`epics[${epicIndex}].keyword must be a non-empty string.`);
+    throw new Error(`epics[${epicIndex}].keyword must be a non-empty string and a valid regex.`);
   }
   return value;
 }
