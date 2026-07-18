@@ -88,7 +88,7 @@ function OptionsCard({ timelineOptions, setTimelineOptions }: OptionsCardProps) 
         </select>
       </p>
       <p>
-        Show number of hours in each bucket?
+        Show number of hours in each bucket:&nbsp;
         <select defaultValue={timelineOptions.showBucketHours} ref={showHoursRef}>
           <option value="all">Always</option>
           <option value="nonzero">Only nonzero entries</option>

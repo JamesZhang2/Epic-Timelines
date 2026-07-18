@@ -1,6 +1,8 @@
 #options-div {
   display: flex;
   flex-direction: column;
+  width: max-content;
+  max-width: 450px;
 }
 
 #options-apply-button-container {
