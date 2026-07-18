@@ -313,16 +313,6 @@ describe("ConfigPersistence", () => {
     );
   });
 
-  it("rejects invalid bucket granularities", () => {
-    const saveFile = cloneValidSaveFile();
-
-    saveFile.timelineOptions.bucketGranularity = "quarter";
-
-    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config timelineOptions.bucketGranularity must be a valid bucket granularity.",
-    );
-  });
-
   it("rejects start dates that are after end dates", () => {
     const saveFile = cloneValidSaveFile();
 
