@@ -7,7 +7,7 @@ import { useMemo, useState } from "react";
 import "./EpicTimelines.css";
 import OptionsCard from "./OptionsCard";
 import SaveLoadCard from "./SaveLoadCard";
-import { deserializeConfig, serializeConfig } from "./ConfigPersistence";
+import { deserializeConfig, serializeConfig, type LoadedConfig } from "./ConfigPersistence";
 import type {
   BucketedEvents,
   BucketGranularity,
@@ -224,7 +224,13 @@ function EpicTimelines({ icsText }: EpicTimelinesProps) {
   }
 
   function handleLoadConfig(jsonText: string) {
-    const loadedConfig = deserializeConfig(jsonText);
+    let loadedConfig: LoadedConfig;
+    try {
+      loadedConfig = deserializeConfig(jsonText);
+    } catch (error) {
+      alert(`Failed to load config: ${error}`);
+      return;
+    }
     const shouldReplaceConfig = confirm(
       "Loading a config will replace the current Epics and Options.",
     );
