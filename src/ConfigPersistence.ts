@@ -129,7 +129,6 @@ function parseEpic(epicIndex: number, value: unknown): Epic {
   }
 
   return {
-    ...value,
     name: parseEpicName(epicIndex, value.name),
     keyword: parseEpicKeyword(epicIndex, value.keyword),
     caseSensitive: parseConfigBoolean(`epics[${epicIndex}].caseSensitive`, value.caseSensitive),
