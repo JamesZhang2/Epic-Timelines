@@ -119,21 +119,20 @@ describe("ConfigPersistence", () => {
     );
   });
 
-  it("rejects configs missing timeline options", () => {
-    const saveFile = cloneValidSaveFile();
-
-    delete saveFile.timelineOptions;
-    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      'Config file must include a "timelineOptions" object.',
-    );
-  });
-
   it("rejects configs where epics is not an array", () => {
     const saveFile = cloneValidSaveFile();
 
     saveFile.epics = {};
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
       'Config file must include an "epics" array.',
+    );
+  });
+
+  it("rejects epics that are not objects", () => {
+    const saveFile = cloneValidSaveFile();
+    saveFile.epics = ["foo", "bar"];
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config epics[0] must be an object.",
     );
   });
 
@@ -277,6 +276,15 @@ describe("ConfigPersistence", () => {
   });
 
   // Timeline options error cases
+
+  it("rejects configs missing timeline options", () => {
+    const saveFile = cloneValidSaveFile();
+
+    delete saveFile.timelineOptions;
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      'Config file must include a "timelineOptions" object.',
+    );
+  });
 
   it("rejects configs where timeline options is an array", () => {
     const saveFile = cloneValidSaveFile();
