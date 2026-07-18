@@ -134,6 +134,12 @@ function parseEpic(epicIndex: number, value: unknown): Epic {
     keyword: parseEpicKeyword(epicIndex, value.keyword),
     caseSensitive: parseConfigBoolean(`epics[${epicIndex}].caseSensitive`, value.caseSensitive),
     color: parseConfigColor(`epics[${epicIndex}].color`, value.color),
+    matchTitle: parseConfigBoolean(`epics[${epicIndex}].matchTitle`, value.matchTitle),
+    matchDescription: parseConfigBoolean(
+      `epics[${epicIndex}].matchDescription`,
+      value.matchDescription,
+    ),
+    matchLocation: parseConfigBoolean(`epics[${epicIndex}].matchLocation`, value.matchLocation),
   } as Epic;
 }
 

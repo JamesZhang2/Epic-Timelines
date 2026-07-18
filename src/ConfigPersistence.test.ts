@@ -209,6 +209,33 @@ describe("ConfigPersistence", () => {
     );
   });
 
+  it("rejects epics with non-boolean matchTitle values", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.epics[0].matchTitle = "true";
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config epics[0].matchTitle must be a boolean.",
+    );
+  });
+
+  it("rejects epics with non-boolean matchDescription values", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.epics[0].matchDescription = "false";
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config epics[0].matchDescription must be a boolean.",
+    );
+  });
+
+  it("rejects epics with non-boolean matchLocation values", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.epics[0].matchLocation = "foo";
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config epics[0].matchLocation must be a boolean.",
+    );
+  });
+
   // Timeline options error cases
 
   it("rejects configs where timeline options is an array", () => {
