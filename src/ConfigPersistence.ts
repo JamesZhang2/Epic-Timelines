@@ -158,7 +158,7 @@ function assertEpicNamesUnique(epics: Epic[]) {
   const names = epics.map((e) => e.name);
   const uniqueNames = new Set(names);
   if (names.length != uniqueNames.size) {
-    throw new Error("epics must have unique names.");
+    throw new Error("Epics must have unique names.");
   }
 }
 

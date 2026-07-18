@@ -279,7 +279,7 @@ describe("ConfigPersistence", () => {
     };
 
     expect(() => deserializeConfig(JSON.stringify(invalidSaveFile))).toThrow(
-      "epics must have unique names.",
+      "Epics must have unique names.",
     );
   });
 
