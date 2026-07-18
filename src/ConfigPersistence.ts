@@ -128,17 +128,29 @@ function parseEpic(epicIndex: number, value: unknown): Epic {
     throw new Error(`Config epics[${epicIndex}] must be an object.`);
   }
 
+  const matchTitle = parseConfigBoolean(`epics[${epicIndex}].matchTitle`, value.matchTitle);
+  const matchDescription = parseConfigBoolean(
+    `epics[${epicIndex}].matchDescription`,
+    value.matchDescription,
+  );
+  const matchLocation = parseConfigBoolean(
+    `epics[${epicIndex}].matchLocation`,
+    value.matchLocation,
+  );
+  if (!matchTitle && !matchDescription && !matchLocation) {
+    throw new Error(
+      `Config epics[${epicIndex}] must have at least one of the fields included in the match.`,
+    );
+  }
+
   return {
     name: parseEpicName(epicIndex, value.name),
     keyword: parseEpicKeyword(epicIndex, value.keyword),
     caseSensitive: parseConfigBoolean(`epics[${epicIndex}].caseSensitive`, value.caseSensitive),
     color: parseConfigColor(`epics[${epicIndex}].color`, value.color),
-    matchTitle: parseConfigBoolean(`epics[${epicIndex}].matchTitle`, value.matchTitle),
-    matchDescription: parseConfigBoolean(
-      `epics[${epicIndex}].matchDescription`,
-      value.matchDescription,
-    ),
-    matchLocation: parseConfigBoolean(`epics[${epicIndex}].matchLocation`, value.matchLocation),
+    matchTitle,
+    matchDescription,
+    matchLocation,
   } as Epic;
 }
 

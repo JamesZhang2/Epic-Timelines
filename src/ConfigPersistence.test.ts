@@ -276,10 +276,20 @@ describe("ConfigPersistence", () => {
         useGlobalScale: true,
         globalColor: "#2f80ed",
       },
-    }
+    };
 
     expect(() => deserializeConfig(JSON.stringify(invalidSaveFile))).toThrow(
       "Config epics must have unique names.",
+    );
+  });
+
+  it("rejects epics where matchTitle, matchDescription, and matchLocation are all false", () => {
+    const saveFile = cloneValidSaveFile();
+    saveFile.epics[0].matchTitle = false;
+    saveFile.epics[0].matchDescription = false;
+    saveFile.epics[0].matchLocation = false;
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config epics[0] must have at least one of the fields included in the match.",
     );
   });
 
@@ -307,7 +317,7 @@ describe("ConfigPersistence", () => {
     const saveFile = cloneValidSaveFile();
     delete saveFile.timelineOptions.startDate;
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      'Config timelineOptions.startDate must be a valid yyyy-mm-dd date.',
+      "Config timelineOptions.startDate must be a valid yyyy-mm-dd date.",
     );
   });
 
@@ -315,7 +325,7 @@ describe("ConfigPersistence", () => {
     const saveFile = cloneValidSaveFile();
     saveFile.timelineOptions.startDate = 12345;
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      'Config timelineOptions.startDate must be a valid yyyy-mm-dd date.',
+      "Config timelineOptions.startDate must be a valid yyyy-mm-dd date.",
     );
   });
 
