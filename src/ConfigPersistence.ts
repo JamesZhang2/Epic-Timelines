@@ -115,6 +115,17 @@ function parseEpicName(epicIndex: number, value: unknown): string {
   return value;
 }
 
+function isEpicKeyword(value: unknown): value is string {
+  return typeof value === "string" && value.trim() !== "";
+}
+
+function parseEpicKeyword(epicIndex: number, value: unknown): string {
+  if (!isEpicKeyword(value)) {
+    throw new Error(`Config epics[${epicIndex}].keyword must be a non-empty string.`);
+  }
+  return value;
+}
+
 function parseEpic(epicIndex: number, value: unknown): Epic {
   if (!isJsonObject(value)) {
     throw new Error(`Config epics[${epicIndex}] must be an object.`);
@@ -123,6 +134,7 @@ function parseEpic(epicIndex: number, value: unknown): Epic {
   return {
     ...value,
     name: parseEpicName(epicIndex, value.name),
+    keyword: parseEpicKeyword(epicIndex, value.keyword),
   } as Epic;
 }
 

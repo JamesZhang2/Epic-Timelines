@@ -151,6 +151,24 @@ describe("ConfigPersistence", () => {
     );
   });
 
+  it("rejects epics with non-string keywords", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.epics[0].keyword = 123;
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config epics[0].keyword must be a non-empty string.",
+    );
+  });
+
+  it("rejects epics with blank keywords", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.epics[0].keyword = "   ";
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config epics[0].keyword must be a non-empty string.",
+    );
+  });
+
   it("rejects configs where timeline options is an array", () => {
     const saveFile = cloneValidSaveFile();
 
