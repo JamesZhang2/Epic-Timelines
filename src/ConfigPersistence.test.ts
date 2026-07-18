@@ -169,6 +169,15 @@ describe("ConfigPersistence", () => {
     );
   });
 
+  it("rejects epics with non-boolean caseSensitive values", () => {
+    const saveFile = cloneValidSaveFile();
+
+    saveFile.epics[0].caseSensitive = "true";
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config epics[0].caseSensitive must be a boolean.",
+    );
+  });
+
   it("rejects configs where timeline options is an array", () => {
     const saveFile = cloneValidSaveFile();
 

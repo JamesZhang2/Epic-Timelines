@@ -83,12 +83,9 @@ function isConfigBoolean(value: unknown): value is boolean {
   return typeof value === "boolean";
 }
 
-function parseConfigBoolean(
-  fieldName: "ignoreAllDayEvents" | "useGlobalColor" | "useGlobalScale",
-  value: unknown,
-): boolean {
+function parseConfigBoolean(fieldName: string, value: unknown): boolean {
   if (!isConfigBoolean(value)) {
-    throw new Error(`Config timelineOptions.${fieldName} must be a boolean.`);
+    throw new Error(`Config ${fieldName} must be a boolean.`);
   }
   return value as boolean;
 }
@@ -135,6 +132,7 @@ function parseEpic(epicIndex: number, value: unknown): Epic {
     ...value,
     name: parseEpicName(epicIndex, value.name),
     keyword: parseEpicKeyword(epicIndex, value.keyword),
+    caseSensitive: parseConfigBoolean(`epics[${epicIndex}].caseSensitive`, value.caseSensitive),
   } as Epic;
 }
 
@@ -192,15 +190,15 @@ export function deserializeConfig(jsonText: string): LoadedConfig {
   const bucketGranularity = parseBucketGranularity(saveFile.timelineOptions.bucketGranularity);
   const showBucketHours = parseShowBucketHours(saveFile.timelineOptions.showBucketHours);
   const ignoreAllDayEvents = parseConfigBoolean(
-    "ignoreAllDayEvents",
+    "timelineOptions.ignoreAllDayEvents",
     saveFile.timelineOptions.ignoreAllDayEvents,
   );
   const useGlobalColor = parseConfigBoolean(
-    "useGlobalColor",
+    "timelineOptions.useGlobalColor",
     saveFile.timelineOptions.useGlobalColor,
   );
   const useGlobalScale = parseConfigBoolean(
-    "useGlobalScale",
+    "timelineOptions.useGlobalScale",
     saveFile.timelineOptions.useGlobalScale,
   );
   const globalColor = parseConfigColor("globalColor", saveFile.timelineOptions.globalColor);
