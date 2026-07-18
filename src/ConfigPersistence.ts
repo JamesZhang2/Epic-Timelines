@@ -142,8 +142,18 @@ function parseEpic(epicIndex: number, value: unknown): Epic {
   } as Epic;
 }
 
+function assertEpicNamesUnique(epics: Epic[]) {
+  const names = epics.map((e) => e.name);
+  const uniqueNames = new Set(names);
+  if (names.length != uniqueNames.size) {
+    throw new Error("Config epics must have unique names.");
+  }
+}
+
 function parseEpics(value: unknown[]): Epic[] {
-  return value.map((epic, index) => parseEpic(index, epic));
+  const epics = value.map((epic, index) => parseEpic(index, epic));
+  assertEpicNamesUnique(epics);
+  return epics;
 }
 
 export function serializeConfig(epics: Epic[], timelineOptions: TimelineOptions): string {

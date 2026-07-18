@@ -236,6 +236,46 @@ describe("ConfigPersistence", () => {
     );
   });
 
+  it("rejects epics with duplicate names", () => {
+    const invalidSaveFile = {
+      version: 1,
+      epics: [
+        {
+          name: "Alpha",
+          keyword: "alpha1",
+          caseSensitive: true,
+          color: "#7799ff",
+          matchTitle: true,
+          matchDescription: true,
+          matchLocation: false,
+        },
+        {
+          name: "Alpha",
+          keyword: "alpha2",
+          caseSensitive: false,
+          color: "#885533",
+          matchTitle: false,
+          matchDescription: true,
+          matchLocation: false,
+        },
+      ],
+      timelineOptions: {
+        startDate: "2026-06-24",
+        endDate: "2026-07-01",
+        bucketGranularity: "week",
+        showBucketHours: "all",
+        ignoreAllDayEvents: false,
+        useGlobalColor: true,
+        useGlobalScale: true,
+        globalColor: "#2f80ed",
+      },
+    }
+
+    expect(() => deserializeConfig(JSON.stringify(invalidSaveFile))).toThrow(
+      "Config epics must have unique names.",
+    );
+  });
+
   // Timeline options error cases
 
   it("rejects configs where timeline options is an array", () => {
