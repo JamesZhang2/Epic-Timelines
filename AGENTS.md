@@ -52,18 +52,20 @@ High-level pipeline:
 
 - `src/App.tsx`: file upload UI; reads `.ics` into text and parses events
 - `src/ICSParser.ts`: converts ICS text → `CalendarEvent[]`, including expanded recurring event occurrences in range
-- `src/EpicTimelines.tsx`: top-level “app” logic once events are loaded (epics/options/buckets/selection/reordering)
+- `src/EpicTimelines.tsx`: top-level “app” logic once events are loaded (epics/options/buckets/selection/reordering/config save-load)
 - `src/BucketUtil.ts`: bucket generation, event bucketing, and hours aggregation
+- `src/ConfigPersistence.ts`: versioned JSON save/load serialization and validation for Epics + Timeline Options
 - `src/EventUtil.ts`: event filtering and epic-to-event matching helpers
 - `src/Timelines.tsx`: table composition (header + rows + optional details row; optional reorder columns)
 - `src/TimelineHeader.tsx`: bucket labels + optional reorder column labels
 - `src/TimelineRow.tsx`: per-epic row rendering + heatmap coloring + optional reorder buttons
 - `src/AddEpicCard.tsx`: create epic form (uncontrolled inputs; submit-time validation)
 - `src/OptionsCard.tsx`: timeline options form (uncontrolled inputs; submit-time validation)
+- `src/SaveLoadCard.tsx`: JSON config save/load UI for Epics and Options only
 - `src/EpicDetails.tsx`: selected epic details + edit/delete (includes delete confirmation timeout)
 - `src/Util.ts`: overlap math, color helpers, local-midnight date parsing
 - Tests:
-  - `src/BucketUtil.test.ts`, `src/EventUtil.test.ts`, `src/ICSParser.test.ts`, `src/Util.test.ts`
+  - `src/BucketUtil.test.ts`, `src/ConfigPersistence.test.ts`, `src/EventUtil.test.ts`, `src/ICSParser.test.ts`, `src/Util.test.ts`
   - Sample ICS fixtures live under `test/...` (used by tests)
 
 ## Core domain types (source of truth: `src/EpicTimelines.tsx`)
@@ -93,6 +95,12 @@ High-level pipeline:
   - Global color and global scale are independent options: users can enable either one without the other.
   - `getTimelineScaleMaxHours` intentionally throws if the provided global max is smaller than the current Epic row max.
 - **Epic names must be unique**: enforced in `EpicTimelines` when adding/editing.
+- **Config persistence**:
+  - Save/load is a local JSON browser-file flow for Epics and Timeline Options only; it never saves parsed calendar events or the uploaded `.ics` data.
+  - Config files are versioned (`version: 1`) and store `epics` in display order plus the complete `timelineOptions` object.
+  - Saved `startDate`/`endDate` values are `yyyy-mm-dd` strings; loading converts them back through `dateAtLocalMidnight` to preserve local-midnight semantics.
+  - Loading validates the entire file before mutating state: supported version, top-level shape, valid options, unique valid Epics, valid colors, at least one match field, and regex keywords that compile.
+  - A failed or cancelled load leaves the current Epics and Options unchanged. A successful load replaces Epics and Options, clears the selected Epic, exits reorder mode, and remounts `OptionsCard` so uncontrolled defaults reflect loaded values.
 - **Epic order is user-controlled**:
   - `EpicTimelines` owns the `epics` array order and reorders it with `setEpics`.
   - Reordering swaps neighboring Epics only; first-row up and last-row down actions are disabled in the UI.
@@ -111,6 +119,7 @@ High-level pipeline:
   - Button text is `Reorder Epics` when inactive and `Done` when active.
   - Reorder columns/buttons are shown only while reordering.
   - Visible controls use `↑` and `↓` characters with accessible `aria-label`s.
+- Save/load UI uses browser-native file APIs and `alert`/`confirm`, matching the app's current submit-time validation style.
 
 ## TODOs
 
@@ -119,6 +128,7 @@ High-level pipeline:
 ## When making changes: quick test plan
 
 - Run `npm test` (Vitest)
+- Persistence has focused unit coverage in `src/ConfigPersistence.test.ts`. End-to-end save/load interaction tests are intentionally omitted for now because they require mocking browser file/download and confirmation interactions.
 - Manually:
   - Upload a small `.ics`, verify events appear in computed buckets
   - Try a recurring `.ics` event and confirm occurrences appear only within the selected range
@@ -127,5 +137,7 @@ High-level pipeline:
   - Toggle "Use global color" and confirm timeline cells use the global color without changing Epic colors
   - Toggle "Use global scale" and confirm cell darkness is scaled against the max bucket hours across all Epics
   - Add several Epics, toggle reorder mode, move Epics up/down, and verify first/last boundary buttons are disabled
+  - Save a config JSON and load it back, confirming Epics, Options, global color/global scale, and Epic order are restored
+  - Try cancelling a valid config load and loading an invalid config, confirming existing Epics and Options remain unchanged
   - Try month/year bucket edge cases (e.g., starting on the 31st)
   - Edit + delete epic flows (including delete confirmation timeout)
