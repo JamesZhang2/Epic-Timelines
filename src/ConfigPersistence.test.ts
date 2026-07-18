@@ -208,6 +208,14 @@ describe("ConfigPersistence", () => {
     );
   });
 
+  it("rejects epics with invalid color values", () => {
+    const saveFile = cloneValidSaveFile();
+    saveFile.epics[0].color = "#colors";
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      "Config epics[0].color must be a color in the format #RRGGBB.",
+    );
+  });
+
   it("rejects epics with non-boolean matchTitle values", () => {
     const saveFile = cloneValidSaveFile();
 
@@ -292,6 +300,22 @@ describe("ConfigPersistence", () => {
     saveFile.timelineOptions = [];
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
       'Config file must include a "timelineOptions" object.',
+    );
+  });
+
+  it("rejects timeline options missing required fields", () => {
+    const saveFile = cloneValidSaveFile();
+    delete saveFile.timelineOptions.startDate;
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      'Config timelineOptions.startDate must be a valid yyyy-mm-dd date.',
+    );
+  });
+
+  it("rejects start dates that are not strings", () => {
+    const saveFile = cloneValidSaveFile();
+    saveFile.timelineOptions.startDate = 12345;
+    expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
+      'Config timelineOptions.startDate must be a valid yyyy-mm-dd date.',
     );
   });
 
