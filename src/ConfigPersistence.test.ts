@@ -132,7 +132,7 @@ describe("ConfigPersistence", () => {
     const saveFile = cloneValidSaveFile();
     saveFile.epics = ["foo", "bar"];
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config epics[0] must be an object.",
+      "epics[0] must be an object.",
     );
   });
 
@@ -141,7 +141,7 @@ describe("ConfigPersistence", () => {
 
     saveFile.epics[0].name = 123;
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config epics[0].name must be a non-empty string.",
+      "epics[0].name must be a non-empty string.",
     );
   });
 
@@ -150,7 +150,7 @@ describe("ConfigPersistence", () => {
 
     saveFile.epics[0].name = "   ";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config epics[0].name must be a non-empty string.",
+      "epics[0].name must be a non-empty string.",
     );
   });
 
@@ -159,7 +159,7 @@ describe("ConfigPersistence", () => {
 
     saveFile.epics[0].keyword = 123;
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config epics[0].keyword must be a non-empty string.",
+      "epics[0].keyword must be a non-empty string.",
     );
   });
 
@@ -168,7 +168,7 @@ describe("ConfigPersistence", () => {
 
     saveFile.epics[0].keyword = "   ";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config epics[0].keyword must be a non-empty string.",
+      "epics[0].keyword must be a non-empty string.",
     );
   });
 
@@ -177,7 +177,7 @@ describe("ConfigPersistence", () => {
 
     saveFile.epics[0].caseSensitive = "true";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config epics[0].caseSensitive must be a boolean.",
+      "epics[0].caseSensitive must be a boolean.",
     );
   });
 
@@ -186,7 +186,7 @@ describe("ConfigPersistence", () => {
 
     saveFile.epics[0].color = 123;
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config epics[0].color must be a color in the format #RRGGBB.",
+      "epics[0].color must be a color in the format #RRGGBB.",
     );
   });
 
@@ -195,7 +195,7 @@ describe("ConfigPersistence", () => {
 
     saveFile.epics[0].color = "#123";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config epics[0].color must be a color in the format #RRGGBB.",
+      "epics[0].color must be a color in the format #RRGGBB.",
     );
   });
 
@@ -204,7 +204,7 @@ describe("ConfigPersistence", () => {
 
     saveFile.epics[0].color = "2f80ed";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config epics[0].color must be a color in the format #RRGGBB.",
+      "epics[0].color must be a color in the format #RRGGBB.",
     );
   });
 
@@ -212,7 +212,7 @@ describe("ConfigPersistence", () => {
     const saveFile = cloneValidSaveFile();
     saveFile.epics[0].color = "#colors";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config epics[0].color must be a color in the format #RRGGBB.",
+      "epics[0].color must be a color in the format #RRGGBB.",
     );
   });
 
@@ -221,7 +221,7 @@ describe("ConfigPersistence", () => {
 
     saveFile.epics[0].matchTitle = "true";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config epics[0].matchTitle must be a boolean.",
+      "epics[0].matchTitle must be a boolean.",
     );
   });
 
@@ -230,7 +230,7 @@ describe("ConfigPersistence", () => {
 
     saveFile.epics[0].matchDescription = "false";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config epics[0].matchDescription must be a boolean.",
+      "epics[0].matchDescription must be a boolean.",
     );
   });
 
@@ -239,7 +239,7 @@ describe("ConfigPersistence", () => {
 
     saveFile.epics[0].matchLocation = "foo";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config epics[0].matchLocation must be a boolean.",
+      "epics[0].matchLocation must be a boolean.",
     );
   });
 
@@ -279,7 +279,7 @@ describe("ConfigPersistence", () => {
     };
 
     expect(() => deserializeConfig(JSON.stringify(invalidSaveFile))).toThrow(
-      "Config epics must have unique names.",
+      "epics must have unique names.",
     );
   });
 
@@ -289,7 +289,7 @@ describe("ConfigPersistence", () => {
     saveFile.epics[0].matchDescription = false;
     saveFile.epics[0].matchLocation = false;
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config epics[0] must have at least one of the fields included in the match.",
+      "epics[0] must have at least one of the fields included in the match.",
     );
   });
 
@@ -317,7 +317,7 @@ describe("ConfigPersistence", () => {
     const saveFile = cloneValidSaveFile();
     delete saveFile.timelineOptions.startDate;
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config timelineOptions.startDate must be a valid yyyy-mm-dd date.",
+      "timelineOptions.startDate must be a valid yyyy-mm-dd date.",
     );
   });
 
@@ -325,7 +325,7 @@ describe("ConfigPersistence", () => {
     const saveFile = cloneValidSaveFile();
     saveFile.timelineOptions.startDate = 12345;
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config timelineOptions.startDate must be a valid yyyy-mm-dd date.",
+      "timelineOptions.startDate must be a valid yyyy-mm-dd date.",
     );
   });
 
@@ -334,7 +334,7 @@ describe("ConfigPersistence", () => {
 
     saveFile.timelineOptions.startDate = "06/24/2026";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config timelineOptions.startDate must be a valid yyyy-mm-dd date.",
+      "timelineOptions.startDate must be a valid yyyy-mm-dd date.",
     );
   });
 
@@ -343,7 +343,7 @@ describe("ConfigPersistence", () => {
 
     saveFile.timelineOptions.endDate = "2026-02-30";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config timelineOptions.endDate must be a valid yyyy-mm-dd date.",
+      "timelineOptions.endDate must be a valid yyyy-mm-dd date.",
     );
   });
 
@@ -353,7 +353,7 @@ describe("ConfigPersistence", () => {
     saveFile.timelineOptions.startDate = "2026-07-01";
     saveFile.timelineOptions.endDate = "2026-06-24";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config timelineOptions.startDate must be before timelineOptions.endDate.",
+      "timelineOptions.startDate must be before timelineOptions.endDate.",
     );
   });
 
@@ -363,7 +363,7 @@ describe("ConfigPersistence", () => {
     saveFile.timelineOptions.bucketGranularity = "quarter";
 
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config timelineOptions.bucketGranularity must be a valid bucket granularity.",
+      "timelineOptions.bucketGranularity must be a valid bucket granularity.",
     );
   });
 
@@ -373,7 +373,7 @@ describe("ConfigPersistence", () => {
     saveFile.timelineOptions.showBucketHours = "true";
 
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config timelineOptions.showBucketHours must be all, nonzero, or none.",
+      "timelineOptions.showBucketHours must be all, nonzero, or none.",
     );
   });
 
@@ -383,7 +383,7 @@ describe("ConfigPersistence", () => {
     saveFile.timelineOptions.ignoreAllDayEvents = "true";
 
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config timelineOptions.ignoreAllDayEvents must be a boolean.",
+      "timelineOptions.ignoreAllDayEvents must be a boolean.",
     );
   });
 
@@ -393,7 +393,7 @@ describe("ConfigPersistence", () => {
     saveFile.timelineOptions.useGlobalColor = "false";
 
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config timelineOptions.useGlobalColor must be a boolean.",
+      "timelineOptions.useGlobalColor must be a boolean.",
     );
   });
 
@@ -403,7 +403,7 @@ describe("ConfigPersistence", () => {
     saveFile.timelineOptions.useGlobalScale = "true";
 
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config timelineOptions.useGlobalScale must be a boolean.",
+      "timelineOptions.useGlobalScale must be a boolean.",
     );
   });
 
@@ -412,7 +412,7 @@ describe("ConfigPersistence", () => {
 
     saveFile.timelineOptions.globalColor = 123;
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config timelineOptions.globalColor must be a color in the format #RRGGBB.",
+      "timelineOptions.globalColor must be a color in the format #RRGGBB.",
     );
   });
 
@@ -421,7 +421,7 @@ describe("ConfigPersistence", () => {
 
     saveFile.timelineOptions.globalColor = "#123";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config timelineOptions.globalColor must be a color in the format #RRGGBB.",
+      "timelineOptions.globalColor must be a color in the format #RRGGBB.",
     );
   });
 
@@ -430,7 +430,7 @@ describe("ConfigPersistence", () => {
 
     saveFile.timelineOptions.globalColor = "2f80ed";
     expect(() => deserializeConfig(JSON.stringify(saveFile))).toThrow(
-      "Config timelineOptions.globalColor must be a color in the format #RRGGBB.",
+      "timelineOptions.globalColor must be a color in the format #RRGGBB.",
     );
   });
 });

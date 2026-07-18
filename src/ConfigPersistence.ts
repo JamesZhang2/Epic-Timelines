@@ -37,12 +37,12 @@ function isJsonObject(value: unknown): value is Record<string, unknown> {
 
 function parseConfigDate(fieldName: "startDate" | "endDate", value: unknown): Date {
   if (typeof value !== "string") {
-    throw new Error(`Config timelineOptions.${fieldName} must be a valid yyyy-mm-dd date.`);
+    throw new Error(`timelineOptions.${fieldName} must be a valid yyyy-mm-dd date.`);
   }
 
   const result = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
   if (!result) {
-    throw new Error(`Config timelineOptions.${fieldName} must be a valid yyyy-mm-dd date.`);
+    throw new Error(`timelineOptions.${fieldName} must be a valid yyyy-mm-dd date.`);
   }
 
   const year = Number(result[1]);
@@ -51,7 +51,7 @@ function parseConfigDate(fieldName: "startDate" | "endDate", value: unknown): Da
   const date = dateAtLocalMidnight(value);
 
   if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
-    throw new Error(`Config timelineOptions.${fieldName} must be a valid yyyy-mm-dd date.`);
+    throw new Error(`timelineOptions.${fieldName} must be a valid yyyy-mm-dd date.`);
   }
 
   return date;
@@ -63,7 +63,7 @@ function isBucketGranularity(value: unknown): value is BucketGranularity {
 
 function parseBucketGranularity(value: unknown): BucketGranularity {
   if (!isBucketGranularity(value)) {
-    throw new Error("Config timelineOptions.bucketGranularity must be a valid bucket granularity.");
+    throw new Error("timelineOptions.bucketGranularity must be a valid bucket granularity.");
   }
   return value as BucketGranularity;
 }
@@ -74,7 +74,7 @@ function isShowBucketHours(value: unknown): value is ShowBucketHours {
 
 function parseShowBucketHours(value: unknown): ShowBucketHours {
   if (!isShowBucketHours(value)) {
-    throw new Error("Config timelineOptions.showBucketHours must be all, nonzero, or none.");
+    throw new Error("timelineOptions.showBucketHours must be all, nonzero, or none.");
   }
   return value as ShowBucketHours;
 }
@@ -85,7 +85,7 @@ function isConfigBoolean(value: unknown): value is boolean {
 
 function parseConfigBoolean(fieldName: string, value: unknown): boolean {
   if (!isConfigBoolean(value)) {
-    throw new Error(`Config ${fieldName} must be a boolean.`);
+    throw new Error(`${fieldName} must be a boolean.`);
   }
   return value as boolean;
 }
@@ -96,7 +96,7 @@ function isConfigColor(value: unknown): value is string {
 
 function parseConfigColor(fieldName: string, value: unknown): string {
   if (!isConfigColor(value)) {
-    throw new Error(`Config ${fieldName} must be a color in the format #RRGGBB.`);
+    throw new Error(`${fieldName} must be a color in the format #RRGGBB.`);
   }
   return value;
 }
@@ -107,7 +107,7 @@ function isEpicName(value: unknown): value is string {
 
 function parseEpicName(epicIndex: number, value: unknown): string {
   if (!isEpicName(value)) {
-    throw new Error(`Config epics[${epicIndex}].name must be a non-empty string.`);
+    throw new Error(`epics[${epicIndex}].name must be a non-empty string.`);
   }
   return value;
 }
@@ -118,14 +118,14 @@ function isEpicKeyword(value: unknown): value is string {
 
 function parseEpicKeyword(epicIndex: number, value: unknown): string {
   if (!isEpicKeyword(value)) {
-    throw new Error(`Config epics[${epicIndex}].keyword must be a non-empty string.`);
+    throw new Error(`epics[${epicIndex}].keyword must be a non-empty string.`);
   }
   return value;
 }
 
 function parseEpic(epicIndex: number, value: unknown): Epic {
   if (!isJsonObject(value)) {
-    throw new Error(`Config epics[${epicIndex}] must be an object.`);
+    throw new Error(`epics[${epicIndex}] must be an object.`);
   }
 
   const matchTitle = parseConfigBoolean(`epics[${epicIndex}].matchTitle`, value.matchTitle);
@@ -139,7 +139,7 @@ function parseEpic(epicIndex: number, value: unknown): Epic {
   );
   if (!matchTitle && !matchDescription && !matchLocation) {
     throw new Error(
-      `Config epics[${epicIndex}] must have at least one of the fields included in the match.`,
+      `epics[${epicIndex}] must have at least one of the fields included in the match.`,
     );
   }
 
@@ -158,7 +158,7 @@ function assertEpicNamesUnique(epics: Epic[]) {
   const names = epics.map((e) => e.name);
   const uniqueNames = new Set(names);
   if (names.length != uniqueNames.size) {
-    throw new Error("Config epics must have unique names.");
+    throw new Error("epics must have unique names.");
   }
 }
 
@@ -212,7 +212,7 @@ export function deserializeConfig(jsonText: string): LoadedConfig {
   const endDate = parseConfigDate("endDate", saveFile.timelineOptions.endDate);
 
   if (startDate > endDate) {
-    throw new Error("Config timelineOptions.startDate must be before timelineOptions.endDate.");
+    throw new Error("timelineOptions.startDate must be before timelineOptions.endDate.");
   }
 
   const bucketGranularity = parseBucketGranularity(saveFile.timelineOptions.bucketGranularity);
