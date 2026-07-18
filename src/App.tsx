@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import "./App.css";
 import EpicTimelines from "./EpicTimelines";
+import UploadCard from "./UploadCard";
 
 function App() {
   const [icsText, setIcsText] = useState<string>("");
   const [fileUploaded, setFileUploaded] = useState<boolean>(false);
 
-  function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleFileUpload(e: ChangeEvent<HTMLInputElement>) {
     const fileList = e.target.files;
     if (!fileList || fileList.length === 0) {
       return;
@@ -28,25 +29,13 @@ function App() {
     reader.readAsText(uploadedFile);
   }
 
-  if (fileUploaded) {
-    return (
-      <>
-        <h1>Epic Timelines</h1>
-        <p id="upload-instructions">Export the .ics file from your calendar and upload it here:</p>
-        <input type="file" id="file-input" accept=".ics" onChange={handleFileUpload} />
-        <p id="upload-success-text">Calendar file successfully uploaded!</p>
-        <EpicTimelines icsText={icsText}></EpicTimelines>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <h1>Epic Timelines</h1>
-        <p id="upload-instructions">Export the .ics file from your calendar and upload it here:</p>
-        <input type="file" id="file-input" accept=".ics" onChange={handleFileUpload} />
-      </>
-    );
-  }
+  return (
+    <>
+      <h1>Epic Timelines</h1>
+      <UploadCard fileUploaded={fileUploaded} onFileUpload={handleFileUpload} />
+      {fileUploaded && <EpicTimelines icsText={icsText}></EpicTimelines>}
+    </>
+  );
 }
 
 export default App;

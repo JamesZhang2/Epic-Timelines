@@ -1,0 +1,52 @@
+#upload-success-text {
+  color: #137333;
+  font-weight: 500;
+}
+
+#upload-card {
+  box-sizing: border-box;
+  width: max-content;
+  max-width: calc(100vw - 40px);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#upload-instructions {
+  color: #444;
+  font-size: 16px;
+  line-height: 1.35;
+  text-align: center;
+}
+
+#file-input-label {
+  display: block;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+#file-input {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+}
+
+#file-input::file-selector-button {
+  margin-right: 12px;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: #ddd;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition-duration: 0.2s;
+}
+
+#file-input::file-selector-button:hover {
+  background-color: #ccc;
+}
