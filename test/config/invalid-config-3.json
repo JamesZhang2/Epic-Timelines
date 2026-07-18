@@ -1,5 +1,13 @@
 {
   "version": 1,
   "epics": [],
-  "timelineOptions": {}
+  "timelineOptions": {
+    "endDate": "2026-12-31",
+    "bucketGranularity": "3 months",
+    "showBucketHours": "nonzero",
+    "ignoreAllDayEvents": false,
+    "useGlobalColor": false,
+    "useGlobalScale": true,
+    "globalColor": "#2f80ed"
+  }
 }

@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "epics": [
+    {
+      "name": "a",
+      "keyword": "a",
+      "caseSensitive": false,
+      "color": "#2f80ed",
+      "matchTitle": true,
+      "matchDescription": true,
+      "matchLocation": false
+    }
+  ],
+  "timelineOptions": {
+    "startDate": "2026-07-05",
+    "endDate": "2026-07-12",
+    "bucketGranularity": "day",
+    "showBucketHours": "nonzero",
+    "ignoreAllDayEvents": true,
+    "useGlobalColor": false,
+    "useGlobalScale": false,
+    "globalColor": "#2f80ed"
+  }
+}
