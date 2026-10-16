@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cleanPunctuation, normalizeText, removeUrls } from "./Tokenizer.ts";
+import { cleanPunctuation, normalizeText, removeUrls, tokenize } from "./Tokenizer.ts";
 
 describe("normalizeText", () => {
   it("lowercases mixed-case text", () => {
@@ -110,5 +110,54 @@ describe("removeUrls", () => {
     for (const text of ["", " \t\n", "John's work/lunch", "Café reunión", "www planning"]) {
       expect(removeUrls(text)).toBe(text);
     }
+  });
+});
+
+describe("tokenize", () => {
+  it("splits spaces, tabs, and newlines without emitting empty tokens", () => {
+    expect(tokenize("  team\t\troadmap\nreview\r\n planning  ")).toEqual([
+      "team",
+      "roadmap",
+      "review",
+      "planning",
+    ]);
+  });
+
+  it("splits Unicode whitespace", () => {
+    expect(tokenize("café\u00a0reunión\u2003mañana\u3000equipo")).toEqual([
+      "café",
+      "reunión",
+      "mañana",
+      "equipo",
+    ]);
+  });
+
+  it("returns no tokens for empty, whitespace-only, or punctuation-only input", () => {
+    for (const text of ["", " \t\n\r\n\u00a0", "!?…。/’", "--- () ' ’"]) {
+      expect(tokenize(text)).toEqual([]);
+    }
+  });
+
+  it("normalizes mixed case and decomposed accents before splitting", () => {
+    expect(tokenize("CAFE\u0301 ReUnIo\u0301N")).toEqual(["café", "reunión"]);
+  });
+
+  it("removes URLs before splitting their punctuation into words", () => {
+    expect(tokenize("Review(https://example.com/team-room?q=agenda)today www.example.org")).toEqual(
+      ["review", "today"],
+    );
+  });
+
+  it("splits punctuation and preserves contractions and possessives", () => {
+    expect(tokenize("'I'm'/HE’S—John's:l’été")).toEqual(["i'm", "he’s", "john's", "l’été"]);
+  });
+
+  it("preserves an unspaced Chinese phrase as one token", () => {
+    expect(tokenize("项目规划会议")).toEqual(["项目规划会议"]);
+    expect(tokenize("项目规划会议，团队讨论 café")).toEqual(["项目规划会议", "团队讨论", "café"]);
+  });
+
+  it("preserves repeated tokens in their original order", () => {
+    expect(tokenize("Team review TEAM")).toEqual(["team", "review", "team"]);
   });
 });

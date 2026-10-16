@@ -194,20 +194,22 @@ completing its changes; resolve failures before moving on to the next feature.
 Keep logic/data changes separate from UI changes in these commit-sized units.
 This verification applies throughout implementation, not only at the end.
 
+Mark the subtask/task as done in the commit that completes it.
+
 - [ ] Tokenization and data cleaning.
-  - [ ] Normalize Unicode to NFC and lowercase words while preserving accents;
+  - [x] Normalize Unicode to NFC and lowercase words while preserving accents;
         cover composed/decomposed characters and mixed case.
-  - [ ] Remove URLs before punctuation cleanup so URL fragments never become
+  - [x] Remove URLs before punctuation cleanup so URL fragments never become
         candidates.
-  - [ ] Split surrounding and internal Unicode punctuation into spaces without
+  - [x] Split surrounding and internal Unicode punctuation into spaces without
         merging words (e.g. `work/lunch` → `work`, `lunch`).
-  - [ ] Preserve straight and typographic apostrophes between letters so possessives
+  - [x] Preserve straight and typographic apostrophes between letters so possessives
         and contractions remain one token (e.g. `John's` → `john's`, `I'm` → `i'm`,
         `he’s` → `he’s`); remove surrounding quotation apostrophes.
-  - [ ] Split on whitespace, handling spaces, tabs, newlines, empty input, and
+  - [x] Split on whitespace, handling spaces, tabs, newlines, empty input, and
         punctuation-only input without emitting empty tokens.
   - [ ] Discard numeric-only tokens while retaining words containing numbers.
-  - [ ] Cover unspaced Chinese text, preserving a whole phrase as one token;
+  - [x] Cover unspaced Chinese text, preserving a whole phrase as one token;
         segmentation remains outside the beta scope.
 - [ ] Stopword filtering.
   - [ ] Select compatible English and Spanish sources; record their versions,
