@@ -24,7 +24,8 @@ English and Spanish stopwords, and local browser processing only.
   Remove URLs before punctuation cleanup, replace all Unicode punctuation with
   spaces, then split on whitespace and discard empty and numeric-only tokens.
   This also removes internal punctuation: `work/lunch` becomes `work` and `lunch`,
-  rather than merging them into `worklunch`.
+  rather than merging them into `worklunch`. However, something like apostrophe-s (John's)
+  should remain one token.
 - Filter against the union of bundled English and Spanish stopword lists. Acquire
   these during development, record their source/version and license in a section in
   `README.md`, and ship them with the app. No language detection or runtime downloads
@@ -170,37 +171,124 @@ do not split failing tests and their implementation into separate commits.
 
 ## Implementation tasks
 
-Prepare small feature commits in the order below, completing red–green–refactor
-for each logic feature using its coverage in the testing plan. Create modules under
-`src/suggestions/` as they become needed. Leave changes uncommitted for user review.
+Work through the task groups below in order, preparing small feature commits from
+their subtasks. Complete red–green–refactor for each logic subtask using its coverage
+in the testing plan. Create modules under `src/suggestions/` as they become needed.
+Leave changes uncommitted for user review.
 
-For every prepared commit, run the full unit test suite, build, and lint after
+For every prepared commit (each subtask), run the full unit test suite, build, and lint after
 completing its changes; resolve failures before moving on to the next feature.
 Keep logic/data changes separate from UI changes in these commit-sized units.
 This verification applies throughout implementation, not only at the end.
 
-- [ ] Tokenization: test, implement, and refactor normalization and token cleanup.
-- [ ] Stopword filtering: select compatible English/Spanish sources and bundle
-      UTF-8 `.txt` lists with attribution; test, implement, and refactor list parsing,
-      one-time in-memory loading, and filtering.
-- [ ] Frequency counting: test, implement, and refactor token occurrence counting.
-- [ ] Suggestion pipeline: test, implement, and refactor title extraction, composition
-      of the processing stages, configurable minimum counts, full ranked results, shared
-      defaults, option validation, and ranking.
-- [ ] Epic draft conversion: test, implement, and refactor literal regex escaping
-      and draft defaults, separately from the UI wiring.
-- [ ] Add the foldable beta section below `AddEpicCard` and `OptionsCard`, with
-      explanatory text, suggestion list/counts, review actions, and empty state;
-      generate on expansion and refresh invalidated results as described above.
-- [ ] Add minimum-frequency and suggestions-per-page inputs with Apply, submit-time
-      validation, and session-only applied settings.
-- [ ] Add Ignore and Reset ignored suggestions actions, session dismissal state,
-      and Show more suggestions in configurable batches; verify reset/exhaustion
-      behavior and complete TDD for any extracted logic helpers.
-- [ ] Implement and verify lazy generation and cache invalidation: no computation
-      while collapsed, reuse unchanged results on reopening, and retain dismissals
-      independently of the result cache across event/range changes.
-- [ ] Add draft prefilling to `AddEpicCard`, including unsaved-edit confirmation and
-      submit-time regex validation. Keep inputs uncontrolled and creation explicit.
-- [ ] Manually verify date/all-day filtering, review/edit/add, duplicate-name errors,
-      draft cancellation, and save/load of accepted Epics without suggestion data.
+- [ ] Tokenization and data cleaning.
+  - [ ] Normalize Unicode to NFC and lowercase words while preserving accents;
+        cover composed/decomposed characters and mixed case.
+  - [ ] Remove URLs before punctuation cleanup so URL fragments never become
+        candidates.
+  - [ ] Split surrounding and internal Unicode punctuation into spaces without
+        merging words (e.g. `work/lunch` → `work`, `lunch`).
+  - [ ] Preserve apostrophe-s possessives as one token (e.g. `John's` → `john's`),
+        covering straight and typographic apostrophes as a punctuation exception.
+  - [ ] Split on whitespace, handling spaces, tabs, newlines, empty input, and
+        punctuation-only input without emitting empty tokens.
+  - [ ] Discard numeric-only tokens while retaining words containing numbers.
+  - [ ] Cover unspaced Chinese text, preserving a whole phrase as one token;
+        segmentation remains outside the beta scope.
+- [ ] Stopword filtering.
+  - [ ] Select compatible English and Spanish sources; record their versions,
+        licenses, and attribution alongside the data and in `README.md`.
+  - [ ] Bundle UTF-8 `.txt` lists as raw text imports with no runtime downloads.
+  - [ ] Parse LF/CRLF lists: trim lines, ignore blanks, normalize entries as for
+        tokens, and deduplicate. Cover empty lists and duplicate entries.
+  - [ ] Load both lists once into a shared in-memory set; smoke-test that both
+        bundled languages contribute entries.
+  - [ ] Filter tokens against the union; cover mixed-language input, retained
+        content words, accent preservation, and empty input.
+- [ ] Frequency counting.
+  - [ ] Count every token occurrence, including repeated words within one title
+        and across events.
+  - [ ] Cover empty input, single occurrences, and distinct accented words;
+        verify input arrays remain unchanged.
+- [ ] Suggestion pipeline.
+  - [ ] Define the public suggestion/options types and shared defaults (minimum
+        frequency 2, suggestions per page 10).
+  - [ ] Define reasonable option bounds and validate both options at the engine
+        boundary; reject zero, negative, fractional, non-finite, unsafe, and
+        out-of-bounds values.
+  - [ ] Compose title extraction, tokenization, stopword filtering, and counting
+        in the pure `suggestEpicKeywords(events, options)` entry point.
+  - [ ] Apply the minimum-frequency threshold; cover default/custom thresholds,
+        exact boundaries, and no qualifying words.
+  - [ ] Rank by descending count with deterministic lexical ties; return every
+        qualifying candidate without pagination or dismissal logic.
+  - [ ] Verify the full pipeline with mixed English/Spanish fixtures, title-only
+        analysis, recurring occurrences supplied as separate events, and unchanged
+        input events. Keep date/all-day filtering in the caller.
+- [ ] Epic draft conversion.
+  - [ ] Escape regex metacharacters so suggested words become literal keywords;
+        verify the resulting regex matches the literal text.
+  - [ ] Set the name and case-insensitive, title-only defaults without choosing
+        a new color. Keep conversion separate from counting and UI wiring.
+- [ ] Foldable beta section.
+  - [ ] Add `EpicSuggestionsCard` below both existing cards as a full-width,
+        initially collapsed, keyboard-accessible disclosure.
+  - [ ] Explain title-only analysis, occurrence counts, and regex matching inside
+        longer words.
+  - [ ] Connect first expansion to the engine using `EpicTimelines`' already
+        filtered events; do no suggestion processing before expansion.
+  - [ ] Render words, counts, and review actions; expose a draft callback for
+        the later Add Epic form integration.
+  - [ ] Show a helpful empty state when no candidates meet the threshold.
+- [ ] Suggestion settings.
+  - [ ] Add uncontrolled Minimum frequency and Suggestions per page inputs with
+        shared defaults and an Apply button.
+  - [ ] Validate both values on submit using the shared bounds; show errors and
+        preserve applied settings/results when invalid.
+  - [ ] Keep applied settings in session state outside `TimelineOptions` and
+        config persistence; retain them across collapse/reopen.
+  - [ ] Refresh results and reset pagination only after a valid Apply.
+- [ ] Dismissal and pagination.
+  - [ ] Implement pure helpers for selecting the first batch and appending unseen,
+        non-dismissed candidates in ranked order; cover no duplicates, partial
+        final batches, and exhaustion through TDD before UI wiring.
+  - [ ] Own the normalized dismissed-word set in session state independently of
+        cached results; preserve it across regeneration, settings/range changes,
+        calendar uploads, and collapse/reopen.
+  - [ ] Add Ignore actions with word-specific accessible labels; remove rows
+        without auto-filling or changing calendar events or Epics.
+  - [ ] Add Show more suggestions using the applied batch size; append without
+        recounting events and hide the button when candidates are exhausted.
+  - [ ] Add Reset ignored suggestions to clear dismissals and restart at the
+        first batch; distinguish the all-ignored empty state and offer reset.
+- [ ] Lazy generation and cache invalidation.
+  - [ ] Track cache validity using calendar/event input, applied range, all-day
+        filtering, and relevant applied suggestion settings.
+  - [ ] Regenerate immediately after relevant changes while expanded; reset
+        pagination and retain dismissals.
+  - [ ] Mark results stale after relevant changes while collapsed, deferring all
+        computation until the next expansion.
+  - [ ] Reuse cached results and pagination on unchanged collapse/reopen; ignore
+        unrelated renders and timeline display option changes.
+  - [ ] Verify engine call counts for first expansion, unchanged reopening,
+        changes while collapsed, and expansion after invalidation.
+- [ ] Add Epic form integration.
+  - [ ] Connect review actions to draft conversion and prefill uncontrolled
+        `AddEpicCard` inputs while retaining the current color.
+  - [ ] Detect unsaved edits and confirm before replacing a draft; cancellation
+        must preserve the current form values.
+  - [ ] Validate edited regex keywords on submit and require an explicit Add;
+        reuse the existing add handler and unique-name checks.
+  - [ ] Verify review/edit/add and repeated prefilling without changing existing
+        Epics or their display order.
+- [ ] Manual integration verification.
+  - [ ] Check placement, keyboard disclosure controls, counts, settings, and both
+        empty states using a small calendar fixture.
+  - [ ] Check date/all-day filtering, recurring occurrences, and calendar uploads
+        with both expanded and collapsed suggestions.
+  - [ ] Check successive batches, Ignore without auto-fill, retained dismissals,
+        reset, and exhausted results.
+  - [ ] Check draft review/edit/add, regex errors, duplicate-name rejection, and
+        cancellation of draft replacement.
+  - [ ] Save/load accepted Epics through normal config persistence; confirm
+        temporary suggestions, settings, and dismissals are not saved.
