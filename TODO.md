@@ -49,6 +49,8 @@
     - Avoid duplicate suggestions for existing Epics
     - Allow custom stopwords and dismissed suggestions
     - Escape suggested literal keywords when converting them to Epic regex rules
+- [ ] Side project: A CLI tool that filters an ICS file to a given time range. Outputs the shortened ICS file.
+  - Recurrent events are kept iff they overlap with the given time range.
 - [x] UI: Make timelines look like intervals rather than colored cells
 - [x] UI/UX: Look into relative luminance to set foreground color based on background
 - [ ] Add screenshots of the project to `README.md`
