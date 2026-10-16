@@ -35,7 +35,20 @@
 - [x] Allow saving and loading Epics & Options to/from a file
   - [x] Handle errors when loading
 - [ ] Handle errors when parsing a corrupted ICS file
-- [ ] Advanced: Suggest Epics based on calendar events (probably with frequency count/bag-of-words)
+- [ ] Advanced/beta: Suggest Epics based on calendar events
+  - Design and implementation tasks: [EPIC_SUGGESTIONS_DESIGN.md](design/epic_suggestions_design.md)
+  - [ ] First pass: split event text on whitespace, count word frequencies, and suggest frequent content words as Epic keywords
+  - [ ] Download and bundle English and Spanish stopword lists (such as particles and prepositions) to exclude common non-content words; keep calendar processing local with no runtime downloads
+  - [ ] Let users review, edit, and accept suggestions before creating Epics
+  - Potential improvements:
+    - Normalize case and punctuation, and merge related word forms (e.g. plurals and conjugations)
+    - Support Chinese word segmentation; whitespace splitting will not reliably separate Chinese words
+    - Suggest meaningful multiword phrases instead of only individual words
+    - Much later: use an English–Spanish dictionary to group words/phrases by meaning before counting (e.g. desayuno/breakfast), accounting for ambiguous translations
+    - Rank by distinct-event frequency or time spent
+    - Avoid duplicate suggestions for existing Epics
+    - Allow custom stopwords and dismissed suggestions
+    - Escape suggested literal keywords when converting them to Epic regex rules
 - [x] UI: Make timelines look like intervals rather than colored cells
 - [x] UI/UX: Look into relative luminance to set foreground color based on background
 - [ ] Add screenshots of the project to `README.md`
