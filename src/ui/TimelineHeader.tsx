@@ -1,4 +1,4 @@
-import type { TimeBucket } from "./Timelines.types";
+import type { TimeBucket } from "../types/Timelines.types";
 import "./TimelineHeader.css";
 
 type TimelineHeaderProps = {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Epic, TimelineOptions } from "./Timelines.types";
+import type { Epic, TimelineOptions } from "../types/Timelines.types";
 import { deserializeConfig, serializeConfig } from "./ConfigPersistence";
 
 describe("ConfigPersistence", () => {

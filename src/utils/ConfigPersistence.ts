@@ -2,8 +2,13 @@
  * Saves/loads the config (Epics and TimelineOptions) to/from a JSON file.
  */
 
-import { BUCKET_GRANULARITIES, SHOW_BUCKET_HOURS } from "./Timelines.types";
-import type { BucketGranularity, Epic, ShowBucketHours, TimelineOptions } from "./Timelines.types";
+import { BUCKET_GRANULARITIES, SHOW_BUCKET_HOURS } from "../types/Timelines.types";
+import type {
+  BucketGranularity,
+  Epic,
+  ShowBucketHours,
+  TimelineOptions,
+} from "../types/Timelines.types";
 import { dateAtLocalMidnight } from "./Util";
 
 const SAVE_FILE_VERSION = 1;

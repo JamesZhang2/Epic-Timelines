@@ -24,7 +24,7 @@ English and Spanish stopwords, and local browser processing only.
   twice; sort by descending count, then deterministic lexical order for ties, and
   show at most 10. Keep thresholds/constants in the suggestion utility.
 - Return suggestion data (word and count), separate from `Epic` objects. Use a pure
-  `suggestEpicKeywords(events)` helper in `src/EpicSuggestions.ts` so the ranking
+  `suggestEpicKeywords(events)` helper in `src/utils/EpicSuggestions.ts` so the ranking
   and filtering can be tested independently of React.
 - Show each word and its occurrence count, with an action to populate the existing
   Add Epic form. Prefill name, an escaped literal regex keyword, case-insensitive

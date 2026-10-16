@@ -7,7 +7,7 @@ import {
   getTimelineScaleMaxHours,
   lastDayOfMonth,
 } from "./BucketUtil.ts";
-import type { BucketedEvents, Epic, TimeBucket } from "./Timelines.types.ts";
+import type { BucketedEvents, Epic, TimeBucket } from "../types/Timelines.types.ts";
 import { parseICSToCalendarEventsInRange } from "./ICSParser.ts";
 import type { CalendarEvent } from "./ICSParser.ts";
 import { readFileSync } from "fs";
@@ -801,7 +801,7 @@ describe("computeEpicBucketHours", () => {
     };
     const bucketsPST: TimeBucket[] = [bucket1PST, bucket2PST, bucket3PST, bucket4PST];
 
-    const filePath = join(__dirname, "../test/gcal/different-hours-1.ics");
+    const filePath = join(__dirname, "../../test/gcal/different-hours-1.ics");
     const text = readFileSync(filePath, "utf-8");
     const events: CalendarEvent[] = parseICSToCalendarEventsInRange(
       text,

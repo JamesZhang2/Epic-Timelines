@@ -50,27 +50,32 @@ High-level pipeline:
 
 ## Repo layout (important files)
 
-- `src/App.tsx`: file upload UI; reads `.ics` into text and parses events
-- `src/ICSParser.ts`: converts ICS text → `CalendarEvent[]`, including expanded recurring event occurrences in range
-- `src/EpicTimelines.tsx`: top-level “app” logic once events are loaded (epics/options/buckets/selection/reordering/config save-load)
-- `src/BucketUtil.ts`: bucket generation, event bucketing, and hours aggregation
-- `src/ConfigPersistence.ts`: versioned JSON save/load serialization and validation for Epics + Timeline Options
-- `src/EventUtil.ts`: event filtering and epic-to-event matching helpers
-- `src/Timelines.tsx`: table composition (header + rows + optional details row; optional reorder columns)
-- `src/TimelineHeader.tsx`: bucket labels + optional reorder column labels
-- `src/TimelineRow.tsx`: per-epic row rendering + heatmap coloring + optional reorder buttons
-- `src/AddEpicCard.tsx`: create epic form (uncontrolled inputs; submit-time validation)
-- `src/OptionsCard.tsx`: timeline options form (uncontrolled inputs; submit-time validation)
-- `src/SaveLoadCard.tsx`: JSON config save/load UI for Epics and Options only
-- `src/EpicDetails.tsx`: selected epic details + edit/delete (includes delete confirmation timeout)
-- `src/Util.ts`: overlap math, color helpers, local-midnight date parsing
+- `src/main.tsx` and `src/index.css`: browser entry point and global styles
+- `src/ui/`: React components with colocated component CSS
+- `src/utils/`: parsing, persistence, and utility logic with colocated unit tests
+- `src/types/`: shared domain types and option constants
+
+- `src/ui/App.tsx`: file upload UI; reads `.ics` into text and parses events
+- `src/utils/ICSParser.ts`: converts ICS text → `CalendarEvent[]`, including expanded recurring event occurrences in range
+- `src/ui/EpicTimelines.tsx`: top-level “app” logic once events are loaded (epics/options/buckets/selection/reordering/config save-load)
+- `src/utils/BucketUtil.ts`: bucket generation, event bucketing, and hours aggregation
+- `src/utils/ConfigPersistence.ts`: versioned JSON save/load serialization and validation for Epics + Timeline Options
+- `src/utils/EventUtil.ts`: event filtering and epic-to-event matching helpers
+- `src/ui/Timelines.tsx`: table composition (header + rows + optional details row; optional reorder columns)
+- `src/ui/TimelineHeader.tsx`: bucket labels + optional reorder column labels
+- `src/ui/TimelineRow.tsx`: per-epic row rendering + heatmap coloring + optional reorder buttons
+- `src/ui/AddEpicCard.tsx`: create epic form (uncontrolled inputs; submit-time validation)
+- `src/ui/OptionsCard.tsx`: timeline options form (uncontrolled inputs; submit-time validation)
+- `src/ui/SaveLoadCard.tsx`: JSON config save/load UI for Epics and Options only
+- `src/ui/EpicDetails.tsx`: selected epic details + edit/delete (includes delete confirmation timeout)
+- `src/utils/Util.ts`: overlap math, color helpers, local-midnight date parsing
 - Tests:
-  - `src/BucketUtil.test.ts`, `src/ConfigPersistence.test.ts`, `src/EventUtil.test.ts`, `src/ICSParser.test.ts`, `src/Util.test.ts`
+  - `src/utils/BucketUtil.test.ts`, `src/utils/ConfigPersistence.test.ts`, `src/utils/EventUtil.test.ts`, `src/utils/ICSParser.test.ts`, `src/utils/Util.test.ts`
   - Sample ICS fixtures live under `test/...` (used by tests)
 
-## Core domain types (source of truth: `src/EpicTimelines.tsx`)
+## Core domain types (source of truth: `src/types/Timelines.types.ts`)
 
-- `CalendarEvent` (`src/ICSParser.ts`): `{ id, title, description?, location?, start, end }`
+- `CalendarEvent` (`src/utils/ICSParser.ts`): `{ id, title, description?, location?, start, end }`
 - `Epic`: `{ name (unique), keyword (regex string), caseSensitive, color, matchTitle, matchDescription, matchLocation }`
 - `TimeBucket`: `{ start: Date, end: Date }`
 - `TimelineOptions`: `{ startDate, endDate, bucketGranularity, showBucketHours, ignoreAllDayEvents, useGlobalColor, useGlobalScale, globalColor }`
@@ -128,7 +133,7 @@ High-level pipeline:
 ## When making changes: quick test plan
 
 - Run `npm test` (Vitest)
-- Persistence has focused unit coverage in `src/ConfigPersistence.test.ts`. End-to-end save/load interaction tests are intentionally omitted for now because they require mocking browser file/download and confirmation interactions.
+- Persistence has focused unit coverage in `src/utils/ConfigPersistence.test.ts`. End-to-end save/load interaction tests are intentionally omitted for now because they require mocking browser file/download and confirmation interactions.
 - Manually:
   - Upload a small `.ics`, verify events appear in computed buckets
   - Try a recurring `.ics` event and confirm occurrences appear only within the selected range

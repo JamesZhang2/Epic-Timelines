@@ -1,10 +1,10 @@
-import type { Epic, ShowBucketHours, TimeBucket } from "./Timelines.types";
+import type { Epic, ShowBucketHours, TimeBucket } from "../types/Timelines.types";
 import TimelineRow from "./TimelineRow";
 import EpicDetails from "./EpicDetails";
 import React from "react";
 import "./Timelines.css";
 import TimelineHeader from "./TimelineHeader";
-import { computeGlobalMaxBucketHours } from "./BucketUtil";
+import { computeGlobalMaxBucketHours } from "../utils/BucketUtil";
 
 type TimelinesProps = {
   epics: Epic[];

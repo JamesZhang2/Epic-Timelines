@@ -1,13 +1,13 @@
-import { parseICSToCalendarEventsInRange } from "./ICSParser";
-import { bucketEvents, computeEpicBucketHours, generateTimeBuckets } from "./BucketUtil";
-import { filterOutAllDayEvents } from "./EventUtil";
+import { parseICSToCalendarEventsInRange } from "../utils/ICSParser";
+import { bucketEvents, computeEpicBucketHours, generateTimeBuckets } from "../utils/BucketUtil";
+import { filterOutAllDayEvents } from "../utils/EventUtil";
 import AddEpicCard from "./AddEpicCard";
 import Timelines from "./Timelines";
 import { useMemo, useState } from "react";
 import "./EpicTimelines.css";
 import OptionsCard from "./OptionsCard";
 import SaveLoadCard from "./SaveLoadCard";
-import { deserializeConfig, serializeConfig, type LoadedConfig } from "./ConfigPersistence";
+import { deserializeConfig, serializeConfig, type LoadedConfig } from "../utils/ConfigPersistence";
 import type {
   BucketedEvents,
   BucketGranularity,
@@ -15,7 +15,7 @@ import type {
   ShowBucketHours,
   TimeBucket,
   TimelineOptions,
-} from "./Timelines.types";
+} from "../types/Timelines.types";
 
 type EpicTimelinesProps = {
   icsText: string;

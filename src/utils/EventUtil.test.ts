@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { epicMatchesEvent, filterOutAllDayEvents } from "./EventUtil.ts";
-import type { Epic } from "./Timelines.types.ts";
+import type { Epic } from "../types/Timelines.types.ts";
 import type { CalendarEvent } from "./ICSParser.ts";
 
 describe("filterOutAllDayEvents", () => {

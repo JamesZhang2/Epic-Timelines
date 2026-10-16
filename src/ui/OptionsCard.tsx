@@ -1,7 +1,7 @@
 import { useRef, useState, type ChangeEvent } from "react";
-import type { BucketGranularity, ShowBucketHours, TimelineOptions } from "./Timelines.types";
+import type { BucketGranularity, ShowBucketHours, TimelineOptions } from "../types/Timelines.types";
 import "./OptionsCard.css";
-import { dateAtLocalMidnight } from "./Util";
+import { dateAtLocalMidnight } from "../utils/Util";
 
 type OptionsCardProps = {
   timelineOptions: TimelineOptions;

@@ -1,4 +1,4 @@
-import type { CalendarEvent } from "./ICSParser";
+import type { CalendarEvent } from "../utils/ICSParser";
 
 export type Epic = {
   name: string; // Must be unique.
