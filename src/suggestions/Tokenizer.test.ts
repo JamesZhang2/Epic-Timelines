@@ -160,4 +160,30 @@ describe("tokenize", () => {
   it("preserves repeated tokens in their original order", () => {
     expect(tokenize("Team review TEAM")).toEqual(["team", "review", "team"]);
   });
+
+  it("discards numeric-only tokens among words", () => {
+    expect(tokenize("2026 roadmap 123 review 0 007")).toEqual(["roadmap", "review"]);
+  });
+
+  it("discards Unicode numeric-only tokens", () => {
+    expect(tokenize("１２３ ١٢٣ १२३ ½ Ⅻ café")).toEqual(["café"]);
+  });
+
+  it("discards numeric fragments produced by punctuation cleanup", () => {
+    expect(tokenize("Review 1,000 3.14 2026-10-15 09:30")).toEqual(["review"]);
+  });
+
+  it("retains tokens containing both words and numbers", () => {
+    expect(tokenize("Q4 project2026 3D café2 versión２")).toEqual([
+      "q4",
+      "project2026",
+      "3d",
+      "café2",
+      "versión２",
+    ]);
+  });
+
+  it("returns no tokens for numeric-only input", () => {
+    expect(tokenize("0 42 １２３")).toEqual([]);
+  });
 });

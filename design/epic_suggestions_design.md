@@ -196,7 +196,7 @@ This verification applies throughout implementation, not only at the end.
 
 Mark the subtask/task as done in the commit that completes it.
 
-- [ ] Tokenization and data cleaning.
+- [x] Tokenization and data cleaning.
   - [x] Normalize Unicode to NFC and lowercase words while preserving accents;
         cover composed/decomposed characters and mixed case.
   - [x] Remove URLs before punctuation cleanup so URL fragments never become
@@ -208,7 +208,7 @@ Mark the subtask/task as done in the commit that completes it.
         `he’s` → `he’s`); remove surrounding quotation apostrophes.
   - [x] Split on whitespace, handling spaces, tabs, newlines, empty input, and
         punctuation-only input without emitting empty tokens.
-  - [ ] Discard numeric-only tokens while retaining words containing numbers.
+  - [x] Discard numeric-only tokens while retaining words containing numbers.
   - [x] Cover unspaced Chinese text, preserving a whole phrase as one token;
         segmentation remains outside the beta scope.
 - [ ] Stopword filtering.

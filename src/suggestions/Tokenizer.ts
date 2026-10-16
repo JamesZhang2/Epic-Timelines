@@ -16,8 +16,8 @@ export function cleanPunctuation(text: string): string {
   );
 }
 
-/** Clean title text and split on whitespace without segmenting unspaced languages. */
+/** Clean and split title text, discarding empty and numeric-only tokens. */
 export function tokenize(text: string): string[] {
   const cleaned = cleanPunctuation(removeUrls(normalizeText(text)));
-  return cleaned.split(/\s+/u).filter((token) => token.length > 0);
+  return cleaned.split(/\s+/u).filter((token) => token.length > 0 && !/^\p{N}+$/u.test(token));
 }
