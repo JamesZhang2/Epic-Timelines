@@ -21,15 +21,23 @@ English and Spanish stopwords, and local browser processing only.
 - Initially, analyze titles only: descriptions often contain boilerplate and meeting
   links. Created suggestions therefore default to matching titles only.
 - Normalize Unicode to NFC and turn words to lowercase without removing accents.
-  Remove URLs before punctuation cleanup, replace all Unicode punctuation with
-  spaces, then split on whitespace and discard empty and numeric-only tokens.
+  Remove URLs before punctuation cleanup, replace Unicode punctuation with spaces
+  except for straight (`'`) and typographic (`’`) apostrophes between letters, then
+  split on whitespace and discard empty and numeric-only tokens.
   This also removes internal punctuation: `work/lunch` becomes `work` and `lunch`,
-  rather than merging them into `worklunch`. However, something like apostrophe-s (John's)
-  should remain one token.
+  rather than merging them into `worklunch`. Preserve possessives and contractions
+  as single tokens (e.g. `John's` → `john's`, `I'm` → `i'm`, `he’s` → `he’s`).
+  Surrounding quotation apostrophes still become spaces; common contractions can
+  be filtered by the stopword lists.
 - Filter against the union of bundled English and Spanish stopword lists. Acquire
   these during development, record their source/version and license in a section in
   `README.md`, and ship them with the app. No language detection or runtime downloads
   are needed.
+- Also filter out tokens containing two or fewer Unicode letters, even when absent
+  from the stopword lists. Count letters rather than UTF-16 code units; accents
+  do not add letters, and apostrophes, digits, and other symbols do not count.
+  For example, discard `go`, `sí`, `I'm`, and `3D`, but retain `sol` and `café`
+  unless they are stopwords.
 - Count total token occurrences across titles. Keep candidates appearing at least
   `minFrequency` times (default: 2); sort by descending count, then deterministic
   lexical order for ties. Return all qualifying candidates; the UI initially shows
@@ -86,7 +94,8 @@ Keep the suggestion engine in its own `src/suggestions/` directory:
   option validation, minimum-frequency filtering, and ranking. Pagination and
   dismissal operate on the returned list in the UI; the engine does not truncate it.
 - `Tokenizer.ts`: text normalization, whitespace tokenization, and token cleanup.
-- `TokenFilter.ts`: parse stopword text and filter tokens using an in-memory set.
+- `TokenFilter.ts`: parse stopword text and filter tokens using an in-memory set
+  plus the minimum-letter-count rule.
 - `FrequencyCounter.ts`: count token occurrences independently of ranking.
 - `data/stopwords-en.txt` and `data/stopwords-es.txt`: UTF-8 word lists, one word per
   line, with source/license attribution alongside them. Import as bundled raw text
@@ -117,6 +126,8 @@ do not split failing tests and their implementation into separate commits.
 - **Tokenizer:** spaces, tabs, and newlines; empty/whitespace input; mixed case;
   composed/decomposed accented characters; punctuation-only input; surrounding and
   internal Unicode punctuation (including hyphens, apostrophes, and slashes);
+  possessives and contractions preserved with straight and typographic apostrophes
+  between letters; surrounding quotation apostrophes removed;
   punctuation separating words without merging them; URLs removed before cleanup
   so their fragments do not become candidates; numeric-only tokens.
   Include Chinese text to document that an unspaced phrase stays one token.
@@ -124,6 +135,8 @@ do not split failing tests and their implementation into separate commits.
   input, retained content words, accent preservation, empty lists/input, duplicate
   entries, blank lines, and LF/CRLF files. Use small inline text fixtures for parser
   tests and a smoke test with the bundled lists to verify both languages load.
+  Cover the minimum-letter-count boundary with non-stopword tokens of one, two,
+  and three letters, accented letters, contractions, digits, and Unicode letters.
 - **Frequency counter:** exact counts for repeated tokens within one title and
   across events, single occurrences, empty input, and distinct accented words.
   Verify input arrays are unchanged.
@@ -188,8 +201,9 @@ This verification applies throughout implementation, not only at the end.
         candidates.
   - [ ] Split surrounding and internal Unicode punctuation into spaces without
         merging words (e.g. `work/lunch` → `work`, `lunch`).
-  - [ ] Preserve apostrophe-s possessives as one token (e.g. `John's` → `john's`),
-        covering straight and typographic apostrophes as a punctuation exception.
+  - [ ] Preserve straight and typographic apostrophes between letters so possessives
+        and contractions remain one token (e.g. `John's` → `john's`, `I'm` → `i'm`,
+        `he’s` → `he’s`); remove surrounding quotation apostrophes.
   - [ ] Split on whitespace, handling spaces, tabs, newlines, empty input, and
         punctuation-only input without emitting empty tokens.
   - [ ] Discard numeric-only tokens while retaining words containing numbers.
@@ -205,6 +219,9 @@ This verification applies throughout implementation, not only at the end.
         bundled languages contribute entries.
   - [ ] Filter tokens against the union; cover mixed-language input, retained
         content words, accent preservation, and empty input.
+  - [ ] Filter out tokens with two or fewer Unicode letters independently of
+        stopword membership; test one/two/three-letter boundaries, accents,
+        contractions, digits, and Unicode letters.
 - [ ] Frequency counting.
   - [ ] Count every token occurrence, including repeated words within one title
         and across events.
