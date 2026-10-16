@@ -81,9 +81,9 @@ function TimelineRow({
     };
     let textInCell;
     if (showBucketHours === "all") {
-      textInCell = <p style={textStyle}>{hours}</p>;
+      textInCell = <p style={textStyle}>{hours.toFixed(2)}</p>;
     } else if (showBucketHours === "nonzero") {
-      textInCell = hours > 0 ? <p style={textStyle}>{hours}</p> : <></>;
+      textInCell = hours > 0 ? <p style={textStyle}>{hours.toFixed(2)}</p> : <></>;
     } else {
       textInCell = <></>;
     }
@@ -100,7 +100,7 @@ function TimelineRow({
   const totalHours = epicHours.reduce((acc, num) => acc + num, 0);
   cells.push(
     <td key="row-summary" className="row-summary">
-      {totalHours}
+      {totalHours.toFixed(2)}
     </td>,
   );
   return <tr>{cells}</tr>;
