@@ -13,3 +13,9 @@ export function getStopwords(): ReadonlySet<string> {
   stopwords ??= parseStopwords(`${englishStopwordText}\n${spanishStopwordText}`);
   return stopwords;
 }
+
+/** Remove bundled stopwords from normalized tokens, preserving order and occurrences. */
+export function filterTokens(tokens: readonly string[]): string[] {
+  const stopwords = getStopwords();
+  return tokens.filter((token) => !stopwords.has(token));
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { getStopwords, parseStopwords } from "./TokenFilter.ts";
+import { filterTokens, getStopwords, parseStopwords } from "./TokenFilter.ts";
 
 describe("parseStopwords", () => {
   it("parses LF and CRLF lists identically", () => {
@@ -62,5 +62,41 @@ describe("getStopwords", () => {
     } finally {
       tokenizeSpy.mockRestore();
     }
+  });
+});
+
+describe("filterTokens", () => {
+  it("removes English and Spanish stopwords from mixed-language tokens", () => {
+    expect(
+      filterTokens(["the", "roadmap", "and", "reunión", "para", "desayuno", "también"]),
+    ).toEqual(["roadmap", "reunión", "desayuno"]);
+  });
+
+  it("retains content words in their original order, including repeated occurrences", () => {
+    expect(filterTokens(["roadmap", "desayuno", "roadmap"])).toEqual([
+      "roadmap",
+      "desayuno",
+      "roadmap",
+    ]);
+  });
+
+  it("preserves accented content words as distinct tokens", () => {
+    expect(filterTokens(["café", "cafe", "résumé", "resume", "también", "más"])).toEqual([
+      "café",
+      "cafe",
+      "résumé",
+      "resume",
+    ]);
+  });
+
+  it("returns no tokens for empty or entirely stopword input", () => {
+    expect(filterTokens([])).toEqual([]);
+    expect(filterTokens(["the", "with", "para", "también", "don't"])).toEqual([]);
+  });
+
+  it("does not mutate the input array", () => {
+    const tokens = Object.freeze(["the", "café", "para", "café"]);
+    expect(filterTokens(tokens)).toEqual(["café", "café"]);
+    expect(tokens).toEqual(["the", "café", "para", "café"]);
   });
 });

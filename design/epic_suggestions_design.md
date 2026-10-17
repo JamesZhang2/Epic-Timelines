@@ -219,7 +219,7 @@ Mark the subtask/task as done in the commit that completes it.
         tokens, and deduplicate. Cover empty lists and duplicate entries.
   - [x] Load both lists once into a shared in-memory set; smoke-test that both
         bundled languages contribute entries.
-  - [ ] Filter tokens against the union; cover mixed-language input, retained
+  - [x] Filter tokens against the union; cover mixed-language input, retained
         content words, accent preservation, and empty input.
   - [ ] Filter out tokens with two or fewer Unicode letters independently of
         stopword membership; test one/two/three-letter boundaries, accents,
