@@ -235,7 +235,7 @@ Mark the subtask/task as done in the commit that completes it.
   - [x] Define reasonable option bounds and shared validation for both options;
         reject zero, negative, fractional, non-finite, unsafe, and out-of-bounds
         values. Bounds: minimum frequency 1–1,000,000; suggestions per page 1–100.
-  - [ ] Compose title extraction, tokenization, stopword filtering, and counting
+  - [x] Compose title extraction, tokenization, stopword filtering, and counting
         in the pure `suggestEpicKeywords(events, options)` entry point; validate
         both options at this engine boundary before processing events.
   - [ ] Apply the minimum-frequency threshold; cover default/custom thresholds,
@@ -301,7 +301,7 @@ Mark the subtask/task as done in the commit that completes it.
         reuse the existing add handler and unique-name checks.
   - [ ] Verify review/edit/add and repeated prefilling without changing existing
         Epics or their display order.
-- [ ] Manual integration verification.
+- [ ] Manual integration verification (by user).
   - [ ] Check placement, keyboard disclosure controls, counts, settings, and both
         empty states using a small calendar fixture.
   - [ ] Check date/all-day filtering, recurring occurrences, and calendar uploads

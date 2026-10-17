@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_SUGGESTION_OPTIONS, validateSuggestionOptions } from "./EpicSuggestions.ts";
+import type { CalendarEvent } from "../utils/ICSParser.ts";
+import {
+  DEFAULT_SUGGESTION_OPTIONS,
+  suggestEpicKeywords,
+  validateSuggestionOptions,
+} from "./EpicSuggestions.ts";
 
 describe("validateSuggestionOptions", () => {
   it("accepts the shared defaults", () => {
@@ -36,5 +41,55 @@ describe("validateSuggestionOptions", () => {
     const options = Object.freeze({ minFrequency: 3, suggestionsPerPage: 0 });
     expect(() => validateSuggestionOptions(options)).toThrow();
     expect(options).toEqual({ minFrequency: 3, suggestionsPerPage: 0 });
+  });
+});
+
+describe("suggestEpicKeywords", () => {
+  function eventWithTitle(title: string): CalendarEvent {
+    return {
+      id: title,
+      title,
+      start: new Date(2026, 9, 16, 9),
+      end: new Date(2026, 9, 16, 10),
+    };
+  }
+
+  const options = { ...DEFAULT_SUGGESTION_OPTIONS, minFrequency: 1 };
+
+  it("normalizes, cleans, filters, and counts title tokens across events", () => {
+    const events = [
+      eventWithTitle("CAFE\u0301/ROADMAP roadmap and the https://example.com/agenda 123 xy"),
+      eventWithTitle("Reunión para CAFÉ ROADMAP review"),
+    ];
+
+    const suggestions = suggestEpicKeywords(events, options);
+    expect(suggestions).toHaveLength(4);
+    expect(suggestions).toEqual(
+      expect.arrayContaining([
+        { word: "café", count: 2 },
+        { word: "roadmap", count: 3 },
+        { word: "reunión", count: 1 },
+        { word: "review", count: 1 },
+      ]),
+    );
+  });
+
+  it("analyzes titles without counting descriptions or locations", () => {
+    const event = {
+      ...eventWithTitle("Roadmap roadmap"),
+      description: "roadmap budget budget",
+      location: "roadmap office office",
+    };
+
+    expect(suggestEpicKeywords([event], options)).toEqual([{ word: "roadmap", count: 2 }]);
+  });
+
+  it("returns no suggestions for empty event input", () => {
+    expect(suggestEpicKeywords([])).toEqual([]);
+  });
+
+  it("returns no suggestions when titles contain no content words", () => {
+    const events = [eventWithTitle(""), eventWithTitle("the and para sí xy 123 !!!")];
+    expect(suggestEpicKeywords(events, options)).toEqual([]);
   });
 });

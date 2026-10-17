@@ -1,3 +1,8 @@
+import type { CalendarEvent } from "../utils/ICSParser.ts";
+import { countTokenFrequencies } from "./FrequencyCounter.ts";
+import { filterTokens } from "./TokenFilter.ts";
+import { tokenize } from "./Tokenizer.ts";
+
 /** A candidate keyword and its total token occurrences across event titles. */
 export type EpicSuggestion = {
   word: string;
@@ -32,4 +37,15 @@ export function validateSuggestionOptions(options: Readonly<SuggestionOptions>):
       throw new Error(`${label} must be an integer between ${min} and ${max}.`);
     }
   }
+}
+
+/** Outputs title-word counts. The caller handles date and all-day event filtering. */
+export function suggestEpicKeywords(
+  events: readonly CalendarEvent[],
+  options: Readonly<SuggestionOptions> = DEFAULT_SUGGESTION_OPTIONS,
+): EpicSuggestion[] {
+  validateSuggestionOptions(options);
+  const tokens = events.flatMap((event) => tokenize(event.title));
+  const frequencies = countTokenFrequencies(filterTokens(tokens));
+  return Array.from(frequencies, ([word, count]) => ({ word, count }));
 }
