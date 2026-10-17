@@ -23,11 +23,12 @@ English and Spanish stopwords, and local browser processing only.
 - Normalize Unicode to NFC and turn words to lowercase without removing accents.
   Remove URLs before punctuation cleanup, replace Unicode punctuation and ASCII
   angle brackets (`<`, `>`) with spaces
-  except for straight (`'`) and typographic (`’`) apostrophes between letters, then
-  split on whitespace and discard empty and numeric-only tokens.
+  except for straight (`'`) and typographic (`’`) apostrophes between letters.
+  Normalize these internal apostrophes to straight `'` so variants share counts
+  and stopword matching, then split on whitespace and discard empty and numeric-only tokens.
   This also removes internal punctuation: `work/lunch` becomes `work` and `lunch`,
   rather than merging them into `worklunch`. Preserve possessives and contractions
-  as single tokens (e.g. `John's` → `john's`, `I'm` → `i'm`, `he’s` → `he’s`).
+  as single tokens (e.g. `John's` → `john's`, `I'm` → `i'm`, `he’s` → `he's`).
   Surrounding quotation apostrophes still become spaces; common contractions can
   be filtered by the stopword lists.
 - Filter against the union of bundled English and Spanish stopword lists. Acquire
@@ -144,8 +145,8 @@ steps and private helpers to be refactored without rewriting tests.
   composed/decomposed accented characters; punctuation-only input; surrounding and
   internal Unicode punctuation (including hyphens, apostrophes, and slashes);
   angle brackets treated as punctuation, including around URLs and between words;
-  possessives and contractions preserved with straight and typographic apostrophes
-  between letters; surrounding quotation apostrophes removed;
+  possessives and contractions preserved with either apostrophe style between
+  letters, normalized to straight `'`; surrounding quotation apostrophes removed;
   punctuation separating words without merging them; URLs removed before cleanup
   so their fragments do not become candidates; numeric-only tokens.
   Include Chinese text to document that an unspaced phrase stays one token.
@@ -162,7 +163,8 @@ steps and private helpers to be refactored without rewriting tests.
   Verify input arrays are unchanged.
 - **Suggestion pipeline:** mixed English/Spanish event fixtures with explicit
   expected words/counts; title-only analysis; minimum-count boundaries; descending
-  counts and deterministic tie ordering; default and custom frequency thresholds;
+  counts and deterministic tie ordering; counts combined across apostrophe styles
+  and stopword contractions removed in either style; default and custom frequency thresholds;
   all qualifying candidates returned; rejection of zero, negative, fractional, non-finite, and unsafe
   integer options; no qualifying words;
   repeated occurrences supplied as separate events; unchanged input events.
@@ -223,9 +225,9 @@ Mark the subtask/task as done in the commit that completes it.
         candidates.
   - [x] Split surrounding and internal Unicode punctuation into spaces without
         merging words (e.g. `work/lunch` → `work`, `lunch`).
-  - [x] Preserve straight and typographic apostrophes between letters so possessives
-        and contractions remain one token (e.g. `John's` → `john's`, `I'm` → `i'm`,
-        `he’s` → `he’s`); remove surrounding quotation apostrophes.
+  - [x] Preserve apostrophes between letters and normalize both styles to straight
+        `'` so possessives and contractions remain one token (e.g. `John's` → `john's`,
+        `I'm` → `i'm`, `he’s` → `he's`); remove surrounding quotation apostrophes.
   - [x] Split on whitespace, handling spaces, tabs, newlines, empty input, and
         punctuation-only input without emitting empty tokens.
   - [x] Discard numeric-only tokens while retaining words containing numbers.

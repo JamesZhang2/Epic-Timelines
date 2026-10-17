@@ -74,6 +74,12 @@ describe("suggestEpicKeywords", () => {
     );
   });
 
+  it("combines apostrophe variants in counts and removes contractions in either style", () => {
+    const events = [eventWithTitle("John's don't"), eventWithTitle("John’s don’t")];
+
+    expect(suggestEpicKeywords(events, options)).toEqual([{ word: "john's", count: 2 }]);
+  });
+
   it("analyzes titles without counting descriptions or locations", () => {
     const event = {
       ...eventWithTitle("Roadmap roadmap"),

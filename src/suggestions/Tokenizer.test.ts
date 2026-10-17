@@ -71,7 +71,7 @@ describe("tokenize", () => {
   });
 
   it("splits punctuation and preserves contractions and possessives", () => {
-    expect(tokenize("'I'm'/HE’S—John's:l’été")).toEqual(["i'm", "he’s", "john's", "l’été"]);
+    expect(tokenize("'I'm'/HE’S—John's:l’été")).toEqual(["i'm", "he's", "john's", "l'été"]);
   });
 
   it("splits surrounding Unicode punctuation", () => {
@@ -101,32 +101,32 @@ describe("tokenize", () => {
     ]);
   });
 
-  it("preserves straight and typographic apostrophes between letters", () => {
+  it("normalizes both apostrophe styles between letters to straight apostrophes", () => {
     expect(
       tokenize("I'm I’m he's he’s don't don’t we'll we’ll l’été rock'n'roll John’smith"),
     ).toEqual([
       "i'm",
-      "i’m",
+      "i'm",
       "he's",
-      "he’s",
+      "he's",
       "don't",
-      "don’t",
+      "don't",
       "we'll",
-      "we’ll",
-      "l’été",
+      "we'll",
+      "l'été",
       "rock'n'roll",
-      "john’smith",
+      "john'smith",
     ]);
-    expect(tokenize("John's María’s JAMES'S")).toEqual(["john's", "maría’s", "james's"]);
+    expect(tokenize("John's María’s JAMES'S")).toEqual(["john's", "maría's", "james's"]);
   });
 
   it("removes quotation apostrophes while preserving contractions and possessives", () => {
     expect(tokenize("'I'm' ‘he’s’ 'don't' 'John's' ‘María’s’")).toEqual([
       "i'm",
-      "he’s",
+      "he's",
       "don't",
       "john's",
-      "maría’s",
+      "maría's",
     ]);
   });
 
@@ -135,7 +135,7 @@ describe("tokenize", () => {
   });
 
   it("preserves possessives after decomposed accented letters", () => {
-    expect(tokenize("Cafe\u0301's Cafe\u0301’s")).toEqual(["café's", "café’s"]);
+    expect(tokenize("Cafe\u0301's Cafe\u0301’s")).toEqual(["café's", "café's"]);
   });
 
   it("preserves accents and non-punctuation symbols", () => {

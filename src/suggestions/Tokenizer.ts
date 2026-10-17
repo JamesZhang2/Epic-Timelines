@@ -10,11 +10,12 @@ function removeUrls(text: string): string {
   return text.replace(/\b(?:https?:\/\/|www\.)[^\s<>"'“”‘’()[\]{}]+/giu, " ");
 }
 
-/** Split punctuation and angle brackets, retaining apostrophes between letters. */
+/** Split punctuation and angle brackets, normalizing internal apostrophes to '. */
 function cleanPunctuation(text: string): string {
   return text.replace(
     /(?<=\p{L}\p{M}*)(['’])(?=\p{L})|[\p{P}<>]/gu,
-    (_punctuation, internalApostrophe: string | undefined) => internalApostrophe ?? " ",
+    (_punctuation, internalApostrophe: string | undefined) =>
+      internalApostrophe === undefined ? " " : "'",
   );
 }
 
