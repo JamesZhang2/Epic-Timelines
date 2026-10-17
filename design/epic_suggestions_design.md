@@ -214,7 +214,7 @@ Mark the subtask/task as done in the commit that completes it.
 - [ ] Stopword filtering.
   - [x] Select compatible English and Spanish sources; record their versions,
         licenses, and attribution alongside the data and in `README.md`.
-  - [ ] Bundle UTF-8 `.txt` lists as raw text imports with no runtime downloads.
+  - [x] Bundle UTF-8 `.txt` lists as raw text imports with no runtime downloads.
   - [ ] Parse LF/CRLF lists: trim lines, ignore blanks, normalize entries as for
         tokens, and deduplicate. Cover empty lists and duplicate entries.
   - [ ] Load both lists once into a shared in-memory set; smoke-test that both
