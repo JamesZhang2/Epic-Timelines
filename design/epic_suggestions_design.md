@@ -93,16 +93,19 @@ Keep the suggestion engine in its own `src/suggestions/` directory:
 - `EpicSuggestions.ts`: public entry point, suggestion/options types, shared defaults,
   option validation, minimum-frequency filtering, and ranking. Pagination and
   dismissal operate on the returned list in the UI; the engine does not truncate it.
-- `Tokenizer.ts`: text normalization, whitespace tokenization, and token cleanup.
+- `Tokenizer.ts`: expose `tokenize` for text normalization, whitespace tokenization,
+  and token cleanup; keep its processing-step helpers private.
 - `TokenFilter.ts`: parse stopword text and filter tokens using an in-memory set
-  plus the minimum-letter-count rule.
+  plus the minimum-letter-count rule; expose only `filterTokens`, keeping list
+  parsing and cache access private.
 - `FrequencyCounter.ts`: count token occurrences independently of ranking.
 - `data/stopwords-en.txt` and `data/stopwords-es.txt`: UTF-8 word lists, one word per
   line, with source/license attribution alongside them. Import as bundled raw text
   and parse once into a shared set; no runtime fetch or filesystem access. Trim
   lines, ignore blank lines, normalize as for tokens, and deduplicate entries.
   Future dictionaries can also live in `data/`.
-- Colocated `*.test.ts` files for the engine and text-processing helpers.
+- Colocated `*.test.ts` files for the engine and text-processing modules, exercising
+  the APIs used by production callers.
 
 The engine accepts calendar events and returns suggestion data without mutating
 inputs. It may import shared domain types but has no React, DOM, file-download,
@@ -123,6 +126,19 @@ refactor while keeping tests green. Repeat within each feature as needed. Each
 prepared commit includes its tests and implementation and ends with passing tests;
 do not split failing tests and their implementation into separate commits.
 
+**Unit test boundary:** test each module through the API intended for production
+callers, as required by [AGENTS.md](../AGENTS.md). A unit can be a small module;
+it does not have to be an individual function. Keep private implementation helpers
+unexported and do not test them directly or export them solely for tests.
+For example, test normalization, URL removal, and punctuation handling through
+`tokenize`, and stopword handling through `filterTokens`; do not directly test
+`normalizeText`, `removeUrls`, `cleanPunctuation`, `parseStopwords`, or `getStopwords`.
+Use focused cases for each behavior and edge case, asserting final results rather
+than intermediate whitespace, set identity, or internal helper call counts.
+Independently reusable utilities with their own production API can have direct
+unit tests. Preserve coverage of observable behavior while allowing processing
+steps and private helpers to be refactored without rewriting tests.
+
 - **Tokenizer:** spaces, tabs, and newlines; empty/whitespace input; mixed case;
   composed/decomposed accented characters; punctuation-only input; surrounding and
   internal Unicode punctuation (including hyphens, apostrophes, and slashes);
@@ -131,10 +147,12 @@ do not split failing tests and their implementation into separate commits.
   punctuation separating words without merging them; URLs removed before cleanup
   so their fragments do not become candidates; numeric-only tokens.
   Include Chinese text to document that an unspaced phrase stays one token.
-- **Filtering and list parsing:** English and Spanish stopwords, mixed-language
-  input, retained content words, accent preservation, empty lists/input, duplicate
-  entries, blank lines, and LF/CRLF files. Use small inline text fixtures for parser
-  tests and a smoke test with the bundled lists to verify both languages load.
+- **Filtering:** exercise `filterTokens` with English and Spanish stopwords,
+  mixed-language input, retained content words, accent preservation, and empty
+  input. Use the bundled lists to verify both languages contribute to filtering.
+  If testing empty lists, duplicate entries, blank lines, or LF/CRLF handling,
+  substitute raw-text fixtures at the bundled-data boundary and assert filtering
+  results through `filterTokens`; do not expose or directly test the list parser.
   Cover the minimum-letter-count boundary with non-stopword tokens of one, two,
   and three letters, accented letters, contractions, digits, and Unicode letters.
 - **Frequency counter:** exact counts for repeated tokens within one title and
@@ -163,8 +181,8 @@ do not split failing tests and their implementation into separate commits.
   collapse/reopen, deferred computation for input changes while collapsed, and
   refresh on expansion after invalidation. Verify dismissed words stay excluded
   after event/range changes and calendar uploads for the lifetime of the app session.
-  Unit-test any extracted pure pagination/dismissal helpers through their own
-  red–green–refactor cycle.
+  Test any extracted pure pagination/dismissal module through the API used by the
+  UI, following red–green–refactor; keep its internal helpers private.
 
 ## Known limitations and later improvements
 
@@ -216,7 +234,8 @@ Mark the subtask/task as done in the commit that completes it.
         licenses, and attribution alongside the data and in `README.md`.
   - [x] Bundle UTF-8 `.txt` lists as raw text imports with no runtime downloads.
   - [x] Parse LF/CRLF lists: trim lines, ignore blanks, normalize entries as for
-        tokens, and deduplicate. Cover empty lists and duplicate entries.
+        tokens, and deduplicate. Keep list parsing private and verify observable
+        filtering behavior through `filterTokens`.
   - [x] Load both lists once into a shared in-memory set; smoke-test that both
         bundled languages contribute entries.
   - [x] Filter tokens against the union; cover mixed-language input, retained

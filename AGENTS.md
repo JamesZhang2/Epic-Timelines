@@ -24,6 +24,7 @@ High-level pipeline:
 ## DOs and DON'Ts
 
 - DO write tests for backend production code. DO use test-driven development (TDD) when applicable, especially when writing backend logic code. Write the tests, run them, see them fail (failure to build doesn't count), then implement the production code and run the tests. Continue to fix the production code until the tests pass.
+- DO test a module through the API intended for production callers. Keep private implementation helpers unexported and exercise their behavior through that API; do not export or directly test helpers solely for unit tests. A unit can be a small module rather than an individual function. Use focused cases for each behavior and edge case, asserting observable results rather than intermediate details (such as exact whitespace during token cleanup), so internal refactoring does not require rewriting tests. Independently reusable utilities with their own production API can have direct unit tests.
 - DO write small, targeted commits that are easy to review. DO separate the frontend changes from the backend changes. DO NOT write one large end-to-end commit that both add UI elements and implement a complicated backend feature (one that requires unit tests).
 - DO NOT commit changes on behalf of the user. Leave them uncommitted in the working tree for the user to review.
 
