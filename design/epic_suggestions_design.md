@@ -212,7 +212,7 @@ Mark the subtask/task as done in the commit that completes it.
   - [x] Cover unspaced Chinese text, preserving a whole phrase as one token;
         segmentation remains outside the beta scope.
 - [ ] Stopword filtering.
-  - [ ] Select compatible English and Spanish sources; record their versions,
+  - [x] Select compatible English and Spanish sources; record their versions,
         licenses, and attribution alongside the data and in `README.md`.
   - [ ] Bundle UTF-8 `.txt` lists as raw text imports with no runtime downloads.
   - [ ] Parse LF/CRLF lists: trim lines, ignore blanks, normalize entries as for
