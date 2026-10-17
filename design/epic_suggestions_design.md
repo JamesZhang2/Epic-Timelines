@@ -211,7 +211,7 @@ Mark the subtask/task as done in the commit that completes it.
   - [x] Discard numeric-only tokens while retaining words containing numbers.
   - [x] Cover unspaced Chinese text, preserving a whole phrase as one token;
         segmentation remains outside the beta scope.
-- [ ] Stopword filtering.
+- [x] Stopword filtering.
   - [x] Select compatible English and Spanish sources; record their versions,
         licenses, and attribution alongside the data and in `README.md`.
   - [x] Bundle UTF-8 `.txt` lists as raw text imports with no runtime downloads.
@@ -221,7 +221,7 @@ Mark the subtask/task as done in the commit that completes it.
         bundled languages contribute entries.
   - [x] Filter tokens against the union; cover mixed-language input, retained
         content words, accent preservation, and empty input.
-  - [ ] Filter out tokens with two or fewer Unicode letters independently of
+  - [x] Filter out tokens with two or fewer Unicode letters independently of
         stopword membership; test one/two/three-letter boundaries, accents,
         contractions, digits, and Unicode letters.
 - [ ] Frequency counting.

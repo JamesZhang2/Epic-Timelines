@@ -99,4 +99,37 @@ describe("filterTokens", () => {
     expect(filterTokens(tokens)).toEqual(["café", "café"]);
     expect(tokens).toEqual(["the", "café", "para", "café"]);
   });
+
+  it("requires at least three letters even for tokens absent from the stopword lists", () => {
+    const tokens = ["é", "xy", "xyz"];
+    for (const token of tokens) {
+      expect(getStopwords().has(token)).toBe(false);
+    }
+    expect(filterTokens(tokens)).toEqual(["xyz"]);
+  });
+
+  it("counts accented letters once and does not count combining marks", () => {
+    expect(filterTokens(["é", "éé", "été", "a\u0301b\u0301", "a\u0301b\u0301c\u0301"])).toEqual([
+      "été",
+      "a\u0301b\u0301c\u0301",
+    ]);
+  });
+
+  it("does not count apostrophes toward the minimum", () => {
+    expect(filterTokens(["i'm", "i’m", "x'y", "x’y", "x'y'z", "x’y’z", "john's"])).toEqual([
+      "x'y'z",
+      "x’y’z",
+      "john's",
+    ]);
+  });
+
+  it("does not count digits or symbols toward the minimum", () => {
+    expect(filterTokens(["", "123", "😊", "3d", "q4", "ab123", "c++", "abc123"])).toEqual([
+      "abc123",
+    ]);
+  });
+
+  it("counts Unicode letters rather than UTF-16 code units", () => {
+    expect(filterTokens(["猫", "猫狗", "猫狗鸟", "𐐨", "𐐨𐐩", "𐐨𐐩𐐪"])).toEqual(["猫狗鸟", "𐐨𐐩𐐪"]);
+  });
 });

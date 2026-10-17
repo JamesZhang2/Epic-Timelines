@@ -14,8 +14,11 @@ export function getStopwords(): ReadonlySet<string> {
   return stopwords;
 }
 
-/** Remove bundled stopwords from normalized tokens, preserving order and occurrences. */
+/** Remove stopwords and tokens with fewer than three letters, preserving occurrences. */
 export function filterTokens(tokens: readonly string[]): string[] {
   const stopwords = getStopwords();
-  return tokens.filter((token) => !stopwords.has(token));
+  return tokens.filter((token) => {
+    const letterCount = token.match(/\p{L}/gu)?.length ?? 0;
+    return letterCount >= 3 && !stopwords.has(token);
+  });
 }
