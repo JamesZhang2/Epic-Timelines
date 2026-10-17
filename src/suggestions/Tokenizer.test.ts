@@ -21,7 +21,7 @@ describe("tokenize", () => {
   });
 
   it("returns no tokens for empty, whitespace-only, or punctuation-only input", () => {
-    for (const text of ["", " \t\n\r\n\u00a0", "!?…。/’", "--- () ' ’"]) {
+    for (const text of ["", " \t\n\r\n\u00a0", "!?…。/’", "--- () ' ’", "<> << >>"]) {
       expect(tokenize(text)).toEqual([]);
     }
   });
@@ -49,9 +49,9 @@ describe("tokenize", () => {
     expect(tokenize("HTTPS://EXAMPLE.COM/a www.example.org/b HTTP://example.net/c")).toEqual([]);
   });
 
-  it("removes enclosed links while preserving words and non-punctuation delimiters", () => {
+  it("removes enclosed links and their delimiters while preserving words", () => {
     expect(tokenize('Notes <https://example.com> "https://example.org" [www.example.net]')).toEqual(
-      ["notes", "<", ">"],
+      ["notes"],
     );
   });
 
@@ -76,6 +76,15 @@ describe("tokenize", () => {
 
   it("splits surrounding Unicode punctuation", () => {
     expect(tokenize("“¡Café!”（reunión）")).toEqual(["café", "reunión"]);
+  });
+
+  it("treats angle brackets as separators without merging adjacent words", () => {
+    expect(tokenize("<Roadmap>review>planning<today")).toEqual([
+      "roadmap",
+      "review",
+      "planning",
+      "today",
+    ]);
   });
 
   it("splits internal punctuation without merging words", () => {

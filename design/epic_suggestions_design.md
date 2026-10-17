@@ -21,7 +21,8 @@ English and Spanish stopwords, and local browser processing only.
 - Initially, analyze titles only: descriptions often contain boilerplate and meeting
   links. Created suggestions therefore default to matching titles only.
 - Normalize Unicode to NFC and turn words to lowercase without removing accents.
-  Remove URLs before punctuation cleanup, replace Unicode punctuation with spaces
+  Remove URLs before punctuation cleanup, replace Unicode punctuation and ASCII
+  angle brackets (`<`, `>`) with spaces
   except for straight (`'`) and typographic (`’`) apostrophes between letters, then
   split on whitespace and discard empty and numeric-only tokens.
   This also removes internal punctuation: `work/lunch` becomes `work` and `lunch`,
@@ -142,6 +143,7 @@ steps and private helpers to be refactored without rewriting tests.
 - **Tokenizer:** spaces, tabs, and newlines; empty/whitespace input; mixed case;
   composed/decomposed accented characters; punctuation-only input; surrounding and
   internal Unicode punctuation (including hyphens, apostrophes, and slashes);
+  angle brackets treated as punctuation, including around URLs and between words;
   possessives and contractions preserved with straight and typographic apostrophes
   between letters; surrounding quotation apostrophes removed;
   punctuation separating words without merging them; URLs removed before cleanup
