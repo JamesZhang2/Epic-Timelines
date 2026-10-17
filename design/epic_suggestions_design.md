@@ -224,10 +224,10 @@ Mark the subtask/task as done in the commit that completes it.
   - [x] Filter out tokens with two or fewer Unicode letters independently of
         stopword membership; test one/two/three-letter boundaries, accents,
         contractions, digits, and Unicode letters.
-- [ ] Frequency counting.
-  - [ ] Count every token occurrence, including repeated words within one title
+- [x] Frequency counting.
+  - [x] Count every token occurrence, including repeated words within one title
         and across events.
-  - [ ] Cover empty input, single occurrences, and distinct accented words;
+  - [x] Cover empty input, single occurrences, and distinct accented words;
         verify input arrays remain unchanged.
 - [ ] Suggestion pipeline.
   - [ ] Define the public suggestion/options types and shared defaults (minimum
