@@ -232,11 +232,12 @@ Mark the subtask/task as done in the commit that completes it.
 - [ ] Suggestion pipeline.
   - [x] Define the public suggestion/options types and shared defaults (minimum
         frequency 2, suggestions per page 10).
-  - [ ] Define reasonable option bounds and validate both options at the engine
-        boundary; reject zero, negative, fractional, non-finite, unsafe, and
-        out-of-bounds values.
+  - [x] Define reasonable option bounds and shared validation for both options;
+        reject zero, negative, fractional, non-finite, unsafe, and out-of-bounds
+        values. Bounds: minimum frequency 1–1,000,000; suggestions per page 1–100.
   - [ ] Compose title extraction, tokenization, stopword filtering, and counting
-        in the pure `suggestEpicKeywords(events, options)` entry point.
+        in the pure `suggestEpicKeywords(events, options)` entry point; validate
+        both options at this engine boundary before processing events.
   - [ ] Apply the minimum-frequency threshold; cover default/custom thresholds,
         exact boundaries, and no qualifying words.
   - [ ] Rank by descending count with deterministic lexical ties; return every
