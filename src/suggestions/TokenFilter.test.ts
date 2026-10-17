@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
-import { parseStopwords } from "./TokenFilter.ts";
+import { describe, expect, it, vi } from "vitest";
+import { getStopwords, parseStopwords } from "./TokenFilter.ts";
 
 describe("parseStopwords", () => {
   it("parses LF and CRLF lists identically", () => {
@@ -31,5 +31,36 @@ describe("parseStopwords", () => {
 
   it("applies shared token cleanup to entries", () => {
     expect(parseStopwords("'DON'T'\npor qué")).toEqual(new Set(["don't", "por", "qué"]));
+  });
+});
+
+describe("getStopwords", () => {
+  it("loads both bundled languages into one normalized set", () => {
+    const stopwords = getStopwords();
+    for (const word of ["the", "don't", "para", "también"]) {
+      expect(stopwords.has(word)).toBe(true);
+    }
+    expect(stopwords.has("")).toBe(false);
+    expect(stopwords.has("TAMBIÉN")).toBe(false);
+    expect(stopwords.has("tambie\u0301n")).toBe(false);
+  });
+
+  it("defers parsing until first use and reuses the set without further tokenization", async () => {
+    vi.resetModules();
+    const tokenizer = await import("./Tokenizer.ts");
+    const tokenizeSpy = vi.spyOn(tokenizer, "tokenize");
+
+    try {
+      const tokenFilter = await import("./TokenFilter.ts");
+      expect(tokenizeSpy).not.toHaveBeenCalled();
+
+      const first = tokenFilter.getStopwords();
+      expect(tokenizeSpy).toHaveBeenCalledTimes(1);
+      expect(tokenFilter.getStopwords()).toBe(first);
+      expect(tokenFilter.getStopwords()).toBe(first);
+      expect(tokenizeSpy).toHaveBeenCalledTimes(1);
+    } finally {
+      tokenizeSpy.mockRestore();
+    }
   });
 });

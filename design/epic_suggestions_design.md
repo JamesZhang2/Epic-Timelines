@@ -217,7 +217,7 @@ Mark the subtask/task as done in the commit that completes it.
   - [x] Bundle UTF-8 `.txt` lists as raw text imports with no runtime downloads.
   - [x] Parse LF/CRLF lists: trim lines, ignore blanks, normalize entries as for
         tokens, and deduplicate. Cover empty lists and duplicate entries.
-  - [ ] Load both lists once into a shared in-memory set; smoke-test that both
+  - [x] Load both lists once into a shared in-memory set; smoke-test that both
         bundled languages contribute entries.
   - [ ] Filter tokens against the union; cover mixed-language input, retained
         content words, accent preservation, and empty input.
