@@ -230,7 +230,7 @@ Mark the subtask/task as done in the commit that completes it.
   - [x] Cover empty input, single occurrences, and distinct accented words;
         verify input arrays remain unchanged.
 - [ ] Suggestion pipeline.
-  - [ ] Define the public suggestion/options types and shared defaults (minimum
+  - [x] Define the public suggestion/options types and shared defaults (minimum
         frequency 2, suggestions per page 10).
   - [ ] Define reasonable option bounds and validate both options at the engine
         boundary; reject zero, negative, fractional, non-finite, unsafe, and
