@@ -62,16 +62,12 @@ describe("suggestEpicKeywords", () => {
       eventWithTitle("Reunión para CAFÉ ROADMAP review"),
     ];
 
-    const suggestions = suggestEpicKeywords(events, options);
-    expect(suggestions).toHaveLength(4);
-    expect(suggestions).toEqual(
-      expect.arrayContaining([
-        { word: "café", count: 2 },
-        { word: "roadmap", count: 3 },
-        { word: "reunión", count: 1 },
-        { word: "review", count: 1 },
-      ]),
-    );
+    expect(suggestEpicKeywords(events, options)).toEqual([
+      { word: "roadmap", count: 3 },
+      { word: "café", count: 2 },
+      { word: "reunión", count: 1 },
+      { word: "review", count: 1 },
+    ]);
   });
 
   it("combines apostrophe variants in counts and removes contractions in either style", () => {
@@ -99,19 +95,54 @@ describe("suggestEpicKeywords", () => {
     expect(suggestEpicKeywords(events, options)).toEqual([]);
   });
 
+  describe("ranking", () => {
+    it("breaks ties by locale-independent lexical order regardless of event order", () => {
+      const events = [eventWithTitle("éclair zulu"), eventWithTitle("café cafe")];
+      const expected = [
+        { word: "cafe", count: 1 },
+        { word: "café", count: 1 },
+        { word: "zulu", count: 1 },
+        { word: "éclair", count: 1 },
+      ];
+
+      expect(suggestEpicKeywords(events, options)).toEqual(expected);
+      expect(suggestEpicKeywords([...events].reverse(), options)).toEqual(expected);
+    });
+
+    // TODO: Change this when we support pagination.
+    it.each([1, 10])(
+      "returns all qualifying words when the page size is %s",
+      (suggestionsPerPage) => {
+        const words = [
+          "aardvark",
+          "bear",
+          "cat",
+          "dog",
+          "elephant",
+          "fish",
+          "goat",
+          "hare",
+          "iguana",
+          "jaguar"
+        ];
+        const title = words.join(" ");
+        const events = [eventWithTitle(`${title} ${title}`)];
+
+        expect(
+          suggestEpicKeywords(events, { ...DEFAULT_SUGGESTION_OPTIONS, suggestionsPerPage }),
+        ).toEqual(words.map((word) => ({ word, count: 2 })));
+      },
+    );
+  });
+
   describe("minimum frequency", () => {
     const events = [eventWithTitle("roadmap roadmap roadmap review review planning")];
 
     it("defaults to two occurrences, including the cutoff and excluding single occurrences", () => {
-      const suggestions = suggestEpicKeywords(events);
-
-      expect(suggestions).toHaveLength(2);
-      expect(suggestions).toEqual(
-        expect.arrayContaining([
-          { word: "roadmap", count: 3 },
-          { word: "review", count: 2 },
-        ]),
-      );
+      expect(suggestEpicKeywords(events)).toEqual([
+        { word: "roadmap", count: 3 },
+        { word: "review", count: 2 },
+      ]);
     });
 
     it.each([
@@ -130,8 +161,7 @@ describe("suggestEpicKeywords", () => {
       ({ minFrequency, expected }) => {
         const suggestions = suggestEpicKeywords(events, { ...options, minFrequency });
 
-        expect(suggestions).toHaveLength(expected.length);
-        expect(suggestions).toEqual(expect.arrayContaining(expected));
+        expect(suggestions).toEqual(expected);
       },
     );
   });

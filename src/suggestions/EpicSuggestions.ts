@@ -40,8 +40,9 @@ export function validateSuggestionOptions(options: Readonly<SuggestionOptions>):
 }
 
 /**
- * Outputs title-word counts meeting the minimum frequency.
+ * Returns all qualifying title-word counts ranked by count, then lexical order.
  * The caller handles date and all-day event filtering.
+ * TODO: Add pagination and dismissal logic.
  */
 export function suggestEpicKeywords(
   events: readonly CalendarEvent[],
@@ -50,7 +51,12 @@ export function suggestEpicKeywords(
   validateSuggestionOptions(options);
   const tokens = events.flatMap((event) => tokenize(event.title));
   const frequencies = countTokenFrequencies(filterTokens(tokens));
-  return Array.from(frequencies, ([word, count]) => ({ word, count })).filter(
-    (suggestion) => suggestion.count >= options.minFrequency,
-  );
+  return Array.from(frequencies, ([word, count]) => ({ word, count }))
+    .filter((suggestion) => suggestion.count >= options.minFrequency)
+    .sort((a, b) => {
+      const countOrder = b.count - a.count;
+      if (countOrder !== 0) return countOrder;
+      // String comparison uses the same UTF-16 lexical order in every locale.
+      return a.word < b.word ? -1 : a.word > b.word ? 1 : 0;
+    });
 }

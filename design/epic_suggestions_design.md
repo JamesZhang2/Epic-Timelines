@@ -263,7 +263,7 @@ Mark the subtask/task as done in the commit that completes it.
         both options at this engine boundary before processing events.
   - [x] Apply the minimum-frequency threshold; cover default/custom thresholds,
         exact boundaries, and no qualifying words.
-  - [ ] Rank by descending count with deterministic lexical ties; return every
+  - [x] Rank by descending count with deterministic lexical ties; return every
         qualifying candidate without pagination or dismissal logic.
   - [ ] Verify the full pipeline with mixed English/Spanish fixtures, title-only
         analysis, recurring occurrences supplied as separate events, and unchanged
