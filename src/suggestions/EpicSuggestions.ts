@@ -39,7 +39,10 @@ export function validateSuggestionOptions(options: Readonly<SuggestionOptions>):
   }
 }
 
-/** Outputs title-word counts. The caller handles date and all-day event filtering. */
+/**
+ * Outputs title-word counts meeting the minimum frequency.
+ * The caller handles date and all-day event filtering.
+ */
 export function suggestEpicKeywords(
   events: readonly CalendarEvent[],
   options: Readonly<SuggestionOptions> = DEFAULT_SUGGESTION_OPTIONS,
@@ -47,5 +50,7 @@ export function suggestEpicKeywords(
   validateSuggestionOptions(options);
   const tokens = events.flatMap((event) => tokenize(event.title));
   const frequencies = countTokenFrequencies(filterTokens(tokens));
-  return Array.from(frequencies, ([word, count]) => ({ word, count }));
+  return Array.from(frequencies, ([word, count]) => ({ word, count })).filter(
+    (suggestion) => suggestion.count >= options.minFrequency,
+  );
 }

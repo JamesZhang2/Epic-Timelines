@@ -98,4 +98,41 @@ describe("suggestEpicKeywords", () => {
     const events = [eventWithTitle(""), eventWithTitle("the and para sí xy 123 !!!")];
     expect(suggestEpicKeywords(events, options)).toEqual([]);
   });
+
+  describe("minimum frequency", () => {
+    const events = [eventWithTitle("roadmap roadmap roadmap review review planning")];
+
+    it("defaults to two occurrences, including the cutoff and excluding single occurrences", () => {
+      const suggestions = suggestEpicKeywords(events);
+
+      expect(suggestions).toHaveLength(2);
+      expect(suggestions).toEqual(
+        expect.arrayContaining([
+          { word: "roadmap", count: 3 },
+          { word: "review", count: 2 },
+        ]),
+      );
+    });
+
+    it.each([
+      {
+        minFrequency: 1,
+        expected: [
+          { word: "roadmap", count: 3 },
+          { word: "review", count: 2 },
+          { word: "planning", count: 1 },
+        ],
+      },
+      { minFrequency: 3, expected: [{ word: "roadmap", count: 3 }] },
+      { minFrequency: 4, expected: [] },
+    ])(
+      "returns only words occurring at least $minFrequency times",
+      ({ minFrequency, expected }) => {
+        const suggestions = suggestEpicKeywords(events, { ...options, minFrequency });
+
+        expect(suggestions).toHaveLength(expected.length);
+        expect(suggestions).toEqual(expect.arrayContaining(expected));
+      },
+    );
+  });
 });

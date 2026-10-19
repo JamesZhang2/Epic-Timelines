@@ -261,7 +261,7 @@ Mark the subtask/task as done in the commit that completes it.
   - [x] Compose title extraction, tokenization, stopword filtering, and counting
         in the pure `suggestEpicKeywords(events, options)` entry point; validate
         both options at this engine boundary before processing events.
-  - [ ] Apply the minimum-frequency threshold; cover default/custom thresholds,
+  - [x] Apply the minimum-frequency threshold; cover default/custom thresholds,
         exact boundaries, and no qualifying words.
   - [ ] Rank by descending count with deterministic lexical ties; return every
         qualifying candidate without pagination or dismissal logic.
